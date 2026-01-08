@@ -1,0 +1,10 @@
+{
+  "event_id": "58F97BC5-AA2B-4AC5-93DF-8EC51AF0B3F4",
+  "timestamp": "2026-01-09T00:28:36+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 31360,
+  "ppid": 31359,
+  "session_time": 1767886116
+}
