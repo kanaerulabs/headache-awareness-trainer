@@ -79,7 +79,7 @@ export const IntensitySlider: React.FC<IntensitySliderProps> = ({
       <div
         role="radiogroup"
         aria-labelledby="intensity-label"
-        className="grid grid-cols-5 gap-2"
+        className="grid grid-cols-5 gap-1 sm:gap-2"
       >
         {intensityConfig.map((config) => {
           const isSelected = value === config.value;
@@ -96,20 +96,20 @@ export const IntensitySlider: React.FC<IntensitySliderProps> = ({
               onKeyDown={(e) => handleKeyDown(e, config.value)}
               className={cn(
                 "flex flex-col items-center justify-center",
-                "rounded-lg p-4 transition-all",
+                "rounded-lg p-2 sm:p-4 transition-all min-h-[60px] sm:min-h-[80px]",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
                 config.color,
                 "text-white font-semibold",
                 !disabled && config.hoverColor,
                 !disabled && "cursor-pointer",
                 disabled && "opacity-50 cursor-not-allowed",
-                isSelected && "ring-4 ring-offset-2",
+                isSelected && "ring-2 sm:ring-4 ring-offset-1 sm:ring-offset-2",
                 isSelected && config.activeColor,
                 !isSelected && "opacity-70",
               )}
             >
-              <span className="text-2xl font-bold mb-1">{config.value}</span>
-              <span className="text-xs">{config.label}</span>
+              <span className="text-lg sm:text-2xl font-bold mb-0.5 sm:mb-1">{config.value}</span>
+              <span className="text-[10px] sm:text-xs leading-tight">{config.label}</span>
             </button>
           );
         })}
