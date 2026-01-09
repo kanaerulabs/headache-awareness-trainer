@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import {
   useLoggingStore,
   type HeadacheType,
-  type HeadacheLocation,
-  type Mood,
+  type MoodType,
 } from "@/interface-adapters/store/loggingStore";
+import { type HeadacheLocation } from "@/components/molecules/LocationPicker";
 
 export interface QuickLoggingFormState {
   // Required fields (Week 1)
@@ -23,7 +23,7 @@ export interface QuickLoggingFormState {
 
   // Week 3+ fields
   bodyTension: number;
-  mood: Mood | null;
+  mood: MoodType | null;
   stressLevel: number;
 }
 
@@ -38,7 +38,7 @@ export interface QuickLoggingHook {
   setHeadacheType: (type: HeadacheType) => void;
   toggleLocation: (location: HeadacheLocation) => void;
   setBodyTension: (value: number) => void;
-  setMood: (mood: Mood) => void;
+  setMood: (mood: MoodType) => void;
   setStressLevel: (value: number) => void;
 
   // Feature unlock state
@@ -130,7 +130,7 @@ export function useQuickLogging(): QuickLoggingHook {
     setFormState((prev) => ({ ...prev, bodyTension: value }));
   }, []);
 
-  const setMood = useCallback((mood: Mood) => {
+  const setMood = useCallback((mood: MoodType) => {
     setFormState((prev) => ({ ...prev, mood }));
   }, []);
 
