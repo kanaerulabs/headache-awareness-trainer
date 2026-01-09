@@ -56,6 +56,13 @@ export interface UserMetadata {
 }
 
 /**
+ * Stored metadata with key for IndexedDB
+ */
+interface StoredMetadata extends UserMetadata {
+  key: string;
+}
+
+/**
  * IndexedDB Schema
  */
 interface LoggingDB extends DBSchema {
@@ -66,7 +73,7 @@ interface LoggingDB extends DBSchema {
   };
   metadata: {
     key: string;
-    value: UserMetadata;
+    value: StoredMetadata;
   };
 }
 
