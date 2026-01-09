@@ -8,6 +8,7 @@ export type ReminderPreference = "yes-gently" | "maybe-later";
 export interface OnboardingState {
   isCompleted: boolean;
   currentStep: number;
+  totalSteps: number;
   headacheType: HeadacheType | null;
   frequency: Frequency | null;
   reminderPreference: ReminderPreference | null;
@@ -28,9 +29,12 @@ export interface OnboardingActions {
 
 export type OnboardingStore = OnboardingState & OnboardingActions;
 
+const TOTAL_STEPS = 4; // Welcome → Type → Frequency → Reminders
+
 const initialState: OnboardingState = {
   isCompleted: false,
   currentStep: 0,
+  totalSteps: TOTAL_STEPS,
   headacheType: null,
   frequency: null,
   reminderPreference: null,
