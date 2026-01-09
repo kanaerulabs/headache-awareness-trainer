@@ -101,7 +101,7 @@ describe("LearnPage Integration", () => {
       const page = container.querySelector('[data-testid="learn-page"]');
       const hub = container.querySelector('[data-testid="education-hub-mock"]');
 
-      expect(page).toContainElement(hub);
+      expect(page).toContainElement(hub as HTMLElement | null);
     });
   });
 

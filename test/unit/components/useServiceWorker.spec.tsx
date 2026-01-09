@@ -1,6 +1,6 @@
 import { renderHook, act, waitFor } from "@testing-library/react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { useServiceWorker, UpdatePrompt } from "@/hooks/useServiceWorker.tsx";
+import { useServiceWorker, UpdatePrompt } from "@/hooks/useServiceWorker";
 
 // Mock service worker APIs
 const mockServiceWorkerRegistration = {
@@ -275,7 +275,7 @@ describe("useServiceWorker", () => {
       ).mock.calls.find((call) => call[0] === "statechange")?.[1];
 
       if (stateChangeHandler) {
-        mockNewWorker.state = "installed";
+        (mockNewWorker as { state: string }).state = "installed";
         act(() => {
           stateChangeHandler();
         });
