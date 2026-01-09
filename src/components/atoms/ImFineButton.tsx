@@ -34,6 +34,7 @@ export const ImFineButton = React.forwardRef<
   return (
     <Button
       ref={ref}
+      type="button"
       variant="outline"
       size="lg"
       className={cn(
