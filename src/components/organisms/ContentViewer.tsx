@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -180,7 +181,8 @@ export function ContentViewer({ contentId }: ContentViewerProps) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <Button variant="ghost" size="sm" onClick={handleBack}>
-          ← Back
+          <ChevronLeft className="mr-1 h-4 w-4" />
+          Back
         </Button>
         <Badge variant="outline">
           {currentSectionIndex + 1} / {totalSections}
@@ -227,12 +229,18 @@ export function ContentViewer({ contentId }: ContentViewerProps) {
       </div>
 
       {/* Section dots */}
-      <div className="flex justify-center gap-2">
+      <div className="flex justify-center gap-2" role="navigation" aria-label="Section navigation">
         {content.sections.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentSectionIndex(index)}
-            className={`w-2 h-2 rounded-full transition-colors ${
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                setCurrentSectionIndex(index);
+              }
+            }}
+            className={`w-2 h-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
               index === currentSectionIndex
                 ? "bg-primary"
                 : index < currentSectionIndex
@@ -240,6 +248,7 @@ export function ContentViewer({ contentId }: ContentViewerProps) {
                   : "bg-muted"
             }`}
             aria-label={`Go to section ${index + 1}`}
+            aria-current={index === currentSectionIndex ? "true" : undefined}
           />
         ))}
       </div>

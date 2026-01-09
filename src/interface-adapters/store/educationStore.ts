@@ -41,8 +41,9 @@ export interface EducationState {
 
 /**
  * Initial content progress state
+ * Exported for use in tests and stories
  */
-const initialContentProgress: Record<ContentType, ContentProgress> = {
+export const initialContentProgress: Record<ContentType, ContentProgress> = {
   "tension-headache": {
     contentId: "tension-headache",
     viewed: false,
