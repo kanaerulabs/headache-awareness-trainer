@@ -1,18 +1,4 @@
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: '{{projectName}}',
-  description: '{{description}}',
-};
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
-  );
+// This file is intentionally empty - the main layout is in /app/layout.tsx
+export default function DeprecatedLayout() {
+  return null;
 }

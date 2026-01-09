@@ -8,3 +8,653 @@
   "ppid": 31359,
   "session_time": 1767886116
 }
+{
+  "event_id": "199F1C67-405E-4B87-9696-5E3D1DB73991",
+  "timestamp": "2026-01-09T00:28:45+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 31431,
+  "ppid": 31430,
+  "session_time": 1767886125
+}
+{
+  "event_id": "49580132-BA29-4F8B-BF44-E8225DBDC23E",
+  "timestamp": "2026-01-09T00:28:50+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 31490,
+  "ppid": 31489,
+  "session_time": 1767886130
+}
+{
+{
+  "event_id": "38EEFA57-6391-4798-8A62-1C958B7A7415",
+  "event_id": "18379ECB-07FE-4C14-B24C-CAA812FA1119",
+  "timestamp": "2026-01-09T00:29:22+09:00",
+  "timestamp": "2026-01-09T00:29:22+09:00",
+  "hook_name": "coverage-enforcer",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "context": "Analyzing test coverage",
+  "pid": 31697,
+  "pid": 31695,
+  "ppid": 31694,
+  "ppid": 31696,
+  "session_time": 1767886162
+}
+  "session_time": 1767886162
+}
+{
+  "event_id": "8231046E-7E5E-4E1F-962F-4C015FB9757D",
+  "timestamp": "2026-01-09T00:29:28+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 31783,
+  "ppid": 31782,
+  "session_time": 1767886168
+}
+{
+  "event_id": "163295AA-E734-40E7-93FF-C873FB03CD97",
+  "timestamp": "2026-01-09T00:53:44+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 42520,
+  "ppid": 42519,
+  "session_time": 1767887624
+}
+{
+  "event_id": "955F9B5A-3594-4E34-8593-45DFA46E29B0",
+  "timestamp": "2026-01-09T00:53:56+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 42583,
+  "ppid": 42582,
+  "session_time": 1767887636
+}
+{
+  "event_id": "F28347BE-7A3D-43D7-9CD3-736E1E822A6D",
+  "timestamp": "2026-01-09T00:54:01+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 42672,
+  "ppid": 42671,
+  "session_time": 1767887641
+}
+{
+  "event_id": "BD9AE808-82D6-45FC-BC45-28D9962DDC49",
+  "timestamp": "2026-01-09T00:55:30+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 44204,
+  "ppid": 44203,
+  "session_time": 1767887730
+}
+{
+  "event_id": "4C21AABE-8288-499B-BD9A-2BCAF239D1BF",
+  "timestamp": "2026-01-09T00:56:01+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 44476,
+  "ppid": 44475,
+  "session_time": 1767887761
+}
+{
+  "event_id": "D1541BAE-5483-481A-83E2-CF229136C86B",
+  "timestamp": "2026-01-09T00:56:43+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 44654,
+  "ppid": 44653,
+  "session_time": 1767887803
+}
+{
+  "event_id": "75C7F13D-4FFE-478D-B527-ED8FF8114455",
+  "timestamp": "2026-01-09T00:57:06+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 45443,
+  "ppid": 45442,
+  "session_time": 1767887826
+}
+{
+  "event_id": "007BA50D-3E6A-449B-ADC2-591FD4D65D86",
+  "timestamp": "2026-01-09T00:57:12+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 45579,
+  "ppid": 45578,
+  "session_time": 1767887832
+}
+{
+  "event_id": "AE628618-5079-4242-9130-D8E8742DD312",
+  "timestamp": "2026-01-09T00:57:20+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 45699,
+  "ppid": 45698,
+  "session_time": 1767887840
+}
+{
+  "event_id": "3197464D-9067-436A-95B0-B479361FB7A5",
+  "timestamp": "2026-01-09T00:57:39+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 46158,
+  "ppid": 46157,
+  "session_time": 1767887859
+}
+{
+  "event_id": "D84DA84D-7A05-41E1-87D5-2D0264734147",
+  "timestamp": "2026-01-09T00:58:18+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 46832,
+  "ppid": 46831,
+  "session_time": 1767887898
+}
+{
+  "event_id": "DF6168E1-ACFF-4BA5-82D1-7C1CE9218429",
+  "timestamp": "2026-01-09T00:58:56+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 47281,
+  "ppid": 47280,
+  "session_time": 1767887936
+}
+{
+  "event_id": "63596803-775D-48D0-9191-0D23C88B4B80",
+  "timestamp": "2026-01-09T00:59:31+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 48343,
+  "ppid": 48342,
+  "session_time": 1767887971
+}
+{
+  "event_id": "7E0FFE87-B346-4CB3-BC76-16088BA8E95A",
+  "timestamp": "2026-01-09T01:00:05+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 49214,
+  "ppid": 49213,
+  "session_time": 1767888005
+}
+{
+  "event_id": "A6250353-60C8-4D70-86E5-E9742E7310E4",
+  "timestamp": "2026-01-09T01:00:52+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 50935,
+  "ppid": 50934,
+  "session_time": 1767888052
+}
+{
+  "event_id": "4C47563F-A601-4D20-A7C8-2FC0F0BCC844",
+  "timestamp": "2026-01-09T01:00:57+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 51367,
+  "ppid": 51366,
+  "session_time": 1767888057
+}
+{
+  "event_id": "2BC55685-725D-4822-B56D-2C549B7575CC",
+  "timestamp": "2026-01-09T01:19:09+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 61832,
+  "ppid": 61831,
+  "session_time": 1767889149
+}
+{
+  "event_id": "2B5B7FF2-799D-49C6-A41B-81A7C7D63A3F",
+  "timestamp": "2026-01-09T01:19:33+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 62437,
+  "ppid": 62436,
+  "session_time": 1767889173
+}
+{
+  "event_id": "6520D268-B46F-466D-8D13-AAB38E819473",
+  "timestamp": "2026-01-09T01:20:23+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 62681,
+  "ppid": 62680,
+  "session_time": 1767889223
+}
+{
+  "event_id": "58A59A54-249C-4719-9BFB-92E2850F53D2",
+  "timestamp": "2026-01-09T01:25:31+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 64053,
+  "ppid": 64052,
+  "session_time": 1767889531
+}
+{
+  "event_id": "B453407A-0F9A-430A-BEC7-D9DC671CD7E5",
+  "timestamp": "2026-01-09T01:26:49+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 64438,
+  "ppid": 64437,
+  "session_time": 1767889609
+}
+{
+  "event_id": "9FFE5116-1C97-47F8-946D-572C214E6641",
+  "timestamp": "2026-01-09T01:27:16+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 64537,
+  "ppid": 64536,
+  "session_time": 1767889636
+}
+{
+  "event_id": "42A0A064-D819-414A-BB12-48136CAAE89F",
+  "timestamp": "2026-01-09T01:27:21+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 64593,
+  "ppid": 64592,
+  "session_time": 1767889641
+}
+{
+  "event_id": "3765E8F8-35D6-41B2-BC16-1CF5B55F1C36",
+  "timestamp": "2026-01-09T01:27:29+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 64649,
+  "ppid": 64648,
+  "session_time": 1767889649
+}
+{
+  "event_id": "E37488B1-2A71-4786-A53D-4442DAB1D826",
+  "timestamp": "2026-01-09T01:27:32+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 64696,
+  "ppid": 64695,
+  "session_time": 1767889652
+}
+{
+  "event_id": "E2E14C93-E7BE-458E-8642-00A138562090",
+  "timestamp": "2026-01-09T01:27:45+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 64897,
+  "ppid": 64896,
+  "session_time": 1767889665
+}
+{
+  "event_id": "A77E349A-C278-46FA-8E77-B2D42F255CB6",
+  "timestamp": "2026-01-09T01:27:57+09:00",
+  "hook_name": "auto-lint-fix",
+  "event_type": "start",
+  "context": "Checking if lint-fix needed",
+  "pid": 65112,
+  "ppid": 65111,
+  "session_time": 1767889677
+}
+{
+  "event_id": "44007F76-2208-44E8-8642-A82A7AA1A944",
+  "timestamp": "2026-01-09T01:27:57+09:00",
+  "hook_name": "unified-pipeline-orchestrator",
+  "event_type": "start",
+  "context": "SubagentStop triggered",
+  "pid": 65120,
+  "ppid": 65119,
+  "session_time": 1767889677
+}
+{
+  "event_id": "A671BED8-09CD-4BF1-808C-69D8E3237F6A",
+  "timestamp": "2026-01-09T01:27:58+09:00",
+  "hook_name": "unified-pipeline-orchestrator",
+  "event_type": "end",
+  "context": "1s (agent: controller-integration-test-review)",
+  "pid": 65235,
+  "ppid": 65092,
+  "session_time": 1767889678
+}
+{
+  "event_id": "F25F5828-3141-404B-BF49-1F52CF1C41C1",
+  "timestamp": "2026-01-09T12:20:51+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 99799,
+  "ppid": 99798,
+  "session_time": 1767928851
+}
+{
+  "event_id": "DAF6D5B3-DCF6-4B2B-BEB3-FD41F0481CC1",
+  "timestamp": "2026-01-09T12:22:46+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 545,
+  "ppid": 544,
+  "session_time": 1767928966
+}
+{
+  "event_id": "B24AFF49-03D2-402D-80A5-A92FB2B9CC40",
+  "timestamp": "2026-01-09T12:22:52+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 643,
+  "ppid": 642,
+  "session_time": 1767928972
+}
+{
+  "event_id": "2CF589CE-237F-4C05-8DF6-46C7E6AE69CA",
+  "timestamp": "2026-01-09T12:23:05+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 839,
+  "ppid": 838,
+  "session_time": 1767928985
+}
+{
+  "event_id": "CD58D5A7-BFAA-46D0-9A09-4BF2A7EAF583",
+  "timestamp": "2026-01-09T12:23:40+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 1324,
+  "ppid": 1323,
+  "session_time": 1767929020
+}
+{
+  "event_id": "671BD8B5-ACB7-413C-8F5C-437A1094E722",
+  "timestamp": "2026-01-09T12:24:02+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 1955,
+  "ppid": 1954,
+  "session_time": 1767929042
+}
+{
+  "event_id": "5C17FE27-79A6-45D1-B9B1-CB65C4EF0BDF",
+  "timestamp": "2026-01-09T12:24:50+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 3027,
+  "ppid": 3026,
+  "session_time": 1767929090
+}
+{
+  "event_id": "81CDCA1E-4272-4612-975C-3D4073FE638F",
+  "timestamp": "2026-01-09T12:25:03+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 3209,
+  "ppid": 3208,
+  "session_time": 1767929103
+}
+{
+  "event_id": "7703F3AE-E0AE-40A7-96A0-23288A323DD7",
+  "timestamp": "2026-01-09T12:40:38+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 29081,
+  "ppid": 29080,
+  "session_time": 1767930038
+}
+{
+  "event_id": "DDF60798-735A-4EE9-88F5-9B0CEA2ECAB2",
+  "timestamp": "2026-01-09T12:41:26+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 29415,
+  "ppid": 29414,
+  "session_time": 1767930086
+}
+{
+  "event_id": "F9515F37-9889-4780-9482-65A2BF03BB2B",
+  "timestamp": "2026-01-09T12:43:17+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 32462,
+  "ppid": 32461,
+  "session_time": 1767930197
+}
+{
+  "event_id": "6C92298F-EF8A-40B3-9768-84242FB3E09B",
+  "timestamp": "2026-01-09T12:43:26+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 32590,
+  "ppid": 32589,
+  "session_time": 1767930206
+}
+{
+  "event_id": "4F1E03FB-C523-4521-8ECA-D5A4CC3A0590",
+  "timestamp": "2026-01-09T12:44:07+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 32830,
+  "ppid": 32829,
+  "session_time": 1767930247
+}
+{
+  "event_id": "4ADBBC12-2D17-4C4B-B9DB-8122607AA5E9",
+  "timestamp": "2026-01-09T12:46:40+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 33082,
+  "ppid": 33081,
+  "session_time": 1767930400
+}
+{
+  "event_id": "2C7E3CAD-C8E8-450D-8165-B85AB9661036",
+  "timestamp": "2026-01-09T12:46:59+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 33388,
+  "ppid": 33387,
+  "session_time": 1767930419
+}
+{
+  "event_id": "25D65CC1-43EA-4F09-8262-A7E3E0798CCC",
+  "timestamp": "2026-01-09T12:47:23+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 33599,
+  "ppid": 33598,
+  "session_time": 1767930443
+}
+{
+  "event_id": "ED1888C4-74EB-443A-B758-F0993D2259E4",
+  "timestamp": "2026-01-09T12:47:58+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 33950,
+  "ppid": 33949,
+  "session_time": 1767930478
+}
+{
+  "event_id": "E49EFAC4-F66B-41B7-8A65-F6EE016EDA51",
+  "timestamp": "2026-01-09T12:48:08+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 34006,
+  "ppid": 34005,
+  "session_time": 1767930488
+}
+{
+  "event_id": "F109E53B-55C3-47AA-AEA1-AEEC5FA48113",
+  "timestamp": "2026-01-09T12:49:48+09:00",
+  "hook_name": "auto-lint-fix",
+  "event_type": "start",
+  "context": "Checking if lint-fix needed",
+  "pid": 34435,
+  "ppid": 34434,
+  "session_time": 1767930588
+}
+{
+  "event_id": "D19D8468-8820-4410-B47E-4E83C0DEA41C",
+  "timestamp": "2026-01-09T12:49:48+09:00",
+  "hook_name": "unified-pipeline-orchestrator",
+  "event_type": "start",
+  "context": "SubagentStop triggered",
+  "pid": 34440,
+  "ppid": 34439,
+  "session_time": 1767930588
+}
+{
+  "event_id": "858C3CDA-6AED-402D-94D8-10D38783E981",
+  "timestamp": "2026-01-09T12:49:48+09:00",
+  "hook_name": "unified-pipeline-orchestrator",
+  "event_type": "end",
+  "context": "0s (agent: component-test-generation)",
+  "pid": 34555,
+  "ppid": 34412,
+  "session_time": 1767930588
+}
+{
+  "event_id": "302EADBD-38FC-450C-AFA3-86E295879102",
+  "timestamp": "2026-01-09T12:50:01+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 34654,
+  "ppid": 34653,
+  "session_time": 1767930601
+}
+{
+  "event_id": "84294990-C594-476F-9189-2A39FAA264D8",
+  "timestamp": "2026-01-09T12:50:30+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 34808,
+  "ppid": 34807,
+  "session_time": 1767930630
+}
+{
+  "event_id": "4EA5F138-EF8C-497B-A9F3-68876EC6E344",
+  "timestamp": "2026-01-09T12:50:40+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 34938,
+  "ppid": 34937,
+  "session_time": 1767930640
+}
+{
+  "event_id": "759594A1-0537-4128-BC72-E68821097EBA",
+  "timestamp": "2026-01-09T12:50:50+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 35141,
+  "ppid": 35140,
+  "session_time": 1767930650
+}
+{
+  "event_id": "DF241812-B086-4179-AD45-3AA336F7D542",
+  "timestamp": "2026-01-09T12:51:37+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 35663,
+  "ppid": 35662,
+  "session_time": 1767930697
+}
+{
+  "event_id": "016B897B-1207-48EB-97B1-AE00E041BDAA",
+  "timestamp": "2026-01-09T13:25:09+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 53946,
+  "ppid": 53945,
+  "session_time": 1767932709
+}
+{
+  "event_id": "5C29B878-9B4E-4DB4-8430-6B0747078BBC",
+  "timestamp": "2026-01-09T13:25:22+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 54033,
+  "ppid": 54032,
+  "session_time": 1767932722
+}
+{
+  "event_id": "6146611C-5B1A-4102-99EC-46E0002B1BD0",
+  "timestamp": "2026-01-09T13:25:31+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 54086,
+  "ppid": 54085,
+  "session_time": 1767932731
+}
+{
+  "event_id": "3876CE7A-CA98-4FA7-BD28-1F8EA28553DF",
+  "timestamp": "2026-01-09T13:27:02+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 55397,
+  "ppid": 55396,
+  "session_time": 1767932822
+}
+{
+  "event_id": "9FC18599-9C0F-4F12-8B2E-65DCC957FEAA",
+  "timestamp": "2026-01-09T13:27:20+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 55535,
+  "ppid": 55534,
+  "session_time": 1767932840
+}
