@@ -1,7 +1,7 @@
-import { notFound } from 'next/navigation';
-import { ContentViewer } from '@/components/organisms/ContentViewer';
-import { educationalContent } from '@/data/educationalContent';
-import { ContentType } from '@/interface-adapters/store/educationStore';
+import { notFound } from "next/navigation";
+import { ContentViewer } from "@/components/organisms/ContentViewer";
+import { educationalContent } from "@/data/educationalContent";
+import { ContentType } from "@/interface-adapters/store/educationStore";
 
 interface PageProps {
   params: Promise<{ contentId: string }>;
@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: PageProps) {
 
   if (!content) {
     return {
-      title: 'Content Not Found',
+      title: "Content Not Found",
     };
   }
 
@@ -38,7 +38,10 @@ export default async function ContentPage({ params }: PageProps) {
   }
 
   return (
-    <main className="container max-w-2xl mx-auto px-4 py-8">
+    <main
+      className="container max-w-2xl mx-auto px-4 py-8"
+      data-testid="content-page"
+    >
       <ContentViewer contentId={contentId as ContentType} />
     </main>
   );
