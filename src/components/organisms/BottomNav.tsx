@@ -48,7 +48,10 @@ export function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 pb-safe">
+    <nav
+      data-testid="bottom-nav"
+      className="fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 pb-safe"
+    >
       <div className="flex items-center justify-around h-16 w-full px-2 sm:px-4">
         {navItems.map((item) => {
           const isActive =
@@ -60,6 +63,7 @@ export function BottomNav() {
             <Link
               key={item.href}
               href={item.href}
+              data-testid={`nav-${item.label.toLowerCase()}`}
               className={cn(
                 "flex flex-col items-center justify-center flex-1 h-full transition-all duration-200",
                 isLogButton && "relative -mt-3",
