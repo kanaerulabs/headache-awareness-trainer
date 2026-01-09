@@ -282,9 +282,10 @@ test.describe('Mobile Touch Interactions', () => {
         return window.visualViewport?.scale || 1;
       });
 
-      // Double tap
+      // Double tap (tap twice for double tap simulation)
       const learnCard = page.locator('[data-testid="learn-card"]');
-      await learnCard.tap({ tapCount: 2 });
+      await learnCard.tap();
+      await learnCard.tap();
 
       await page.waitForTimeout(200);
 

@@ -325,7 +325,7 @@ describe("ContentPage Integration", () => {
         '[data-testid="content-viewer-mock"]',
       );
 
-      expect(page).toContainElement(viewer);
+      expect(page).toContainElement(viewer as HTMLElement | null);
     });
   });
 
