@@ -1,5 +1,8 @@
 # Headache Awareness Trainer
 
+[![CI](https://github.com/kanaerulabs/jinit-labs-headache-awareness-trainer/workflows/CI/badge.svg)](https://github.com/kanaerulabs/jinit-labs-headache-awareness-trainer/actions/workflows/ci.yml)
+[![Deploy to Production](https://github.com/kanaerulabs/jinit-labs-headache-awareness-trainer/workflows/Deploy%20to%20Production/badge.svg)](https://github.com/kanaerulabs/jinit-labs-headache-awareness-trainer/actions/workflows/deploy-production.yml)
+
 Learn to listen to your body before the headache speaks.
 
 ## Overview
