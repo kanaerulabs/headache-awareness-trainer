@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useEffect, useState, useCallback } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useOnboardingStore } from "@/interface-adapters/store/onboardingStore";
 import { useLoggingStore, type HeadacheEntry } from "@/interface-adapters/store/loggingStore";
 import {
@@ -11,11 +11,42 @@ import {
 } from "lucide-react";
 
 export default function HomePage() {
+  return (
+    <Suspense fallback={<HomePageSkeleton />}>
+      <HomePageContent />
+    </Suspense>
+  );
+}
+
+function HomePageSkeleton() {
+  return (
+    <main className="flex min-h-screen flex-col p-6 pb-24" data-testid="home-page-loading">
+      <div className="mx-auto w-full max-w-2xl space-y-8 animate-pulse">
+        <div className="space-y-2">
+          <div className="h-9 w-48 bg-muted rounded" />
+          <div className="h-6 w-64 bg-muted rounded" />
+        </div>
+        <div className="rounded-lg border bg-card p-6 h-32" />
+        <div className="grid grid-cols-2 gap-3">
+          <div className="rounded-lg border bg-card p-4 h-28" />
+          <div className="rounded-lg border bg-card p-4 h-28" />
+        </div>
+      </div>
+    </main>
+  );
+}
+
+function HomePageContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { isCompleted, headacheType } = useOnboardingStore();
   const loggingStore = useLoggingStore();
   const [recentEntries, setRecentEntries] = useState<HeadacheEntry[]>([]);
   const [isLoadingEntries, setIsLoadingEntries] = useState(true);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  // Check if we just logged an entry
+  const justLogged = searchParams.get("logged") === "true";
 
   // Redirect new users to onboarding
   useEffect(() => {
@@ -24,24 +55,34 @@ export default function HomePage() {
     }
   }, [isCompleted, router]);
 
-  // Fetch recent entries
+  // Trigger refresh when navigating back with ?logged=true
   useEffect(() => {
-    const fetchEntries = async () => {
-      try {
-        await loggingStore.initializeDB();
-        const entries = await loggingStore.getRecentEntries(5);
-        setRecentEntries(entries);
-      } catch (error) {
-        console.error("Failed to fetch entries:", error);
-      } finally {
-        setIsLoadingEntries(false);
-      }
-    };
+    if (justLogged) {
+      setRefreshTrigger((prev) => prev + 1);
+      // Clear the URL params without navigation
+      router.replace("/", { scroll: false });
+    }
+  }, [justLogged, router]);
 
+  // Fetch recent entries
+  const fetchEntries = useCallback(async () => {
+    try {
+      setIsLoadingEntries(true);
+      await loggingStore.initializeDB();
+      const entries = await loggingStore.getRecentEntries(5);
+      setRecentEntries(entries);
+    } catch (error) {
+      console.error("Failed to fetch entries:", error);
+    } finally {
+      setIsLoadingEntries(false);
+    }
+  }, [loggingStore]);
+
+  useEffect(() => {
     if (isCompleted) {
       fetchEntries();
     }
-  }, [isCompleted, loggingStore]);
+  }, [isCompleted, fetchEntries, refreshTrigger]);
 
   // If not completed, show nothing (will redirect)
   if (!isCompleted) {
