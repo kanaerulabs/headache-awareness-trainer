@@ -6,9 +6,6 @@ import { useOnboardingStore } from "@/interface-adapters/store/onboardingStore";
 import { useLoggingStore, type HeadacheEntry } from "@/interface-adapters/store/loggingStore";
 import {
   Brain,
-  BookOpen,
-  BarChart3,
-  Settings,
   Lightbulb,
   Clock,
 } from "lucide-react";
@@ -103,48 +100,31 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Quick Action Cards */}
+        {/* Primary Actions - Only the 2 most important */}
         <div className="space-y-4">
-          <h2 className="text-lg font-semibold">Quick Actions</h2>
+          <h2 className="text-lg font-semibold">What would you like to do?</h2>
           <div
-            className="grid grid-cols-1 gap-3 sm:grid-cols-2"
+            className="grid grid-cols-2 gap-3"
             data-testid="quick-actions"
           >
             {/* Log Headache */}
             <ActionCard
               icon={<Brain className="h-5 w-5" />}
               title="Log Headache"
-              description="Record a headache episode"
+              description="Record an episode"
               onClick={() => router.push("/log")}
               testId="log-headache-card"
               variant="primary"
             />
 
-            {/* Learn */}
+            {/* Quick Check-in */}
             <ActionCard
-              icon={<BookOpen className="h-5 w-5" />}
-              title="Learn"
-              description="Build body awareness"
-              onClick={() => router.push("/learn")}
-              testId="learn-card"
-            />
-
-            {/* Insights */}
-            <ActionCard
-              icon={<BarChart3 className="h-5 w-5" />}
-              title="Insights"
-              description="View your patterns"
-              onClick={() => router.push("/insights")}
-              testId="insights-card"
-            />
-
-            {/* Settings */}
-            <ActionCard
-              icon={<Settings className="h-5 w-5" />}
-              title="Settings"
-              description="Update preferences"
-              onClick={() => router.push("/settings")}
-              testId="settings-card"
+              icon={<Clock className="h-5 w-5" />}
+              title="Quick Check-in"
+              description="Track how you feel"
+              onClick={() => router.push("/checkin")}
+              testId="checkin-card"
+              variant="default"
             />
           </div>
         </div>

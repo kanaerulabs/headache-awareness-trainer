@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Home, BookOpen, PlusCircle, BarChart3, Settings } from "lucide-react";
+import { Home, ClipboardCheck, PlusCircle, BarChart3, BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface NavItem {
@@ -19,9 +19,9 @@ const navItems: NavItem[] = [
     icon: <Home className="h-5 w-5" />,
   },
   {
-    href: "/learn",
-    label: "Learn",
-    icon: <BookOpen className="h-5 w-5" />,
+    href: "/checkin",
+    label: "Check-in",
+    icon: <ClipboardCheck className="h-5 w-5" />,
   },
   {
     href: "/log",
@@ -34,9 +34,9 @@ const navItems: NavItem[] = [
     icon: <BarChart3 className="h-5 w-5" />,
   },
   {
-    href: "/settings",
-    label: "Settings",
-    icon: <Settings className="h-5 w-5" />,
+    href: "/learn",
+    label: "Learn",
+    icon: <BookOpen className="h-5 w-5" />,
   },
 ];
 
@@ -50,7 +50,7 @@ export function BottomNav() {
   return (
     <nav
       data-testid="bottom-nav"
-      className="fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 pb-safe"
+      className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 pb-safe shadow-[0_-2px_10px_rgba(0,0,0,0.1)]"
     >
       <div className="flex items-center justify-around h-16 w-full px-2 sm:px-4">
         {navItems.map((item) => {
@@ -73,13 +73,13 @@ export function BottomNav() {
               )}
             >
               {isLogButton ? (
-                // Special styling for the center "Log" button
+                // Special styling for the center "Log" button with high-contrast colors
                 <div
                   className={cn(
-                    "flex items-center justify-center w-12 h-12 rounded-full shadow-lg transition-all duration-200",
+                    "flex items-center justify-center w-14 h-14 rounded-full shadow-lg transition-all duration-200 border-2 border-purple-700",
                     isActive
-                      ? "bg-gradient-to-br from-purple-600 to-blue-600 text-white"
-                      : "bg-gradient-to-br from-purple-500 to-blue-500 text-white hover:shadow-xl",
+                      ? "bg-purple-600 text-white"
+                      : "bg-purple-500 text-white hover:shadow-xl hover:bg-purple-600",
                   )}
                 >
                   {item.icon}
