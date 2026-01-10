@@ -42,11 +42,10 @@ function HomePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { isCompleted, headacheType } = useOnboardingStore();
-  const loggingStore = useLoggingStore();
   const [recentEntries, setRecentEntries] = useState<HeadacheEntry[]>([]);
-  const [isLoadingEntries, setIsLoadingEntries] = useState(true);
-  const [fetchTrigger, setFetchTrigger] = useState(0);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const hasHandledLoggedRef = useRef(false);
+  const hasFetchedRef = useRef(false);
 
   // Check if we just logged an entry
   const justLogged = searchParams.get("logged") === "true";
@@ -58,43 +57,42 @@ function HomePageContent() {
     }
   }, [isCompleted, router]);
 
+  // Fetch recent entries - stable function that doesn't change
+  const fetchEntries = useCallback(async (showLoading = false) => {
+    try {
+      if (showLoading) setIsInitialLoading(true);
+      const store = useLoggingStore.getState();
+      await store.initializeDB();
+      const entries = await store.getRecentEntries(5);
+      setRecentEntries(entries);
+    } catch (error) {
+      console.error("Failed to fetch entries:", error);
+    } finally {
+      setIsInitialLoading(false);
+    }
+  }, []);
+
+  // Initial fetch on mount
+  useEffect(() => {
+    if (!isCompleted || hasFetchedRef.current) return;
+    hasFetchedRef.current = true;
+    fetchEntries(true);
+  }, [isCompleted, fetchEntries]);
+
   // Handle the ?logged=true param - trigger refresh and clear URL
   useEffect(() => {
     if (justLogged && !hasHandledLoggedRef.current) {
       hasHandledLoggedRef.current = true;
-      // Trigger a fetch
-      setFetchTrigger(prev => prev + 1);
-      // Clear the URL param after a brief delay to ensure state update
-      setTimeout(() => {
-        router.replace("/", { scroll: false });
-      }, 100);
+      // Fetch entries silently (no loading state)
+      fetchEntries(false);
+      // Clear the URL param
+      router.replace("/", { scroll: false });
     }
     // Reset the ref when justLogged becomes false (URL is cleared)
     if (!justLogged) {
       hasHandledLoggedRef.current = false;
     }
-  }, [justLogged, router]);
-
-  // Fetch recent entries
-  const fetchEntries = useCallback(async () => {
-    try {
-      setIsLoadingEntries(true);
-      await loggingStore.initializeDB();
-      const entries = await loggingStore.getRecentEntries(5);
-      console.log("Fetched entries:", entries.length);
-      setRecentEntries(entries);
-    } catch (error) {
-      console.error("Failed to fetch entries:", error);
-    } finally {
-      setIsLoadingEntries(false);
-    }
-  }, [loggingStore]);
-
-  // Fetch entries on mount and when fetchTrigger changes
-  useEffect(() => {
-    if (!isCompleted) return;
-    fetchEntries();
-  }, [isCompleted, fetchEntries, fetchTrigger]);
+  }, [justLogged, router, fetchEntries]);
 
   // If not completed, show nothing (will redirect)
   if (!isCompleted) {
@@ -193,7 +191,7 @@ function HomePageContent() {
         </div>
 
         {/* Recent Entries Section */}
-        {isLoadingEntries ? (
+        {isInitialLoading ? (
           <div className="rounded-lg border bg-card p-6 text-center" data-testid="loading-entries">
             <p className="text-sm text-muted-foreground">Loading entries...</p>
           </div>
