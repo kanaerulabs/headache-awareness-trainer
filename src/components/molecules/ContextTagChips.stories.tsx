@@ -203,9 +203,7 @@ export const Disabled: Story = {
  */
 export const DarkMode: Story = {
   render: () => (
-    <ContextTagChipsWithState
-      initialTags={["sudden-onset", "after-meal"]}
-    />
+    <ContextTagChipsWithState initialTags={["sudden-onset", "after-meal"]} />
   ),
   decorators: [
     (Story) => (

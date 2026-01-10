@@ -1,12 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { UpdatePrompt } from './useServiceWorker';
-import { useState } from 'react';
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import { UpdatePrompt } from "./useServiceWorker";
+import { useState } from "react";
 
 const meta: Meta<typeof UpdatePrompt> = {
-  title: 'PWA/UpdatePrompt',
+  title: "PWA/UpdatePrompt",
   component: UpdatePrompt,
   parameters: {
-    layout: 'fullscreen',
+    layout: "fullscreen",
     docs: {
       description: {
         component: `
@@ -46,21 +46,21 @@ const [dismissed, setDismissed] = useState(false);
       config: {
         rules: [
           {
-            id: 'color-contrast',
+            id: "color-contrast",
             enabled: true,
           },
           {
-            id: 'button-name',
+            id: "button-name",
             enabled: true,
           },
         ],
       },
     },
   },
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   args: {
-    onUpdate: () => console.log('Update clicked'),
-    onDismiss: () => console.log('Dismiss clicked'),
+    onUpdate: () => console.log("Update clicked"),
+    onDismiss: () => console.log("Dismiss clicked"),
   },
   decorators: [
     (Story) => (
@@ -70,7 +70,8 @@ const [dismissed, setDismissed] = useState(false);
           <div className="mt-20 bg-white dark:bg-gray-800 rounded-lg p-6">
             <h2 className="text-xl font-bold mb-2">App Content</h2>
             <p className="text-gray-600 dark:text-gray-400">
-              The update prompt appears at the top of the screen when a new version is available.
+              The update prompt appears at the top of the screen when a new
+              version is available.
             </p>
           </div>
         </div>
@@ -115,7 +116,7 @@ Default state of the update prompt. Shows when a new service worker is waiting t
 export const DarkMode: Story = {
   parameters: {
     backgrounds: {
-      default: 'dark',
+      default: "dark",
     },
     docs: {
       description: {
@@ -139,7 +140,9 @@ Dark mode variant using Tailwind's dark mode classes.
           <div className="max-w-md mx-auto dark">
             <Story />
             <div className="mt-20 bg-gray-800 rounded-lg p-6">
-              <h2 className="text-xl font-bold mb-2 text-gray-100">App Content</h2>
+              <h2 className="text-xl font-bold mb-2 text-gray-100">
+                App Content
+              </h2>
               <p className="text-gray-400">
                 The update prompt appears at the top of the screen.
               </p>
@@ -182,7 +185,7 @@ export const InteractiveDismiss: Story = {
         onUpdate={() => {
           args.onUpdate();
           // In real app, this would reload the page
-          alert('Update applied! Page would reload now.');
+          alert("Update applied! Page would reload now.");
         }}
         onDismiss={() => {
           args.onDismiss();
@@ -387,11 +390,12 @@ export const TimingScenarios: Story = {
         <div>
           <h3 className="font-bold mb-2">Scenario 1: Immediate Update</h3>
           <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-            User is on the home page, not doing anything critical. Safe to update immediately.
+            User is on the home page, not doing anything critical. Safe to
+            update immediately.
           </p>
           <UpdatePrompt
-            onUpdate={() => alert('Updating immediately')}
-            onDismiss={() => alert('Dismissed')}
+            onUpdate={() => alert("Updating immediately")}
+            onDismiss={() => alert("Dismissed")}
           />
         </div>
 
@@ -399,13 +403,15 @@ export const TimingScenarios: Story = {
           <h3 className="font-bold mb-2">Scenario 2: During Entry</h3>
           <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-4">
             <p className="text-sm text-yellow-800 dark:text-yellow-200">
-              Warning: User is in the middle of creating an entry. They should click &quot;Later&quot;
-              to finish their work before updating.
+              Warning: User is in the middle of creating an entry. They should
+              click &quot;Later&quot; to finish their work before updating.
             </p>
           </div>
           <UpdatePrompt
-            onUpdate={() => alert('User might lose work! Consider blocking this.')}
-            onDismiss={() => alert('Good choice - finish entry first')}
+            onUpdate={() =>
+              alert("User might lose work! Consider blocking this.")
+            }
+            onDismiss={() => alert("Good choice - finish entry first")}
           />
         </div>
 
@@ -428,7 +434,7 @@ export const TimingScenarios: Story = {
     ),
   ],
   parameters: {
-    layout: 'fullscreen',
+    layout: "fullscreen",
     docs: {
       description: {
         story: `

@@ -1,24 +1,52 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useEffect, useState, useCallback } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useOnboardingStore } from "@/interface-adapters/store/onboardingStore";
 import { useLoggingStore, type HeadacheEntry } from "@/interface-adapters/store/loggingStore";
 import {
   Brain,
-  BookOpen,
-  BarChart3,
-  Settings,
   Lightbulb,
   Clock,
 } from "lucide-react";
 
 export default function HomePage() {
+  return (
+    <Suspense fallback={<HomePageSkeleton />}>
+      <HomePageContent />
+    </Suspense>
+  );
+}
+
+function HomePageSkeleton() {
+  return (
+    <main className="flex min-h-screen flex-col p-6 pb-24" data-testid="home-page-loading">
+      <div className="mx-auto w-full max-w-2xl space-y-8 animate-pulse">
+        <div className="space-y-2">
+          <div className="h-9 w-48 bg-muted rounded" />
+          <div className="h-6 w-64 bg-muted rounded" />
+        </div>
+        <div className="rounded-lg border bg-card p-6 h-32" />
+        <div className="grid grid-cols-2 gap-3">
+          <div className="rounded-lg border bg-card p-4 h-28" />
+          <div className="rounded-lg border bg-card p-4 h-28" />
+        </div>
+      </div>
+    </main>
+  );
+}
+
+function HomePageContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { isCompleted, headacheType } = useOnboardingStore();
   const loggingStore = useLoggingStore();
   const [recentEntries, setRecentEntries] = useState<HeadacheEntry[]>([]);
   const [isLoadingEntries, setIsLoadingEntries] = useState(true);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  // Check if we just logged an entry
+  const justLogged = searchParams.get("logged") === "true";
 
   // Redirect new users to onboarding
   useEffect(() => {
@@ -27,24 +55,34 @@ export default function HomePage() {
     }
   }, [isCompleted, router]);
 
-  // Fetch recent entries
+  // Trigger refresh when navigating back with ?logged=true
   useEffect(() => {
-    const fetchEntries = async () => {
-      try {
-        await loggingStore.initializeDB();
-        const entries = await loggingStore.getRecentEntries(5);
-        setRecentEntries(entries);
-      } catch (error) {
-        console.error("Failed to fetch entries:", error);
-      } finally {
-        setIsLoadingEntries(false);
-      }
-    };
+    if (justLogged) {
+      setRefreshTrigger((prev) => prev + 1);
+      // Clear the URL params without navigation
+      router.replace("/", { scroll: false });
+    }
+  }, [justLogged, router]);
 
+  // Fetch recent entries
+  const fetchEntries = useCallback(async () => {
+    try {
+      setIsLoadingEntries(true);
+      await loggingStore.initializeDB();
+      const entries = await loggingStore.getRecentEntries(5);
+      setRecentEntries(entries);
+    } catch (error) {
+      console.error("Failed to fetch entries:", error);
+    } finally {
+      setIsLoadingEntries(false);
+    }
+  }, [loggingStore]);
+
+  useEffect(() => {
     if (isCompleted) {
       fetchEntries();
     }
-  }, [isCompleted, loggingStore]);
+  }, [isCompleted, fetchEntries, refreshTrigger]);
 
   // If not completed, show nothing (will redirect)
   if (!isCompleted) {
@@ -103,48 +141,31 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Quick Action Cards */}
+        {/* Primary Actions - Only the 2 most important */}
         <div className="space-y-4">
-          <h2 className="text-lg font-semibold">Quick Actions</h2>
+          <h2 className="text-lg font-semibold">What would you like to do?</h2>
           <div
-            className="grid grid-cols-1 gap-3 sm:grid-cols-2"
+            className="grid grid-cols-2 gap-3"
             data-testid="quick-actions"
           >
             {/* Log Headache */}
             <ActionCard
               icon={<Brain className="h-5 w-5" />}
               title="Log Headache"
-              description="Record a headache episode"
+              description="Record an episode"
               onClick={() => router.push("/log")}
               testId="log-headache-card"
               variant="primary"
             />
 
-            {/* Learn */}
+            {/* Quick Check-in */}
             <ActionCard
-              icon={<BookOpen className="h-5 w-5" />}
-              title="Learn"
-              description="Build body awareness"
-              onClick={() => router.push("/learn")}
-              testId="learn-card"
-            />
-
-            {/* Insights */}
-            <ActionCard
-              icon={<BarChart3 className="h-5 w-5" />}
-              title="Insights"
-              description="View your patterns"
-              onClick={() => router.push("/insights")}
-              testId="insights-card"
-            />
-
-            {/* Settings */}
-            <ActionCard
-              icon={<Settings className="h-5 w-5" />}
-              title="Settings"
-              description="Update preferences"
-              onClick={() => router.push("/settings")}
-              testId="settings-card"
+              icon={<Clock className="h-5 w-5" />}
+              title="Quick Check-in"
+              description="Track how you feel"
+              onClick={() => router.push("/checkin")}
+              testId="checkin-card"
+              variant="default"
             />
           </div>
         </div>
