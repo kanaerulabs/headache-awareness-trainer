@@ -1,19 +1,22 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { InstallPrompt } from './InstallPrompt';
-import { useEffect } from 'react';
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import { InstallPrompt } from "./InstallPrompt";
+import { useEffect } from "react";
 
 // Type for the beforeinstallprompt event
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
-  readonly userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
+  readonly userChoice: Promise<{
+    outcome: "accepted" | "dismissed";
+    platform: string;
+  }>;
   prompt(): Promise<void>;
 }
 
 const meta: Meta<typeof InstallPrompt> = {
-  title: 'PWA/InstallPrompt',
+  title: "PWA/InstallPrompt",
   component: InstallPrompt,
   parameters: {
-    layout: 'fullscreen',
+    layout: "fullscreen",
     docs: {
       description: {
         component: `
@@ -44,18 +47,18 @@ InstallPrompt is a custom A2HS (Add to Home Screen) prompt component that provid
       config: {
         rules: [
           {
-            id: 'color-contrast',
+            id: "color-contrast",
             enabled: true,
           },
           {
-            id: 'button-name',
+            id: "button-name",
             enabled: true,
           },
         ],
       },
     },
   },
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   decorators: [
     (Story) => (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4">
@@ -63,7 +66,8 @@ InstallPrompt is a custom A2HS (Add to Home Screen) prompt component that provid
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 mb-4">
             <h2 className="text-xl font-bold mb-2">Sample App Content</h2>
             <p className="text-gray-600 dark:text-gray-400">
-              The install prompt appears at the bottom of the screen. Scroll down to see it.
+              The install prompt appears at the bottom of the screen. Scroll
+              down to see it.
             </p>
           </div>
           <Story />
@@ -88,14 +92,16 @@ export const AndroidPrompt: Story = {
         const mockEvent = {
           preventDefault: () => {},
           prompt: async () => {},
-          userChoice: Promise.resolve({ outcome: 'accepted', platform: 'web' }),
-          platforms: ['web'],
+          userChoice: Promise.resolve({ outcome: "accepted", platform: "web" }),
+          platforms: ["web"],
         } as BeforeInstallPromptEvent;
 
         // Trigger the event after a short delay
         const timer = setTimeout(() => {
           window.dispatchEvent(
-            new CustomEvent('beforeinstallprompt', { detail: mockEvent }) as Event
+            new CustomEvent("beforeinstallprompt", {
+              detail: mockEvent,
+            }) as Event,
           );
         }, 500);
 
@@ -130,15 +136,15 @@ export const IOSInstructions: Story = {
     (Story) => {
       useEffect(() => {
         // Mock iOS user agent
-        Object.defineProperty(window.navigator, 'userAgent', {
-          value: 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X)',
+        Object.defineProperty(window.navigator, "userAgent", {
+          value: "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X)",
           configurable: true,
         });
 
         // Mock display-mode to NOT be standalone
-        Object.defineProperty(window, 'matchMedia', {
+        Object.defineProperty(window, "matchMedia", {
           value: (query: string) => ({
-            matches: query === '(display-mode: standalone)' ? false : true,
+            matches: query === "(display-mode: standalone)" ? false : true,
             media: query,
             addEventListener: () => {},
             removeEventListener: () => {},
@@ -147,10 +153,10 @@ export const IOSInstructions: Story = {
         });
 
         // Clear the localStorage flag to show prompt
-        localStorage.removeItem('hasSeenIOSInstallPrompt');
+        localStorage.removeItem("hasSeenIOSInstallPrompt");
 
         // Trigger a re-render
-        window.dispatchEvent(new Event('resize'));
+        window.dispatchEvent(new Event("resize"));
       }, []);
 
       return <Story />;
@@ -186,9 +192,9 @@ export const AlreadyInstalled: Story = {
     (Story) => {
       useEffect(() => {
         // Mock standalone mode
-        Object.defineProperty(window, 'matchMedia', {
+        Object.defineProperty(window, "matchMedia", {
           value: (query: string) => ({
-            matches: query === '(display-mode: standalone)',
+            matches: query === "(display-mode: standalone)",
             media: query,
             addEventListener: () => {},
             removeEventListener: () => {},
@@ -197,7 +203,7 @@ export const AlreadyInstalled: Story = {
         });
 
         // Mock navigator.standalone for iOS
-        Object.defineProperty(window.navigator, 'standalone', {
+        Object.defineProperty(window.navigator, "standalone", {
           value: true,
           configurable: true,
         });
@@ -244,13 +250,13 @@ export const Dismissed: Story = {
     (Story) => {
       useEffect(() => {
         // Mock iOS
-        Object.defineProperty(window.navigator, 'userAgent', {
-          value: 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X)',
+        Object.defineProperty(window.navigator, "userAgent", {
+          value: "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X)",
           configurable: true,
         });
 
         // Set localStorage flag to simulate previous dismissal
-        localStorage.setItem('hasSeenIOSInstallPrompt', 'true');
+        localStorage.setItem("hasSeenIOSInstallPrompt", "true");
       }, []);
 
       return (
@@ -265,7 +271,7 @@ export const Dismissed: Story = {
             </p>
             <button
               onClick={() => {
-                localStorage.removeItem('hasSeenIOSInstallPrompt');
+                localStorage.removeItem("hasSeenIOSInstallPrompt");
                 window.location.reload();
               }}
               className="mt-2 text-sm text-blue-600 dark:text-blue-400 underline"
@@ -303,7 +309,7 @@ export const DarkModeAndroid: Story = {
   ...AndroidPrompt,
   parameters: {
     backgrounds: {
-      default: 'dark',
+      default: "dark",
     },
     docs: {
       description: {
@@ -322,22 +328,24 @@ Dark mode variant using Tailwind's dark mode classes. All colors, borders, and t
   decorators: [
     (Story) => {
       useEffect(() => {
-        document.documentElement.classList.add('dark');
+        document.documentElement.classList.add("dark");
         const mockEvent = {
           preventDefault: () => {},
           prompt: async () => {},
-          userChoice: Promise.resolve({ outcome: 'accepted', platform: 'web' }),
-          platforms: ['web'],
+          userChoice: Promise.resolve({ outcome: "accepted", platform: "web" }),
+          platforms: ["web"],
         } as BeforeInstallPromptEvent;
 
         const timer = setTimeout(() => {
           window.dispatchEvent(
-            new CustomEvent('beforeinstallprompt', { detail: mockEvent }) as Event
+            new CustomEvent("beforeinstallprompt", {
+              detail: mockEvent,
+            }) as Event,
           );
         }, 500);
 
         return () => {
-          document.documentElement.classList.remove('dark');
+          document.documentElement.classList.remove("dark");
           clearTimeout(timer);
         };
       }, []);
@@ -360,26 +368,27 @@ export const DarkModeIOS: Story = {
   ...IOSInstructions,
   parameters: {
     backgrounds: {
-      default: 'dark',
+      default: "dark",
     },
     docs: {
       description: {
-        story: 'iOS instructions in dark mode. The share icon and text adapt to dark theme.',
+        story:
+          "iOS instructions in dark mode. The share icon and text adapt to dark theme.",
       },
     },
   },
   decorators: [
     (Story) => {
       useEffect(() => {
-        document.documentElement.classList.add('dark');
-        Object.defineProperty(window.navigator, 'userAgent', {
-          value: 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X)',
+        document.documentElement.classList.add("dark");
+        Object.defineProperty(window.navigator, "userAgent", {
+          value: "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X)",
           configurable: true,
         });
-        localStorage.removeItem('hasSeenIOSInstallPrompt');
+        localStorage.removeItem("hasSeenIOSInstallPrompt");
 
         return () => {
-          document.documentElement.classList.remove('dark');
+          document.documentElement.classList.remove("dark");
         };
       }, []);
 

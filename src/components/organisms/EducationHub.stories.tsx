@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { EducationHub } from "./EducationHub";
-import { useEducationStore, initialContentProgress } from "@/interface-adapters/store/educationStore";
+import {
+  useEducationStore,
+  initialContentProgress,
+} from "@/interface-adapters/store/educationStore";
 import { useEffect } from "react";
 
 const meta: Meta<typeof EducationHub> = {
@@ -278,7 +281,8 @@ export const WithUnlockedAdvanced: Story = {
         });
 
         // Mock unlock check to return true for advanced content
-        const originalIsUnlocked = useEducationStore.getState().isContentUnlocked;
+        const originalIsUnlocked =
+          useEducationStore.getState().isContentUnlocked;
         useEducationStore.setState({
           isContentUnlocked: (id) => {
             if (id === "advanced-patterns") return true;

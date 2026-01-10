@@ -69,7 +69,7 @@ export function FrequencyStep() {
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
               frequency === option.value
                 ? "border-primary bg-accent"
-                : "border-border bg-background"
+                : "border-border bg-background",
             )}
             data-testid={`frequency-option-${option.value}`}
             type="button"

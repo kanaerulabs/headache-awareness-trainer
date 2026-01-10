@@ -25,7 +25,11 @@ export default meta;
 type Story = StoryObj<typeof TensionTracker>;
 
 // Interactive wrapper component
-const InteractiveTensionTracker = (args: { value?: number; disabled?: boolean; onChange?: (value: number) => void }) => {
+const InteractiveTensionTracker = (args: {
+  value?: number;
+  disabled?: boolean;
+  onChange?: (value: number) => void;
+}) => {
   const [value, setValue] = useState<number>(args.value ?? 5);
 
   return (

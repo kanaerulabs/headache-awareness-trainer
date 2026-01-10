@@ -171,8 +171,7 @@ export const Extreme: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          "Intensity level 5 (Extreme) selected, shown in dark red color.",
+        story: "Intensity level 5 (Extreme) selected, shown in dark red color.",
       },
     },
   },

@@ -1,0 +1,112 @@
+name: Deploy to Railway
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to Railway Production
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'pnpm'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run type check
+        run: pnpm run type-check
+
+      - name: Build application
+        run: pnpm run build
+        env:
+          NODE_ENV: production
+
+      - name: Deploy to Railway
+        run: |
+          # Get Railway project details
+          PROJECT_ID="${{ secrets.RAILWAY_PROJECT_ID }}"
+          SERVICE_ID="${{ secrets.RAILWAY_SERVICE_ID }}"
+          ENVIRONMENT_ID="${{ secrets.RAILWAY_ENVIRONMENT_ID }}"
+
+          # Trigger deployment using GraphQL API
+          DEPLOY_RESPONSE=$(curl -s -X POST https://backboard.railway.com/graphql/v2 \
+            -H "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"query\": \"mutation { serviceInstanceDeploy(environmentId: \\\"$ENVIRONMENT_ID\\\", serviceId: \\\"$SERVICE_ID\\\", latestCommit: true) }\"}")
+
+          echo "Deployment triggered: $DEPLOY_RESPONSE"
+
+          # Check if deployment was successful
+          if echo "$DEPLOY_RESPONSE" | grep -q "true"; then
+            echo "✅ Deployment initiated successfully"
+          else
+            echo "❌ Deployment failed: $DEPLOY_RESPONSE"
+            exit 1
+          fi
+
+      - name: Wait for deployment
+        run: |
+          echo "Waiting for Railway deployment to complete..."
+          sleep 30
+
+          # Check deployment status
+          STATUS_RESPONSE=$(curl -s -X POST https://backboard.railway.com/graphql/v2 \
+            -H "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"query\": \"query { deployments(first: 1, input: { projectId: \\\"${{ secrets.RAILWAY_PROJECT_ID }}\\\", serviceId: \\\"${{ secrets.RAILWAY_SERVICE_ID }}\\\", environmentId: \\\"${{ secrets.RAILWAY_ENVIRONMENT_ID }}\\\" }) { edges { node { id status createdAt } } } }\"}")
+
+          echo "Latest deployment status: $STATUS_RESPONSE"
+
+      - name: Get deployment URL
+        run: |
+          # Fetch service URL
+          URL_RESPONSE=$(curl -s -X POST https://backboard.railway.com/graphql/v2 \
+            -H "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"query\": \"query { service(id: \\\"${{ secrets.RAILWAY_SERVICE_ID }}\\\") { serviceInstances { edges { node { domains { serviceDomains { domain } } } } } } }\"}")
+
+          echo "Service URL response: $URL_RESPONSE"
+
+          # Extract domain (this is a simplified extraction)
+          DOMAIN=$(echo "$URL_RESPONSE" | grep -o '"domain":"[^"]*"' | head -1 | cut -d'"' -f4)
+
+          if [ -n "$DOMAIN" ]; then
+            echo "🚀 Deployed to: https://$DOMAIN"
+            echo "DEPLOYMENT_URL=https://$DOMAIN" >> $GITHUB_ENV
+          else
+            echo "⚠️ Could not extract deployment URL"
+          fi
+
+      - name: Post deployment summary
+        if: always()
+        run: |
+          echo "## 🚀 Railway Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Triggered by:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+
+          if [ -n "$DEPLOYMENT_URL" ]; then
+            echo "**URL:** $DEPLOYMENT_URL" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Next Steps" >> $GITHUB_STEP_SUMMARY
+          echo "- Verify deployment at Railway dashboard" >> $GITHUB_STEP_SUMMARY
+          echo "- Test PWA features on mobile device" >> $GITHUB_STEP_SUMMARY
+          echo "- Run Lighthouse audit for performance" >> $GITHUB_STEP_SUMMARY

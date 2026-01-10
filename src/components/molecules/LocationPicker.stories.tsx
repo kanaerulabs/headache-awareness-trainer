@@ -21,16 +21,20 @@ export default meta;
 type Story = StoryObj<typeof LocationPicker>;
 
 // Interactive wrapper component
-const InteractiveLocationPicker = (args: { selectedLocations?: HeadacheLocation[]; disabled?: boolean; onLocationToggle?: (location: HeadacheLocation) => void }) => {
-  const [selectedLocations, setSelectedLocations] = useState<HeadacheLocation[]>(
-    args.selectedLocations ?? []
-  );
+const InteractiveLocationPicker = (args: {
+  selectedLocations?: HeadacheLocation[];
+  disabled?: boolean;
+  onLocationToggle?: (location: HeadacheLocation) => void;
+}) => {
+  const [selectedLocations, setSelectedLocations] = useState<
+    HeadacheLocation[]
+  >(args.selectedLocations ?? []);
 
   const handleToggle = (location: HeadacheLocation) => {
     setSelectedLocations((prev) =>
       prev.includes(location)
         ? prev.filter((l) => l !== location)
-        : [...prev, location]
+        : [...prev, location],
     );
     args.onLocationToggle?.(location);
   };
@@ -79,7 +83,8 @@ export const TensionHeadachePattern: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Typical pattern for tension headache - front, back, neck, and shoulders",
+        story:
+          "Typical pattern for tension headache - front, back, neck, and shoulders",
       },
     },
   },
