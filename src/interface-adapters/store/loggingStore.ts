@@ -291,6 +291,7 @@ export const useLoggingStore = create<LoggingState>()(
 
       /**
        * Get recent entries (sorted by timestamp descending)
+       * Uses cursor for efficient retrieval without loading all entries
        */
       getRecentEntries: async (limit: number): Promise<HeadacheEntry[]> => {
         const { db } = get();
@@ -298,18 +299,19 @@ export const useLoggingStore = create<LoggingState>()(
 
         const tx = db.transaction("entries", "readonly");
         const index = tx.store.index("timestamp");
-        const entries = await index.getAll();
+        const entries: HeadacheEntry[] = [];
 
-        // Convert timestamp strings back to Date objects and sort
-        const sortedEntries = entries
-          .map((entry) => ({
-            ...entry,
-            timestamp: new Date(entry.timestamp),
-          }))
-          .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
-          .slice(0, limit);
+        // Use cursor to iterate in reverse order (newest first) - more efficient
+        let cursor = await index.openCursor(null, "prev");
+        while (cursor && entries.length < limit) {
+          entries.push({
+            ...cursor.value,
+            timestamp: new Date(cursor.value.timestamp),
+          });
+          cursor = await cursor.continue();
+        }
 
-        return sortedEntries;
+        return entries;
       },
 
       /**
