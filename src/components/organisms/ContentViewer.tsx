@@ -229,7 +229,11 @@ export function ContentViewer({ contentId }: ContentViewerProps) {
       </div>
 
       {/* Section dots */}
-      <div className="flex justify-center gap-2" role="navigation" aria-label="Section navigation">
+      <div
+        className="flex justify-center gap-2"
+        role="navigation"
+        aria-label="Section navigation"
+      >
         {content.sections.map((_, index) => (
           <button
             key={index}

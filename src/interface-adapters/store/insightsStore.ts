@@ -1,6 +1,6 @@
-import { create } from 'zustand';
-import { useLoggingStore } from './loggingStore';
-import { useCheckInStore } from './checkinStore';
+import { create } from "zustand";
+import { useLoggingStore } from "./loggingStore";
+import { useCheckInStore } from "./checkinStore";
 
 /**
  * Calendar Day Data
@@ -10,16 +10,16 @@ export interface CalendarDayData {
   headacheCount: number;
   maxIntensity: number; // 0-5, 0 = no headache
   checkinCount: number;
-  entries: { type: 'headache' | 'checkin'; id: string }[];
+  entries: { type: "headache" | "checkin"; id: string }[];
 }
 
 /**
  * Correlation Result
  */
 export interface CorrelationResult {
-  factor: 'sleep' | 'stress' | 'jawTension' | 'mood' | 'timeOfDay';
+  factor: "sleep" | "stress" | "jawTension" | "mood" | "timeOfDay";
   strength: number; // 0-100
-  trend: 'positive' | 'negative' | 'neutral';
+  trend: "positive" | "negative" | "neutral";
   description: string;
 }
 
@@ -38,7 +38,7 @@ export interface WeeklyTrendData {
  * Time of Day Data
  */
 export interface TimeOfDayData {
-  timeOfDay: 'morning' | 'afternoon' | 'evening' | 'night';
+  timeOfDay: "morning" | "afternoon" | "evening" | "night";
   percentage: number; // 0-100
   count: number;
 }
@@ -50,7 +50,7 @@ export interface Insight {
   id: string;
   title: string;
   description: string;
-  category: 'pattern' | 'trigger' | 'tip' | 'achievement';
+  category: "pattern" | "trigger" | "tip" | "achievement";
   isPersonal: boolean;
   isUnlocked: boolean;
   unlockCondition?: string;
@@ -61,14 +61,17 @@ export interface Insight {
  */
 export interface InsightsState {
   // Calendar Data
-  getCalendarData: (startDate: Date, endDate: Date) => Promise<CalendarDayData[]>;
+  getCalendarData: (
+    startDate: Date,
+    endDate: Date,
+  ) => Promise<CalendarDayData[]>;
 
   // Correlation Analysis
   correlations: CorrelationResult[];
   calculateCorrelations: () => Promise<CorrelationResult[]>;
 
   // Trend Analysis
-  getWeeklyTrends: (filter: 30 | 90 | 'all') => Promise<WeeklyTrendData[]>;
+  getWeeklyTrends: (filter: 30 | 90 | "all") => Promise<WeeklyTrendData[]>;
 
   // Time of Day
   getTimeOfDayAnalysis: () => Promise<TimeOfDayData[]>;
@@ -84,10 +87,12 @@ export interface InsightsState {
 }
 
 /**
- * Helper: Get date only (no time)
+ * Helper: Get date only (no time) - using UTC to avoid timezone issues
  */
 const getDateOnly = (date: Date): Date => {
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  return new Date(
+    Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()),
+  );
 };
 
 /**
@@ -98,13 +103,16 @@ const getDateKey = (date: Date): string => {
 };
 
 /**
- * Helper: Get time of day from hour
+ * Helper: Get time of day from timestamp (using UTC hours)
  */
-const getTimeOfDay = (hour: number): 'morning' | 'afternoon' | 'evening' | 'night' => {
-  if (hour >= 5 && hour < 12) return 'morning';
-  if (hour >= 12 && hour < 17) return 'afternoon';
-  if (hour >= 17 && hour < 21) return 'evening';
-  return 'night';
+const getTimeOfDay = (
+  timestamp: Date,
+): "morning" | "afternoon" | "evening" | "night" => {
+  const hour = timestamp.getUTCHours();
+  if (hour >= 5 && hour < 12) return "morning";
+  if (hour >= 12 && hour < 17) return "afternoon";
+  if (hour >= 17 && hour < 21) return "evening";
+  return "night";
 };
 
 /**
@@ -112,10 +120,11 @@ const getTimeOfDay = (hour: number): 'morning' | 'afternoon' | 'evening' | 'nigh
  */
 const getWeekStart = (date: Date): Date => {
   const d = getDateOnly(date);
-  const day = d.getDay();
+  const day = d.getUTCDay();
   const diff = day === 0 ? 6 : day - 1; // Monday = 0
-  d.setDate(d.getDate() - diff);
-  return d;
+  const weekStart = new Date(d);
+  weekStart.setUTCDate(d.getUTCDate() - diff);
+  return weekStart;
 };
 
 /**
@@ -123,7 +132,7 @@ const getWeekStart = (date: Date): Date => {
  */
 const getWeekEnd = (weekStart: Date): Date => {
   const d = new Date(weekStart);
-  d.setDate(d.getDate() + 6);
+  d.setUTCDate(d.getUTCDate() + 6);
   return d;
 };
 
@@ -132,26 +141,29 @@ const getWeekEnd = (weekStart: Date): Date => {
  */
 const GENERAL_INSIGHTS: Insight[] = [
   {
-    id: 'gen-1',
-    title: 'Hydration Matters',
-    description: 'Studies show dehydration is a common headache trigger. Try drinking 8 glasses of water daily.',
-    category: 'tip',
+    id: "gen-1",
+    title: "Hydration Matters",
+    description:
+      "Studies show dehydration is a common headache trigger. Try drinking 8 glasses of water daily.",
+    category: "tip",
     isPersonal: false,
     isUnlocked: true,
   },
   {
-    id: 'gen-2',
-    title: 'Sleep Consistency',
-    description: 'Research indicates irregular sleep patterns can trigger headaches. Aim for consistent sleep times.',
-    category: 'tip',
+    id: "gen-2",
+    title: "Sleep Consistency",
+    description:
+      "Research indicates irregular sleep patterns can trigger headaches. Aim for consistent sleep times.",
+    category: "tip",
     isPersonal: false,
     isUnlocked: true,
   },
   {
-    id: 'gen-3',
-    title: 'Jaw Tension Connection',
-    description: 'TMJ disorders and jaw clenching are strongly linked to tension headaches.',
-    category: 'trigger',
+    id: "gen-3",
+    title: "Jaw Tension Connection",
+    description:
+      "TMJ disorders and jaw clenching are strongly linked to tension headaches.",
+    category: "trigger",
     isPersonal: false,
     isUnlocked: true,
   },
@@ -162,31 +174,34 @@ const GENERAL_INSIGHTS: Insight[] = [
  */
 const PERSONAL_INSIGHTS: Insight[] = [
   {
-    id: 'pers-1',
-    title: 'Your Sleep Pattern',
-    description: 'Based on your data, poor sleep quality appears linked to headaches the following day.',
-    category: 'pattern',
+    id: "pers-1",
+    title: "Your Sleep Pattern",
+    description:
+      "Based on your data, poor sleep quality appears linked to headaches the following day.",
+    category: "pattern",
     isPersonal: true,
     isUnlocked: false,
-    unlockCondition: 'Week 2+',
+    unlockCondition: "Week 2+",
   },
   {
-    id: 'pers-2',
-    title: 'Stress Trigger',
-    description: 'Your headaches correlate with high stress levels. Consider stress management techniques.',
-    category: 'trigger',
+    id: "pers-2",
+    title: "Stress Trigger",
+    description:
+      "Your headaches correlate with high stress levels. Consider stress management techniques.",
+    category: "trigger",
     isPersonal: true,
     isUnlocked: false,
-    unlockCondition: 'Week 2+',
+    unlockCondition: "Week 2+",
   },
   {
-    id: 'pers-3',
-    title: 'Morning Headaches',
-    description: 'You experience most headaches in the morning, which may indicate sleep-related triggers.',
-    category: 'pattern',
+    id: "pers-3",
+    title: "Morning Headaches",
+    description:
+      "You experience most headaches in the morning, which may indicate sleep-related triggers.",
+    category: "pattern",
     isPersonal: true,
     isUnlocked: false,
-    unlockCondition: 'Week 2+',
+    unlockCondition: "Week 2+",
   },
 ];
 
@@ -202,7 +217,10 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
   /**
    * Get calendar data for a date range
    */
-  getCalendarData: async (startDate: Date, endDate: Date): Promise<CalendarDayData[]> => {
+  getCalendarData: async (
+    startDate: Date,
+    endDate: Date,
+  ): Promise<CalendarDayData[]> => {
     const loggingStore = useLoggingStore.getState();
     const checkinStore = useCheckInStore.getState();
 
@@ -235,7 +253,7 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
         const dayData = dataByDate.get(key)!;
         dayData.headacheCount++;
         dayData.maxIntensity = Math.max(dayData.maxIntensity, entry.intensity);
-        dayData.entries.push({ type: 'headache', id: entry.id });
+        dayData.entries.push({ type: "headache", id: entry.id });
       }
     });
 
@@ -256,13 +274,13 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
 
         const dayData = dataByDate.get(key)!;
         dayData.checkinCount++;
-        dayData.entries.push({ type: 'checkin', id: entry.id });
+        dayData.entries.push({ type: "checkin", id: entry.id });
       }
     });
 
     // Convert to array and sort by date
     return Array.from(dataByDate.values()).sort(
-      (a, b) => a.date.getTime() - b.date.getTime()
+      (a, b) => a.date.getTime() - b.date.getTime(),
     );
   },
 
@@ -308,7 +326,7 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
     let goodSleepHeadacheDays = 0;
 
     checkinsByDate.forEach((checkins, dateKey) => {
-      const hasPoorSleep = checkins.some((c) => c.sleepQuality === 'poor');
+      const hasPoorSleep = checkins.some((c) => c.sleepQuality === "poor");
       const hasHeadache = headachesByDate.has(dateKey);
 
       if (hasPoorSleep) {
@@ -321,14 +339,19 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
     });
 
     if (poorSleepDays > 0 || goodSleepDays > 0) {
-      const poorSleepRate = poorSleepDays > 0 ? poorSleepHeadacheDays / poorSleepDays : 0;
-      const goodSleepRate = goodSleepDays > 0 ? goodSleepHeadacheDays / goodSleepDays : 0;
-      const strength = Math.min(100, Math.abs(poorSleepRate - goodSleepRate) * 100);
+      const poorSleepRate =
+        poorSleepDays > 0 ? poorSleepHeadacheDays / poorSleepDays : 0;
+      const goodSleepRate =
+        goodSleepDays > 0 ? goodSleepHeadacheDays / goodSleepDays : 0;
+      const strength = Math.min(
+        100,
+        Math.abs(poorSleepRate - goodSleepRate) * 100,
+      );
 
       correlations.push({
-        factor: 'sleep',
+        factor: "sleep",
         strength: Math.round(strength),
-        trend: poorSleepRate > goodSleepRate ? 'negative' : 'positive',
+        trend: poorSleepRate > goodSleepRate ? "negative" : "positive",
         description: `Poor sleep is associated with ${Math.round(poorSleepRate * 100)}% headache rate vs ${Math.round(goodSleepRate * 100)}% on good sleep days.`,
       });
     }
@@ -340,7 +363,9 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
     let calmHeadacheDays = 0;
 
     checkinsByDate.forEach((checkins, dateKey) => {
-      const hasStress = checkins.some((c) => c.mood === 'stressed' || c.mood === 'anxious');
+      const hasStress = checkins.some(
+        (c) => c.mood === "stressed" || c.mood === "anxious",
+      );
       const hasHeadache = headachesByDate.has(dateKey);
 
       if (hasStress) {
@@ -353,14 +378,15 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
     });
 
     if (stressedDays > 0 || calmDays > 0) {
-      const stressRate = stressedDays > 0 ? stressedHeadacheDays / stressedDays : 0;
+      const stressRate =
+        stressedDays > 0 ? stressedHeadacheDays / stressedDays : 0;
       const calmRate = calmDays > 0 ? calmHeadacheDays / calmDays : 0;
       const strength = Math.min(100, Math.abs(stressRate - calmRate) * 100);
 
       correlations.push({
-        factor: 'stress',
+        factor: "stress",
         strength: Math.round(strength),
-        trend: stressRate > calmRate ? 'positive' : 'neutral',
+        trend: stressRate > calmRate ? "positive" : "neutral",
         description: `Stress days show ${Math.round(stressRate * 100)}% headache rate vs ${Math.round(calmRate * 100)}% on calm days.`,
       });
     }
@@ -372,7 +398,7 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
     let noJawTensionHeadacheDays = 0;
 
     checkinsByDate.forEach((checkins, dateKey) => {
-      const hasJawTension = checkins.some((c) => c.bodyTension.includes('jaw'));
+      const hasJawTension = checkins.some((c) => c.bodyTension.includes("jaw"));
       const hasHeadache = headachesByDate.has(dateKey);
 
       if (hasJawTension) {
@@ -385,14 +411,16 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
     });
 
     if (jawTensionDays > 0 || noJawTensionDays > 0) {
-      const jawRate = jawTensionDays > 0 ? jawTensionHeadacheDays / jawTensionDays : 0;
-      const noJawRate = noJawTensionDays > 0 ? noJawTensionHeadacheDays / noJawTensionDays : 0;
+      const jawRate =
+        jawTensionDays > 0 ? jawTensionHeadacheDays / jawTensionDays : 0;
+      const noJawRate =
+        noJawTensionDays > 0 ? noJawTensionHeadacheDays / noJawTensionDays : 0;
       const strength = Math.min(100, Math.abs(jawRate - noJawRate) * 100);
 
       correlations.push({
-        factor: 'jawTension',
+        factor: "jawTension",
         strength: Math.round(strength),
-        trend: jawRate > noJawRate ? 'positive' : 'neutral',
+        trend: jawRate > noJawRate ? "positive" : "neutral",
         description: `Jaw tension days show ${Math.round(jawRate * 100)}% headache rate vs ${Math.round(noJawRate * 100)}% without tension.`,
       });
     }
@@ -404,7 +432,9 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
   /**
    * Get weekly trends
    */
-  getWeeklyTrends: async (filter: 30 | 90 | 'all'): Promise<WeeklyTrendData[]> => {
+  getWeeklyTrends: async (
+    filter: 30 | 90 | "all",
+  ): Promise<WeeklyTrendData[]> => {
     const loggingStore = useLoggingStore.getState();
     const checkinStore = useCheckInStore.getState();
 
@@ -415,13 +445,16 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
     const now = new Date();
     let startDate: Date;
 
-    if (filter === 'all') {
+    if (filter === "all") {
       // Use earliest entry date
       const allDates = [
         ...headacheEntries.map((e) => e.timestamp),
         ...checkinEntries.map((e) => e.timestamp),
       ];
-      startDate = allDates.length > 0 ? new Date(Math.min(...allDates.map((d) => d.getTime()))) : now;
+      startDate =
+        allDates.length > 0
+          ? new Date(Math.min(...allDates.map((d) => d.getTime())))
+          : now;
     } else {
       startDate = new Date(now);
       startDate.setDate(startDate.getDate() - filter);
@@ -447,7 +480,8 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
         }
 
         const weekData = weekDataMap.get(key)!;
-        const newTotal = weekData.averageIntensity * weekData.headacheCount + entry.intensity;
+        const newTotal =
+          weekData.averageIntensity * weekData.headacheCount + entry.intensity;
         weekData.headacheCount++;
         weekData.averageIntensity = newTotal / weekData.headacheCount;
       }
@@ -479,6 +513,7 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
     const currentWeekStart = getWeekStart(startDate);
     const endWeekStart = getWeekStart(now);
 
+    // Fill in missing weeks with zero data
     let weekCursor = new Date(currentWeekStart);
     while (weekCursor <= endWeekStart) {
       const key = getDateKey(weekCursor);
@@ -493,14 +528,15 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
           checkinCount: 0,
         });
       }
-
       // Create new Date to avoid const mutation lint error
       const nextDate = new Date(weekCursor);
-      nextDate.setDate(nextDate.getDate() + 7);
+      nextDate.setUTCDate(nextDate.getUTCDate() + 7);
       weekCursor = nextDate;
     }
 
-    return allWeeks.sort((a, b) => a.weekStart.getTime() - b.weekStart.getTime());
+    return allWeeks.sort(
+      (a, b) => a.weekStart.getTime() - b.weekStart.getTime(),
+    );
   },
 
   /**
@@ -523,8 +559,7 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
     };
 
     headacheEntries.forEach((entry) => {
-      const hour = entry.timestamp.getHours();
-      const timeOfDay = getTimeOfDay(hour);
+      const timeOfDay = getTimeOfDay(entry.timestamp);
       counts[timeOfDay]++;
     });
 
@@ -532,22 +567,22 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
 
     return [
       {
-        timeOfDay: 'morning',
+        timeOfDay: "morning",
         count: counts.morning,
         percentage: Math.round((counts.morning / total) * 100),
       },
       {
-        timeOfDay: 'afternoon',
+        timeOfDay: "afternoon",
         count: counts.afternoon,
         percentage: Math.round((counts.afternoon / total) * 100),
       },
       {
-        timeOfDay: 'evening',
+        timeOfDay: "evening",
         count: counts.evening,
         percentage: Math.round((counts.evening / total) * 100),
       },
       {
-        timeOfDay: 'night',
+        timeOfDay: "night",
         count: counts.night,
         percentage: Math.round((counts.night / total) * 100),
       },
@@ -601,7 +636,7 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
 
       set({ isLoading: false });
     } catch (error) {
-      console.error('Failed to refresh insights:', error);
+      console.error("Failed to refresh insights:", error);
       set({ isLoading: false });
     }
   },

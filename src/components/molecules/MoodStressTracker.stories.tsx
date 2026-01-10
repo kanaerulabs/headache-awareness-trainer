@@ -30,7 +30,13 @@ export default meta;
 type Story = StoryObj<typeof MoodStressTracker>;
 
 // Interactive wrapper component
-const InteractiveMoodStressTracker = (args: { mood?: Mood | null; stressLevel?: number; disabled?: boolean; onMoodChange?: (mood: Mood) => void; onStressChange?: (level: number) => void }) => {
+const InteractiveMoodStressTracker = (args: {
+  mood?: Mood | null;
+  stressLevel?: number;
+  disabled?: boolean;
+  onMoodChange?: (mood: Mood) => void;
+  onStressChange?: (level: number) => void;
+}) => {
   const [mood, setMood] = useState<Mood | null>(args.mood ?? null);
   const [stressLevel, setStressLevel] = useState<number>(args.stressLevel ?? 5);
 
@@ -133,23 +139,47 @@ export const AllMoods: Story = {
     <div className="space-y-8 w-full max-w-2xl">
       <div>
         <h3 className="text-lg font-semibold mb-4">Great Mood - Low Stress</h3>
-        <InteractiveMoodStressTracker mood="great" stressLevel={1} disabled={false} />
+        <InteractiveMoodStressTracker
+          mood="great"
+          stressLevel={1}
+          disabled={false}
+        />
       </div>
       <div>
         <h3 className="text-lg font-semibold mb-4">Good Mood - Mild Stress</h3>
-        <InteractiveMoodStressTracker mood="good" stressLevel={3} disabled={false} />
+        <InteractiveMoodStressTracker
+          mood="good"
+          stressLevel={3}
+          disabled={false}
+        />
       </div>
       <div>
-        <h3 className="text-lg font-semibold mb-4">Neutral Mood - Moderate Stress</h3>
-        <InteractiveMoodStressTracker mood="neutral" stressLevel={5} disabled={false} />
+        <h3 className="text-lg font-semibold mb-4">
+          Neutral Mood - Moderate Stress
+        </h3>
+        <InteractiveMoodStressTracker
+          mood="neutral"
+          stressLevel={5}
+          disabled={false}
+        />
       </div>
       <div>
-        <h3 className="text-lg font-semibold mb-4">Low Mood - Moderate Stress</h3>
-        <InteractiveMoodStressTracker mood="low" stressLevel={7} disabled={false} />
+        <h3 className="text-lg font-semibold mb-4">
+          Low Mood - Moderate Stress
+        </h3>
+        <InteractiveMoodStressTracker
+          mood="low"
+          stressLevel={7}
+          disabled={false}
+        />
       </div>
       <div>
         <h3 className="text-lg font-semibold mb-4">Bad Mood - High Stress</h3>
-        <InteractiveMoodStressTracker mood="bad" stressLevel={9} disabled={false} />
+        <InteractiveMoodStressTracker
+          mood="bad"
+          stressLevel={9}
+          disabled={false}
+        />
       </div>
     </div>
   ),
@@ -160,19 +190,35 @@ export const StressProgression: Story = {
     <div className="space-y-8 w-full max-w-2xl">
       <div>
         <h3 className="text-lg font-semibold mb-4">Calm (0)</h3>
-        <InteractiveMoodStressTracker mood="great" stressLevel={0} disabled={false} />
+        <InteractiveMoodStressTracker
+          mood="great"
+          stressLevel={0}
+          disabled={false}
+        />
       </div>
       <div>
         <h3 className="text-lg font-semibold mb-4">Mild Stress (3)</h3>
-        <InteractiveMoodStressTracker mood="good" stressLevel={3} disabled={false} />
+        <InteractiveMoodStressTracker
+          mood="good"
+          stressLevel={3}
+          disabled={false}
+        />
       </div>
       <div>
         <h3 className="text-lg font-semibold mb-4">Moderate Stress (7)</h3>
-        <InteractiveMoodStressTracker mood="neutral" stressLevel={7} disabled={false} />
+        <InteractiveMoodStressTracker
+          mood="neutral"
+          stressLevel={7}
+          disabled={false}
+        />
       </div>
       <div>
         <h3 className="text-lg font-semibold mb-4">High Stress (10)</h3>
-        <InteractiveMoodStressTracker mood="low" stressLevel={10} disabled={false} />
+        <InteractiveMoodStressTracker
+          mood="low"
+          stressLevel={10}
+          disabled={false}
+        />
       </div>
     </div>
   ),

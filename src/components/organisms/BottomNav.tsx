@@ -2,7 +2,13 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Home, ClipboardCheck, PlusCircle, BarChart3, BookOpen } from "lucide-react";
+import {
+  Home,
+  ClipboardCheck,
+  PlusCircle,
+  BarChart3,
+  BookOpen,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface NavItem {

@@ -1,6 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { ContentViewer } from "./ContentViewer";
-import { useEducationStore, ContentType, initialContentProgress } from "@/interface-adapters/store/educationStore";
+import {
+  useEducationStore,
+  ContentType,
+  initialContentProgress,
+} from "@/interface-adapters/store/educationStore";
 import { useEffect } from "react";
 
 // Mock Next.js router for Storybook

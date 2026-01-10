@@ -26,7 +26,11 @@ export default meta;
 type Story = StoryObj<typeof HeadacheTypeSelector>;
 
 // Interactive wrapper component
-const InteractiveHeadacheTypeSelector = (args: { value?: HeadacheType | null; disabled?: boolean; onChange?: (value: HeadacheType) => void }) => {
+const InteractiveHeadacheTypeSelector = (args: {
+  value?: HeadacheType | null;
+  disabled?: boolean;
+  onChange?: (value: HeadacheType) => void;
+}) => {
   const [value, setValue] = useState<HeadacheType | null>(args.value ?? null);
 
   return (
