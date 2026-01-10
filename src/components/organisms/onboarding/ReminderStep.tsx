@@ -68,7 +68,7 @@ export function ReminderStep() {
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                 reminderPreference === option.value
                   ? "border-primary bg-accent"
-                  : "border-border bg-background"
+                  : "border-border bg-background",
               )}
               data-testid={`reminder-option-${option.value}`}
               type="button"
@@ -79,7 +79,7 @@ export function ReminderStep() {
                     "flex h-10 w-10 shrink-0 items-center justify-center rounded-full",
                     reminderPreference === option.value
                       ? "bg-primary/10 text-primary"
-                      : "bg-muted text-muted-foreground"
+                      : "bg-muted text-muted-foreground",
                   )}
                 >
                   <Icon className="h-5 w-5" />

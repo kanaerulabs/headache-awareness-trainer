@@ -172,7 +172,12 @@ export function InstallPrompt() {
                   className="inline-flex items-center justify-center w-6 h-6 border border-gray-300 dark:border-gray-600 rounded"
                   aria-hidden="true"
                 >
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" data-testid="ios-share-icon">
+                  <svg
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    data-testid="ios-share-icon"
+                  >
                     <path
                       d="M12 2L12 14M12 2L8 6M12 2L16 6M4 14L4 20L20 20L20 14"
                       stroke="currentColor"

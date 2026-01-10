@@ -24,11 +24,41 @@ export interface IntensitySliderProps {
 }
 
 const intensityConfig = [
-  { value: 1 as const, label: "Minimal", color: "bg-green-500", hoverColor: "hover:bg-green-600", activeColor: "ring-green-500" },
-  { value: 2 as const, label: "Mild", color: "bg-yellow-500", hoverColor: "hover:bg-yellow-600", activeColor: "ring-yellow-500" },
-  { value: 3 as const, label: "Moderate", color: "bg-orange-500", hoverColor: "hover:bg-orange-600", activeColor: "ring-orange-500" },
-  { value: 4 as const, label: "Severe", color: "bg-red-500", hoverColor: "hover:bg-red-600", activeColor: "ring-red-500" },
-  { value: 5 as const, label: "Extreme", color: "bg-red-800", hoverColor: "hover:bg-red-900", activeColor: "ring-red-800" },
+  {
+    value: 1 as const,
+    label: "Minimal",
+    color: "bg-green-500",
+    hoverColor: "hover:bg-green-600",
+    activeColor: "ring-green-500",
+  },
+  {
+    value: 2 as const,
+    label: "Mild",
+    color: "bg-yellow-500",
+    hoverColor: "hover:bg-yellow-600",
+    activeColor: "ring-yellow-500",
+  },
+  {
+    value: 3 as const,
+    label: "Moderate",
+    color: "bg-orange-500",
+    hoverColor: "hover:bg-orange-600",
+    activeColor: "ring-orange-500",
+  },
+  {
+    value: 4 as const,
+    label: "Severe",
+    color: "bg-red-500",
+    hoverColor: "hover:bg-red-600",
+    activeColor: "ring-red-500",
+  },
+  {
+    value: 5 as const,
+    label: "Extreme",
+    color: "bg-red-800",
+    hoverColor: "hover:bg-red-900",
+    activeColor: "ring-red-800",
+  },
 ] as const;
 
 /**
@@ -108,8 +138,12 @@ export const IntensitySlider: React.FC<IntensitySliderProps> = ({
                 !isSelected && "opacity-70",
               )}
             >
-              <span className="text-lg sm:text-2xl font-bold mb-0.5 sm:mb-1">{config.value}</span>
-              <span className="text-[10px] sm:text-xs leading-tight">{config.label}</span>
+              <span className="text-lg sm:text-2xl font-bold mb-0.5 sm:mb-1">
+                {config.value}
+              </span>
+              <span className="text-[10px] sm:text-xs leading-tight">
+                {config.label}
+              </span>
             </button>
           );
         })}

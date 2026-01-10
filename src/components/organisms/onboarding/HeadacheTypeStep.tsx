@@ -54,10 +54,7 @@ export function HeadacheTypeStep() {
       title="What type of headaches do you experience?"
       description="This helps us provide personalized insights"
     >
-      <div
-        className="flex flex-col space-y-4"
-        data-testid="headache-type-step"
-      >
+      <div className="flex flex-col space-y-4" data-testid="headache-type-step">
         {/* Headache Type Options */}
         <div className="space-y-3">
           {HEADACHE_TYPES.map((option) => {

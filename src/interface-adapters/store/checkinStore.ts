@@ -41,6 +41,7 @@ interface CheckInDB extends DBSchema {
 export interface CheckInState {
   // IndexedDB instance
   db: IDBPDatabase<CheckInDB> | null;
+  isDBReady: boolean;
 
   // Actions
   initializeDB: () => Promise<void>;
@@ -100,16 +101,21 @@ export const useCheckInStore = create<CheckInState>()(
   persist(
     (set, get) => ({
       db: null,
+      isDBReady: false,
 
       /**
        * Initialize IndexedDB connection
        */
       initializeDB: async () => {
+        // Skip if already initialized
+        if (get().isDBReady) return;
+
         try {
           const db = await initDB();
-          set({ db });
+          set({ db, isDBReady: true });
         } catch (error) {
           console.error("Failed to initialize CheckIn IndexedDB:", error);
+          set({ isDBReady: false });
         }
       },
 
