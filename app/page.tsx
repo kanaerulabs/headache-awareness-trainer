@@ -45,7 +45,6 @@ function HomePageContent() {
   const loggingStore = useLoggingStore();
   const [recentEntries, setRecentEntries] = useState<HeadacheEntry[]>([]);
   const [isLoadingEntries, setIsLoadingEntries] = useState(true);
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   // Check if we just logged an entry
   const justLogged = searchParams.get("logged") === "true";
@@ -57,16 +56,7 @@ function HomePageContent() {
     }
   }, [isCompleted, router]);
 
-  // Trigger refresh when navigating back with ?logged=true
-  useEffect(() => {
-    if (justLogged) {
-      setRefreshTrigger((prev) => prev + 1);
-      // Clear the URL params without navigation
-      router.replace("/", { scroll: false });
-    }
-  }, [justLogged, router]);
-
-  // Fetch recent entries
+  // Fetch recent entries function
   const fetchEntries = useCallback(async () => {
     try {
       setIsLoadingEntries(true);
@@ -80,11 +70,18 @@ function HomePageContent() {
     }
   }, [loggingStore]);
 
+  // Fetch entries on mount and when returning from logging
   useEffect(() => {
-    if (isCompleted) {
-      fetchEntries();
+    if (!isCompleted) return;
+
+    // Always fetch entries when component mounts or URL changes
+    fetchEntries();
+
+    // If we just logged, clear the URL param
+    if (justLogged) {
+      router.replace("/", { scroll: false });
     }
-  }, [isCompleted, fetchEntries, refreshTrigger]);
+  }, [isCompleted, justLogged, fetchEntries, router]);
 
   // If not completed, show nothing (will redirect)
   if (!isCompleted) {
