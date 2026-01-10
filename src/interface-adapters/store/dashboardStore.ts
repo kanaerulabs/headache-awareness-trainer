@@ -115,8 +115,9 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
       const thisWeek = getThisWeekDateRange();
 
       // Get all headache entries and count this week's
-      const allHeadacheEntries =
-        await useLoggingStore.getState().getAllEntries();
+      const allHeadacheEntries = await useLoggingStore
+        .getState()
+        .getAllEntries();
       const thisWeekHeadaches = countEntriesInRange(
         allHeadacheEntries,
         thisWeek.start,
@@ -124,8 +125,9 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
       );
 
       // Get all check-in entries and count this week's
-      const allCheckInEntries =
-        await useCheckInStore.getState().getAllCheckIns();
+      const allCheckInEntries = await useCheckInStore
+        .getState()
+        .getAllCheckIns();
       const thisWeekCheckins = countEntriesInRange(
         allCheckInEntries,
         thisWeek.start,
@@ -162,8 +164,9 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
    */
   calculateTrend: async (): Promise<TrendType> => {
     try {
-      const allHeadacheEntries =
-        await useLoggingStore.getState().getAllEntries();
+      const allHeadacheEntries = await useLoggingStore
+        .getState()
+        .getAllEntries();
 
       const thisWeek = getThisWeekDateRange();
       const lastWeek = getLastWeekDateRange();
@@ -206,12 +209,7 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
    * Generate contextual insight based on user data
    */
   generateInsight: (): string => {
-    const {
-      currentStreak,
-      thisWeekHeadaches,
-      thisWeekCheckins,
-      trend,
-    } = get();
+    const { currentStreak, thisWeekHeadaches, thisWeekCheckins, trend } = get();
     const loggingMetadata = useLoggingStore.getState().metadata;
     const totalEntries = loggingMetadata.totalEntries;
 
@@ -261,12 +259,14 @@ export const useDashboardStore = create<DashboardState>((set, get) => ({
   getRecentEntries: async (limit: number): Promise<CombinedEntry[]> => {
     try {
       // Get recent headache entries
-      const headacheEntries =
-        await useLoggingStore.getState().getRecentEntries(limit);
+      const headacheEntries = await useLoggingStore
+        .getState()
+        .getRecentEntries(limit);
 
       // Get recent check-in entries
-      const checkInEntries =
-        await useCheckInStore.getState().getRecentCheckIns(limit);
+      const checkInEntries = await useCheckInStore
+        .getState()
+        .getRecentCheckIns(limit);
 
       // Combine entries with type tags
       const combined: CombinedEntry[] = [
