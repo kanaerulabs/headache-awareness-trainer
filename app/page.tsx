@@ -8,7 +8,9 @@ import {
   Brain,
   Lightbulb,
   Clock,
+  Settings,
 } from "lucide-react";
+import Link from "next/link";
 
 export default function HomePage() {
   return (
@@ -111,14 +113,24 @@ function HomePageContent() {
       data-testid="home-page"
     >
       <div className="mx-auto w-full max-w-2xl space-y-8">
-        {/* Personalized Greeting */}
-        <div className="space-y-2" data-testid="greeting-section">
-          <h1 className="text-3xl font-bold tracking-tight">
-            Welcome back!
-          </h1>
-          <p className="text-lg text-muted-foreground">
-            Managing your {getHeadacheTypeLabel().toLowerCase()}
-          </p>
+        {/* Header with Settings */}
+        <div className="flex items-start justify-between" data-testid="greeting-section">
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold tracking-tight">
+              Welcome back!
+            </h1>
+            <p className="text-lg text-muted-foreground">
+              Managing your {getHeadacheTypeLabel().toLowerCase()}
+            </p>
+          </div>
+          <Link
+            href="/settings"
+            data-testid="settings-link"
+            className="p-2 rounded-full hover:bg-muted transition-colors"
+            aria-label="Settings"
+          >
+            <Settings className="h-6 w-6 text-muted-foreground" />
+          </Link>
         </div>
 
         {/* Daily Tip Section */}
