@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState, useCallback } from "react";
+import { Suspense, useEffect, useState, useCallback, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useOnboardingStore } from "@/interface-adapters/store/onboardingStore";
 import { useLoggingStore, type HeadacheEntry } from "@/interface-adapters/store/loggingStore";
@@ -45,6 +45,8 @@ function HomePageContent() {
   const loggingStore = useLoggingStore();
   const [recentEntries, setRecentEntries] = useState<HeadacheEntry[]>([]);
   const [isLoadingEntries, setIsLoadingEntries] = useState(true);
+  const [fetchTrigger, setFetchTrigger] = useState(0);
+  const hasHandledLoggedRef = useRef(false);
 
   // Check if we just logged an entry
   const justLogged = searchParams.get("logged") === "true";
@@ -56,12 +58,30 @@ function HomePageContent() {
     }
   }, [isCompleted, router]);
 
-  // Fetch recent entries function
+  // Handle the ?logged=true param - trigger refresh and clear URL
+  useEffect(() => {
+    if (justLogged && !hasHandledLoggedRef.current) {
+      hasHandledLoggedRef.current = true;
+      // Trigger a fetch
+      setFetchTrigger(prev => prev + 1);
+      // Clear the URL param after a brief delay to ensure state update
+      setTimeout(() => {
+        router.replace("/", { scroll: false });
+      }, 100);
+    }
+    // Reset the ref when justLogged becomes false (URL is cleared)
+    if (!justLogged) {
+      hasHandledLoggedRef.current = false;
+    }
+  }, [justLogged, router]);
+
+  // Fetch recent entries
   const fetchEntries = useCallback(async () => {
     try {
       setIsLoadingEntries(true);
       await loggingStore.initializeDB();
       const entries = await loggingStore.getRecentEntries(5);
+      console.log("Fetched entries:", entries.length);
       setRecentEntries(entries);
     } catch (error) {
       console.error("Failed to fetch entries:", error);
@@ -70,18 +90,11 @@ function HomePageContent() {
     }
   }, [loggingStore]);
 
-  // Fetch entries on mount and when returning from logging
+  // Fetch entries on mount and when fetchTrigger changes
   useEffect(() => {
     if (!isCompleted) return;
-
-    // Always fetch entries when component mounts or URL changes
     fetchEntries();
-
-    // If we just logged, clear the URL param
-    if (justLogged) {
-      router.replace("/", { scroll: false });
-    }
-  }, [isCompleted, justLogged, fetchEntries, router]);
+  }, [isCompleted, fetchEntries, fetchTrigger]);
 
   // If not completed, show nothing (will redirect)
   if (!isCompleted) {
