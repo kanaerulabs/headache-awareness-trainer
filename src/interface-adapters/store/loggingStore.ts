@@ -258,32 +258,50 @@ export const useLoggingStore = create<LoggingState>()(
           contextTags: entry.contextTags || [],
         };
 
-        // Save to IndexedDB
-        await db.add("entries", fullEntry);
+        // Calculate new streak BEFORE the write (optimistic)
+        // A new entry today either continues or starts a streak
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const lastEntryDate = metadata.firstEntryDate ? new Date(metadata.firstEntryDate) : null;
+        let newStreak = metadata.currentStreak;
 
-        // Update metadata
+        // If we have entries, check if the last one was today or yesterday
+        if (lastEntryDate) {
+          const lastDate = new Date(lastEntryDate);
+          lastDate.setHours(0, 0, 0, 0);
+          const diffDays = Math.floor((today.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
+          if (diffDays === 0) {
+            // Same day, streak continues
+          } else if (diffDays === 1) {
+            // Yesterday, streak increases
+            newStreak = metadata.currentStreak + 1;
+          } else {
+            // Gap, streak resets to 1
+            newStreak = 1;
+          }
+        } else {
+          newStreak = 1; // First entry starts streak
+        }
+
+        // Create updated metadata with all changes
         const updatedMetadata: UserMetadata = {
           ...metadata,
           firstEntryDate: metadata.firstEntryDate || timestamp,
           totalEntries: metadata.totalEntries + 1,
-        };
-
-        await db.put("metadata", { ...updatedMetadata, key: "user-metadata" });
-        set({ metadata: updatedMetadata });
-
-        // Recalculate streak
-        const newStreak = await get().calculateStreak();
-        const metadataWithStreak: UserMetadata = {
-          ...updatedMetadata,
           currentStreak: newStreak,
         };
-        await db.put("metadata", {
-          ...metadataWithStreak,
-          key: "user-metadata",
-        });
-        set({ metadata: metadataWithStreak });
 
-        // Check for feature unlocks
+        // Single transaction for both writes
+        const tx = db.transaction(["entries", "metadata"], "readwrite");
+        await Promise.all([
+          tx.objectStore("entries").add(fullEntry),
+          tx.objectStore("metadata").put({ ...updatedMetadata, key: "user-metadata" }),
+          tx.done,
+        ]);
+
+        set({ metadata: updatedMetadata });
+
+        // Check for feature unlocks (lightweight, no DB access)
         get().checkFeatureUnlocks();
 
         return id;
@@ -521,29 +539,24 @@ export const useLoggingStore = create<LoggingState>()(
         const { db } = get();
         if (!db) return 0;
 
-        const allEntries = await db.getAll("entries");
-        if (allEntries.length === 0) return 0;
+        // Use cursor for efficient streak calculation - stop as soon as we find a gap
+        const tx = db.transaction("entries", "readonly");
+        const index = tx.store.index("timestamp");
 
-        // Sort entries by timestamp descending
-        const sortedEntries = allEntries
-          .map((entry) => new Date(entry.timestamp))
-          .sort((a, b) => b.getTime() - a.getTime());
-
-        // Check if there's an entry today or yesterday
         const now = new Date();
-        const today = new Date(
-          now.getFullYear(),
-          now.getMonth(),
-          now.getDate(),
-        );
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         const yesterday = new Date(today);
         yesterday.setDate(yesterday.getDate() - 1);
 
-        const mostRecentEntry = sortedEntries[0];
+        // Get first entry to check if streak is broken
+        let cursor = await index.openCursor(null, "prev");
+        if (!cursor) return 0;
+
+        const mostRecentEntry = new Date(cursor.value.timestamp);
         const mostRecentDate = new Date(
           mostRecentEntry.getFullYear(),
           mostRecentEntry.getMonth(),
-          mostRecentEntry.getDate(),
+          mostRecentEntry.getDate()
         );
 
         // Streak broken if no entry today or yesterday
@@ -554,26 +567,36 @@ export const useLoggingStore = create<LoggingState>()(
           return 0;
         }
 
-        // Count consecutive days
+        // Count consecutive days using cursor
         let streak = 1;
         const currentDate = new Date(mostRecentDate);
         currentDate.setDate(currentDate.getDate() - 1);
+        let lastSeenDate = mostRecentDate.getTime();
 
-        for (let i = 1; i < sortedEntries.length; i++) {
-          const entryDate = new Date(
-            sortedEntries[i].getFullYear(),
-            sortedEntries[i].getMonth(),
-            sortedEntries[i].getDate(),
+        cursor = await cursor.continue();
+        while (cursor) {
+          const entryDate = new Date(cursor.value.timestamp);
+          const entryDateOnly = new Date(
+            entryDate.getFullYear(),
+            entryDate.getMonth(),
+            entryDate.getDate()
           );
 
-          if (entryDate.getTime() === currentDate.getTime()) {
+          // Skip entries from the same day
+          if (entryDateOnly.getTime() === lastSeenDate) {
+            cursor = await cursor.continue();
+            continue;
+          }
+
+          if (entryDateOnly.getTime() === currentDate.getTime()) {
             streak++;
+            lastSeenDate = entryDateOnly.getTime();
             currentDate.setDate(currentDate.getDate() - 1);
-          } else if (entryDate.getTime() < currentDate.getTime()) {
-            // Gap in streak
+            cursor = await cursor.continue();
+          } else {
+            // Gap in streak, stop early
             break;
           }
-          // Skip if same day as previous entry
         }
 
         return streak;
