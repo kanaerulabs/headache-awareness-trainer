@@ -46,3 +46,11 @@ next-env.d.ts
 
 *storybook.log
 storybook-static
+
+# Kanaeru internal folders (should not be in client repo)
+.claude/
+logs/
+
+# Test artifacts
+test-results/
+playwright-report/
