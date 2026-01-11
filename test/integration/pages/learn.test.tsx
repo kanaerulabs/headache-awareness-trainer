@@ -6,7 +6,7 @@
  */
 
 import { render, screen } from "@testing-library/react";
-import LearnPage, { metadata } from "../../../app/learn/page";
+import LearnPage, { metadata } from "../../../src/app/learn/page";
 import "@testing-library/jest-dom";
 
 // Mock the EducationHub component

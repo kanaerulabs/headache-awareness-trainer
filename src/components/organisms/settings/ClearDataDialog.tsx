@@ -23,6 +23,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useSettingsStore } from "@/interface-adapters/store/settingsStore";
+import { useTranslations } from "next-intl";
 
 export interface ClearDataDialogProps {
   /**
@@ -50,6 +51,7 @@ export function ClearDataDialog({
   onDataCleared,
   onClearError,
 }: ClearDataDialogProps) {
+  const t = useTranslations("settings");
   const { clearAllData } = useSettingsStore();
   const [isClearing, setIsClearing] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -63,14 +65,14 @@ export function ClearDataDialog({
       onDataCleared?.();
 
       // Show success feedback
-      alert("All data has been cleared successfully. The app will reload.");
+      alert(t("clearDataSuccess"));
 
       // Reload the page to reset all state
       window.location.reload();
     } catch (error) {
       console.error("Failed to clear data:", error);
       onClearError?.(error as Error);
-      alert("Failed to clear data. Please try again.");
+      alert(t("clearDataFailed"));
     } finally {
       setIsClearing(false);
     }
@@ -82,19 +84,18 @@ export function ClearDataDialog({
       data-testid="clear-data-dialog"
     >
       <CardHeader>
-        <CardTitle className="text-destructive">Danger Zone</CardTitle>
+        <CardTitle className="text-destructive">{t("dangerZone")}</CardTitle>
         <CardDescription>
-          Irreversible actions that will permanently delete your data
+          {t("dangerZoneDesc")}
         </CardDescription>
       </CardHeader>
       <CardContent>
         <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
           <div className="flex items-start justify-between gap-4 p-4 rounded-lg border border-destructive/50 bg-destructive/5">
             <div className="space-y-1">
-              <h4 className="font-medium text-destructive">Clear All Data</h4>
+              <h4 className="font-medium text-destructive">{t("clearData")}</h4>
               <p className="text-sm text-muted-foreground">
-                Permanently delete all headache entries, check-ins, settings,
-                and education progress. This action cannot be undone.
+                {t("clearDataDesc")}
               </p>
             </div>
             <AlertDialogTrigger asChild>
@@ -102,28 +103,27 @@ export function ClearDataDialog({
                 variant="destructive"
                 disabled={isClearing}
                 data-testid="clear-data-trigger"
-                aria-label="Clear all data"
+                aria-label={t("clearData")}
               >
-                Clear Data
+                {t("clearDataButton")}
               </Button>
             </AlertDialogTrigger>
           </div>
 
           <AlertDialogContent data-testid="clear-data-confirmation">
             <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogTitle>{t("clearDataConfirmTitle")}</AlertDialogTitle>
               <AlertDialogDescription className="space-y-2">
-                <p>This action will permanently delete:</p>
+                <p>{t("clearDataConfirmDesc")}</p>
                 <ul className="list-disc list-inside space-y-1 text-sm">
-                  <li>All headache log entries</li>
-                  <li>All daily check-in data</li>
-                  <li>Custom factors and headache types</li>
-                  <li>Education progress</li>
-                  <li>All settings and preferences</li>
+                  <li>{t("clearDataItems.entries")}</li>
+                  <li>{t("clearDataItems.checkins")}</li>
+                  <li>{t("clearDataItems.custom")}</li>
+                  <li>{t("clearDataItems.education")}</li>
+                  <li>{t("clearDataItems.settings")}</li>
                 </ul>
                 <p className="font-semibold text-foreground mt-3">
-                  This action cannot be undone. Consider exporting your data
-                  first.
+                  {t("clearDataFinalWarning")}
                 </p>
               </AlertDialogDescription>
             </AlertDialogHeader>
@@ -132,7 +132,7 @@ export function ClearDataDialog({
                 disabled={isClearing}
                 data-testid="clear-data-cancel"
               >
-                Cancel
+                {t("common:cancel")}
               </AlertDialogCancel>
               <AlertDialogAction
                 onClick={(e) => {
@@ -143,7 +143,7 @@ export function ClearDataDialog({
                 className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                 data-testid="clear-data-confirm"
               >
-                {isClearing ? "Clearing..." : "Yes, delete everything"}
+                {isClearing ? t("clearing") : t("clearDataConfirm")}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -152,10 +152,8 @@ export function ClearDataDialog({
         {/* Warning Info */}
         <div className="mt-4 p-3 rounded-md bg-destructive/10 border border-destructive/30">
           <p className="text-xs text-muted-foreground">
-            <strong className="text-destructive">Warning:</strong> Before
-            clearing data, export your information using the &quot;Export
-            Data&quot; section above. This ensures you have a backup if you need
-            it later.
+            <strong className="text-destructive">Warning:</strong>{" "}
+            {t("clearDataWarning")}
           </p>
         </div>
       </CardContent>
