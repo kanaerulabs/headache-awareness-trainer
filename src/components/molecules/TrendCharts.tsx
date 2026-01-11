@@ -13,6 +13,7 @@ import {
 } from "recharts";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 export type TimeFilter = 30 | 90 | "all";
 
@@ -70,10 +71,10 @@ interface ChartDataPoint {
   weekStart: string;
 }
 
-const filterOptions: { value: TimeFilter; label: string }[] = [
-  { value: 30, label: "30 Days" },
-  { value: 90, label: "90 Days" },
-  { value: "all", label: "All Time" },
+const filterOptions: { value: TimeFilter; labelKey: string }[] = [
+  { value: 30, labelKey: "days30" },
+  { value: 90, labelKey: "days90" },
+  { value: "all", labelKey: "allTime" },
 ];
 
 /**
@@ -106,6 +107,8 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
   showIntensity = false,
   className,
 }) => {
+  const t = useTranslations("insights");
+
   // Transform data for recharts
   const chartData: ChartDataPoint[] = React.useMemo(() => {
     return weeklyTrends.map((trend) => ({
@@ -137,9 +140,9 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
         data-testid="trend-chart-empty"
         role="status"
       >
-        <p className="text-center font-medium mb-2">No trend data available</p>
+        <p className="text-center font-medium mb-2">{t("noTrendData")}</p>
         <p className="text-sm text-center">
-          Keep logging check-ins to track your headache patterns over time.
+          {t("keepLogging")}
         </p>
       </div>
     );
@@ -150,13 +153,13 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
       className={cn("space-y-4", className)}
       data-testid="trend-chart"
       role="region"
-      aria-label="Headache trend chart"
+      aria-label={t("trendChartLabel")}
     >
       {/* Filter tabs */}
       <div
         className="flex gap-2 p-1 bg-muted rounded-lg"
         role="tablist"
-        aria-label="Time period filter"
+        aria-label={t("timeRange")}
       >
         {filterOptions.map((option) => (
           <button
@@ -171,9 +174,9 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
             )}
             role="tab"
             aria-selected={filter === option.value}
-            aria-label={`Show trends for ${option.label}`}
+            aria-label={t(option.labelKey)}
           >
-            {option.label}
+            {t(option.labelKey)}
           </button>
         ))}
       </div>
@@ -200,12 +203,6 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
               className="text-xs fill-muted-foreground"
               tick={{ fontSize: 12 }}
               tickLine={{ stroke: "currentColor", opacity: 0.3 }}
-              label={{
-                value: "Headaches per Week",
-                angle: -90,
-                position: "insideLeft",
-                style: { fontSize: 12, fill: "currentColor" },
-              }}
             />
             <Tooltip
               contentStyle={{
@@ -218,10 +215,10 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
               itemStyle={{ color: "hsl(var(--popover-foreground))" }}
               formatter={(value: number, name: string) => {
                 if (name === "headacheCount") {
-                  return [value, "Headaches"];
+                  return [value, t("headaches")];
                 }
                 if (name === "averageIntensity") {
-                  return [value.toFixed(1), "Avg Intensity"];
+                  return [value.toFixed(1), t("avgIntensity")];
                 }
                 return [value, name];
               }}
@@ -234,7 +231,7 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
               strokeWidth={2}
               dot={{ fill: "hsl(var(--primary))", r: 4 }}
               activeDot={{ r: 6 }}
-              name="Headaches per Week"
+              name={t("headachesPerWeek")}
             />
             {showIntensity && (
               <Line
@@ -245,7 +242,7 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
                 strokeDasharray="5 5"
                 dot={{ fill: "hsl(var(--destructive))", r: 4 }}
                 activeDot={{ r: 6 }}
-                name="Average Intensity"
+                name={t("averageIntensity")}
               />
             )}
           </LineChart>
@@ -255,13 +252,13 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
       {/* Chart summary */}
       <div className="grid grid-cols-2 gap-4 text-sm">
         <div className="space-y-1">
-          <p className="text-muted-foreground">Total Headaches</p>
+          <p className="text-muted-foreground">{t("totalHeadaches")}</p>
           <p className="text-2xl font-bold">
             {filteredData.reduce((sum, d) => sum + d.headacheCount, 0)}
           </p>
         </div>
         <div className="space-y-1">
-          <p className="text-muted-foreground">Average per Week</p>
+          <p className="text-muted-foreground">{t("avgPerWeek")}</p>
           <p className="text-2xl font-bold">
             {filteredData.length > 0
               ? (
@@ -273,7 +270,7 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
         </div>
         {showIntensity && (
           <div className="col-span-2 space-y-1">
-            <p className="text-muted-foreground">Average Intensity</p>
+            <p className="text-muted-foreground">{t("avgIntensity")}</p>
             <p className="text-2xl font-bold">
               {filteredData.length > 0
                 ? (

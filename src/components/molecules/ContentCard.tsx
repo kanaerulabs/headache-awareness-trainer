@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { ContentType } from "@/interface-adapters/store/educationStore";
+import { useTranslations } from "next-intl";
 
 interface ContentCardProps {
   id: ContentType;
@@ -38,6 +39,7 @@ export function ContentCard({
   isCompleted,
   className,
 }: ContentCardProps) {
+  const t = useTranslations("learn");
   const cardContent = (
     <Card
       className={cn(
@@ -64,10 +66,10 @@ export function ContentCard({
           <div className="flex flex-col items-end gap-1">
             {isCompleted ? (
               <Badge variant="default" className="bg-green-600">
-                Completed
+                {t("completedBadge")}
               </Badge>
             ) : isLocked ? (
-              <Badge variant="secondary">Locked</Badge>
+              <Badge variant="secondary">{t("lockedBadge")}</Badge>
             ) : progress > 0 ? (
               <Badge variant="outline">{progress}%</Badge>
             ) : null}
@@ -80,9 +82,9 @@ export function ContentCard({
         ) : (
           <>
             <div className="flex items-center justify-between text-sm text-muted-foreground mb-2">
-              <span>{estimatedMinutes} min read</span>
+              <span>{t("minRead", { minutes: estimatedMinutes })}</span>
               {!isCompleted && progress > 0 && (
-                <span>{progress}% complete</span>
+                <span>{t("percentComplete", { percent: progress })}</span>
               )}
             </div>
             {!isCompleted && progress > 0 && (

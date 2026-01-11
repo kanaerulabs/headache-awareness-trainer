@@ -3,6 +3,7 @@
 import * as React from "react";
 import { TrendingUp, TrendingDown, Minus } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 export type CorrelationFactor =
   | "sleep"
@@ -46,12 +47,13 @@ export interface CorrelationBarsProps {
   className?: string;
 }
 
-const factorLabels: Record<CorrelationFactor, string> = {
-  sleep: "Sleep Quality",
-  stress: "Stress Level",
-  jawTension: "Jaw Tension",
-  mood: "Mood",
-  timeOfDay: "Time of Day",
+// Factor label keys for translation
+const factorLabelKeys: Record<CorrelationFactor, string> = {
+  sleep: "factorSleep",
+  stress: "factorStress",
+  jawTension: "factorJawTension",
+  mood: "factorMood",
+  timeOfDay: "factorTimeOfDay",
 };
 
 const getStrengthCategory = (
@@ -126,9 +128,18 @@ export const CorrelationBars: React.FC<CorrelationBarsProps> = ({
   onCorrelationTap,
   className,
 }) => {
+  const t = useTranslations("insights");
   const [expandedFactor, setExpandedFactor] =
     React.useState<CorrelationFactor | null>(null);
   const [isAnimated, setIsAnimated] = React.useState(false);
+
+  // Get translated factor label
+  const getFactorLabel = (factor: CorrelationFactor) => t(factorLabelKeys[factor]);
+
+  // Get translated strength category
+  const getStrengthLabel = (category: "weak" | "medium" | "strong") => {
+    return t(`${category}Correlation`);
+  };
 
   // Trigger animation after mount
   React.useEffect(() => {
@@ -146,7 +157,7 @@ export const CorrelationBars: React.FC<CorrelationBarsProps> = ({
       className={cn("space-y-4", className)}
       data-testid="correlation-bars"
       role="region"
-      aria-label="Headache trigger correlations"
+      aria-label={t("correlationsLabel")}
     >
       {correlations.map((correlation) => {
         const TrendIcon = getTrendIcon(correlation.trend);
@@ -164,13 +175,13 @@ export const CorrelationBars: React.FC<CorrelationBarsProps> = ({
                 isExpanded && "bg-muted/50",
               )}
               aria-expanded={isExpanded}
-              aria-label={`${factorLabels[correlation.factor]}: ${correlation.strength}% correlation, ${correlation.trend} trend`}
+              aria-label={`${getFactorLabel(correlation.factor)}: ${correlation.strength}% correlation, ${correlation.trend} trend`}
             >
               {/* Factor label and strength */}
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium">
-                    {factorLabels[correlation.factor]}
+                    {getFactorLabel(correlation.factor)}
                   </span>
                   <TrendIcon
                     className={cn(
@@ -227,7 +238,7 @@ export const CorrelationBars: React.FC<CorrelationBarsProps> = ({
                           : "text-gray-600 dark:text-gray-400"),
                   )}
                 >
-                  {category} correlation
+                  {getStrengthLabel(category)}
                 </span>
               </div>
             </button>
@@ -237,7 +248,7 @@ export const CorrelationBars: React.FC<CorrelationBarsProps> = ({
               <div
                 className="px-3 pb-3 text-sm text-muted-foreground animate-in fade-in slide-in-from-top-2"
                 role="region"
-                aria-label={`Description for ${factorLabels[correlation.factor]}`}
+                aria-label={`Description for ${getFactorLabel(correlation.factor)}`}
               >
                 {correlation.description}
               </div>
@@ -248,8 +259,7 @@ export const CorrelationBars: React.FC<CorrelationBarsProps> = ({
 
       {correlations.length === 0 && (
         <div className="text-center py-8 text-muted-foreground" role="status">
-          No correlation data available yet. Keep logging check-ins to discover
-          patterns.
+          {t("noCorrelationData")}
         </div>
       )}
     </div>
