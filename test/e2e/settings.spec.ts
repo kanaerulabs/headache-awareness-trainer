@@ -57,18 +57,18 @@ test.describe("Settings Page", () => {
     });
 
     test("should display all settings sections", async ({ page }) => {
-      // Check for all section headings (visible in desktop or accordion items in mobile)
-      const sectionTitles = [
-        "Reminders",
-        "Tracking Preferences",
-        "Headache Types",
-        "Display",
-        "Data Management",
-        "About & Help",
+      // Check for all section headings using data-testid selectors for reliability
+      const sectionIds = [
+        "section-reminders",
+        "section-tracking",
+        "section-headache-types",
+        "section-display",
+        "section-data",
+        "section-about",
       ];
 
-      for (const title of sectionTitles) {
-        await expect(page.getByText(title, { exact: false })).toBeVisible();
+      for (const sectionId of sectionIds) {
+        await expect(page.locator(`[data-testid="${sectionId}"]`)).toBeVisible();
       }
     });
   });
