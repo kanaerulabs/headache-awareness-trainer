@@ -183,7 +183,15 @@
     "headaches": "Headaches",
     "headachesPerWeek": "Headaches per Week",
     "averageIntensity": "Average Intensity",
-    "avgPerWeek": "Average per Week"
+    "avgPerWeek": "Average per Week",
+    "lockedInsight": "Locked insight",
+    "completeRequirements": "Complete requirements to unlock",
+    "personalInsightLocked": "Personal Insight",
+    "lockedInsightDesc": "This personal insight will be revealed once you meet the unlock requirements.",
+    "categoryPattern": "Pattern",
+    "categoryTrigger": "Trigger",
+    "categoryTip": "Tip",
+    "categoryAchievement": "Achievement"
   },
   "learn": {
     "title": "Learn",
@@ -196,6 +204,13 @@
     "lockedBadge": "Locked",
     "minRead": "{minutes} min read",
     "percentComplete": "{percent}% complete",
+    "back": "Back",
+    "previous": "Previous",
+    "next": "Next",
+    "complete": "Complete",
+    "contentNotFound": "Content not found",
+    "backToLearn": "Back to Learn",
+    "contentLocked": "Content Locked",
     "topics": {
       "bodySignals": "Body Signals",
       "bodySignalsDesc": "Learn to recognize early warning signs",
@@ -273,5 +288,143 @@
     "reminderBenefit": "Regular check-ins help identify patterns",
     "allSet": "You're all set!",
     "startTracking": "Start Tracking"
+  },
+  "insightData": {
+    "gen1Title": "Hydration Matters",
+    "gen1Desc": "Studies show dehydration is a common headache trigger. Try drinking 8 glasses of water daily.",
+    "gen2Title": "Sleep Consistency",
+    "gen2Desc": "Research indicates irregular sleep patterns can trigger headaches. Aim for consistent sleep times.",
+    "gen3Title": "Jaw Tension Connection",
+    "gen3Desc": "TMJ disorders and jaw clenching are strongly linked to tension headaches.",
+    "pers1Title": "Your Sleep Pattern",
+    "pers1Desc": "Based on your data, poor sleep quality appears linked to headaches the following day.",
+    "pers2Title": "Stress Trigger",
+    "pers2Desc": "Your headaches correlate with high stress levels. Consider stress management techniques.",
+    "pers3Title": "Morning Headaches",
+    "pers3Desc": "You experience most headaches in the morning, which may indicate sleep-related triggers.",
+    "week2Plus": "Week 2+"
+  },
+  "content": {
+    "tensionHeadache": {
+      "title": "What is a Tension Headache?",
+      "subtitle": "Understanding the most common type of headache",
+      "overview": {
+        "title": "Overview",
+        "content": "Tension headaches are the most common type of headache, affecting up to 80% of adults at some point. Unlike migraines, they typically cause a dull, aching pain that feels like a tight band around your head.\n\n**Key characteristics:**\n- Mild to moderate pain on both sides of the head\n- Pressure or tightness sensation\n- No nausea or sensitivity to light (unlike migraines)\n- Can last from 30 minutes to several days"
+      },
+      "causes": {
+        "title": "What Causes Them?",
+        "content": "Tension headaches often result from muscle contractions in the head, neck, and shoulder regions. Common triggers include:\n\n• **Stress** - Both physical and emotional stress\n• **Poor posture** - Especially from prolonged computer use\n• **Eye strain** - From screens or reading\n• **Jaw clenching** - Often unconscious\n• **Dehydration** - Not drinking enough water\n• **Skipped meals** - Irregular eating patterns\n• **Sleep issues** - Too little or too much sleep"
+      },
+      "signals": {
+        "title": "Your Body's Early Signals",
+        "content": "Before a tension headache fully develops, your body often sends early warning signs:\n\n🔹 Neck or shoulder stiffness\n🔹 Jaw tightness\n🔹 Feeling \"wound up\" or tense\n🔹 Eye fatigue\n🔹 Difficulty concentrating\n\n**The key insight:** If you can catch these early signals, you may be able to prevent the headache from developing fully."
+      },
+      "selfCare": {
+        "title": "Self-Care Strategies",
+        "content": "When you notice early tension signals:\n\n**Immediate actions:**\n- Take a 5-minute break from screens\n- Do gentle neck stretches\n- Practice deep breathing\n- Drink a glass of water\n- Apply a warm compress to your neck\n\n**Long-term prevention:**\n- Regular sleep schedule\n- Stress management techniques\n- Ergonomic workspace setup\n- Regular physical activity\n- Staying hydrated throughout the day"
+      }
+    },
+    "bodyScan": {
+      "title": "How to Do a Body Scan",
+      "subtitle": "A step-by-step guide to noticing body tension",
+      "what": {
+        "title": "What is a Body Scan?",
+        "content": "A body scan is a mindfulness technique where you systematically focus your attention on different parts of your body, noticing any sensations, tension, or discomfort.\n\n**Why it helps with headaches:**\nBody scans help you develop \"interoception\" - your ability to sense what's happening inside your body. Many people don't realize they're holding tension until it becomes a headache.\n\n**Time needed:** 5-10 minutes\n**Best done:** Morning, evening, or when you feel stressed"
+      },
+      "step1": {
+        "title": "Step 1: Prepare",
+        "content": "Find a comfortable position - sitting or lying down works well.\n\n**Setup:**\n- Close your eyes or soften your gaze\n- Take three deep breaths\n- Let your body relax into the surface beneath you\n- Set an intention to simply notice, without judgment\n\n*There's no \"right\" or \"wrong\" way to feel. You're just observing.*"
+      },
+      "step2": {
+        "title": "Step 2: Scan from Head Down",
+        "content": "Start at the top of your head and slowly move your attention downward:\n\n**Head & Face (30 seconds each)**\n🔹 Top of head - any pressure?\n🔹 Forehead - holding any tension?\n🔹 Eyes - strained or relaxed?\n🔹 Jaw - clenched or loose?\n🔹 Temples - any pulsing?\n\n**Neck & Shoulders (30 seconds)**\n🔹 Back of neck - stiff?\n🔹 Shoulders - lifted or dropped?\n🔹 Upper back - tight?"
+      },
+      "step3": {
+        "title": "Step 3: Notice & Release",
+        "content": "As you scan each area, practice the \"Notice & Release\" technique:\n\n1. **Notice** - What sensation do you feel? Tightness? Warmth? Numbness?\n2. **Breathe** - Direct a slow breath toward that area\n3. **Release** - On the exhale, imagine the tension dissolving\n\n**Common findings for headache-prone people:**\n- Jaw clenching (often unconscious)\n- Shoulder tension (\"carrying stress\")\n- Squinting or forehead furrowing\n- Neck stiffness from posture"
+      },
+      "habit": {
+        "title": "Making it a Habit",
+        "content": "The more you practice body scanning, the faster you'll notice tension building.\n\n**Quick check-ins:**\nDo a \"mini scan\" (30 seconds) whenever you:\n- Stop at a red light\n- Wait for something to load\n- Transition between tasks\n- Feel stressed\n\n**Full scans:**\nTry to do one 5-10 minute body scan daily, ideally at the same time to build the habit.\n\n*Over time, you'll start noticing tension automatically - before it becomes a headache.*"
+      }
+    },
+    "bodySignals": {
+      "title": "Signs Your Body Gives You",
+      "subtitle": "Learning to read your body's early warning system",
+      "interoception": {
+        "title": "What is Interoception?",
+        "content": "Interoception is your body's \"sixth sense\" - the ability to feel internal signals like hunger, thirst, heart rate, and muscle tension.\n\n**Why it matters for headaches:**\nPeople who are more attuned to their body's signals can often catch headaches earlier, when they're easier to address.\n\nThe good news: Interoception is a skill you can improve with practice."
+      },
+      "preHeadache": {
+        "title": "Common Pre-Headache Signals",
+        "content": "Your body often sends warning signals hours before a headache develops:\n\n**Physical signals:**\n⚡ Neck stiffness or aching\n⚡ Shoulder tension\n⚡ Eye fatigue or strain\n⚡ Jaw tightness\n⚡ Scalp tenderness\n\n**Energy signals:**\n⚡ Unusual fatigue\n⚡ Difficulty concentrating\n⚡ Irritability\n⚡ Yawning frequently\n\n**Sensory signals:**\n⚡ Light seems brighter\n⚡ Sounds seem louder\n⚡ Food cravings (especially sugar)"
+      },
+      "personal": {
+        "title": "Your Personal Pattern",
+        "content": "Everyone's warning signals are slightly different. The key is discovering YOUR pattern.\n\n**Questions to explore:**\n- Where do YOU typically hold tension?\n- What does YOUR \"pre-headache\" feel like?\n- What triggers tend to affect YOU most?\n\n**Tracking tip:**\nAs you use this app, note not just when headaches happen, but what you felt in the hours before. Patterns will emerge."
+      },
+      "building": {
+        "title": "Building Body Awareness",
+        "content": "Here are ways to strengthen your interoception:\n\n**Daily practices:**\n🔹 Regular body scans (see our tutorial)\n🔹 Pause before eating: \"Am I actually hungry?\"\n🔹 Notice your breathing throughout the day\n🔹 Check in with your posture hourly\n\n**During daily activities:**\n🔹 Notice how your body feels after coffee\n🔹 Pay attention during stressful moments\n🔹 Feel your feet on the ground while walking\n\n*The goal isn't constant monitoring - it's building a natural awareness that alerts you when something's off.*"
+      }
+    },
+    "vocabulary": {
+      "title": "Headache Type Vocabulary",
+      "subtitle": "Words to describe what you're experiencing",
+      "why": {
+        "title": "Why Words Matter",
+        "content": "Having the right vocabulary helps you:\n- Track your experiences more accurately\n- Communicate better with healthcare providers\n- Notice subtle differences between headache types\n\nThis guide covers common terms used to describe headache characteristics."
+      },
+      "quality": {
+        "title": "Pain Quality",
+        "content": "**How does the pain feel?**\n\n• **Throbbing/Pulsating** - Pain that beats like a drum\n• **Pressing/Tightening** - Like a band around your head\n• **Sharp/Stabbing** - Sudden, intense pain\n• **Dull/Aching** - Constant, low-grade discomfort\n• **Burning** - Hot, searing sensation\n\n**Tension headaches** usually feel pressing or tightening.\n**Migraines** often feel throbbing or pulsating."
+      },
+      "location": {
+        "title": "Pain Location",
+        "content": "**Where is the pain?**\n\n• **Bilateral** - Both sides of the head\n• **Unilateral** - One side only\n• **Frontal** - Forehead area\n• **Temporal** - Temple area (sides)\n• **Occipital** - Back of head\n• **Behind the eyes** - Deep pressure sensation\n\n**Tension headaches** are usually bilateral.\n**Migraines** are often unilateral (but not always)."
+      },
+      "intensity": {
+        "title": "Intensity Scale",
+        "content": "When tracking headaches, using a consistent scale helps:\n\n**1-3: Mild**\n- Noticeable but doesn't stop activities\n- Can work/function normally\n- May forget about it at times\n\n**4-6: Moderate**\n- Definitely affects concentration\n- May need to reduce activities\n- Hard to ignore\n\n**7-10: Severe**\n- Significantly impacts activities\n- May need to lie down\n- Difficult to function normally\n\n*Your \"5\" might be different from someone else's \"5\" - that's okay. Consistency in YOUR scale is what matters.*"
+      },
+      "symptoms": {
+        "title": "Associated Symptoms",
+        "content": "Headaches can come with other symptoms:\n\n**Migraine-associated:**\n• Nausea or vomiting\n• Light sensitivity (photophobia)\n• Sound sensitivity (phonophobia)\n• Aura (visual disturbances)\n\n**Tension-associated:**\n• Neck/shoulder stiffness\n• Scalp tenderness\n• Fatigue\n\n**Track these too!** They help distinguish headache types and identify triggers."
+      }
+    },
+    "generalPatterns": {
+      "title": "Research-Backed Patterns",
+      "subtitle": "What science tells us about headache triggers",
+      "triggers": {
+        "title": "Common Triggers",
+        "content": "Research has identified triggers that affect many people:\n\n**Lifestyle factors:**\n• Irregular sleep (too much or too little)\n• Skipping meals or dehydration\n• Excessive caffeine or caffeine withdrawal\n• Alcohol (especially red wine)\n• Intense physical exertion\n\n**Environmental factors:**\n• Weather changes (especially barometric pressure)\n• Strong smells (perfume, smoke)\n• Bright or flickering lights\n• Loud noises\n\n*Important: Triggers are personal. What affects one person may not affect you.*"
+      },
+      "stress": {
+        "title": "The Stress Connection",
+        "content": "Stress is the #1 reported trigger for both tension headaches and migraines.\n\n**How stress causes headaches:**\n1. Muscle tension builds in neck, shoulders, jaw\n2. Blood vessels constrict then dilate\n3. Pain threshold lowers (less tolerance)\n4. Sleep and eating patterns disrupt\n\n**The paradox:**\nMany people get \"let-down headaches\" - headaches that hit AFTER a stressful period ends (like weekends after a busy week)."
+      },
+      "hormonal": {
+        "title": "Hormonal Patterns",
+        "content": "For many people (especially women), hormones play a significant role:\n\n**Menstrual migraines:**\n- Often occur 2 days before to 3 days after period starts\n- Related to estrogen level drops\n- May be more severe than other migraines\n\n**Other hormonal triggers:**\n• Birth control (starting or stopping)\n• Pregnancy (can improve OR worsen)\n• Menopause\n• Hormone replacement therapy\n\n*Tracking headaches alongside your cycle can reveal patterns.*"
+      },
+      "sleep": {
+        "title": "Sleep's Role",
+        "content": "Sleep and headaches have a complex relationship:\n\n**Too little sleep:**\n- Increases pain sensitivity\n- Raises stress hormones\n- Disrupts brain chemistry\n\n**Too much sleep:**\n- Can trigger headaches (weekend headaches)\n- May indicate underlying issues\n\n**Sleep quality matters too:**\n- Sleep apnea links to morning headaches\n- Interrupted sleep can trigger migraines\n\n**The sweet spot:**\nMost adults do best with 7-8 hours of consistent sleep, going to bed and waking at similar times daily."
+      },
+      "threshold": {
+        "title": "The Threshold Theory",
+        "content": "Modern headache science uses the \"threshold\" concept:\n\n**Think of it like a cup:**\n- Your cup has a capacity (your threshold)\n- Triggers add \"water\" to the cup\n- When it overflows = headache\n\n**Why this matters:**\nA single trigger might not cause a headache, but multiple small triggers can combine:\n\n*Skipped breakfast + poor sleep + stressful meeting = headache*\n\n**Building resilience:**\n- Regular sleep, meals, and hydration raise your threshold\n- Stress management techniques help\n- Body awareness lets you notice when your cup is filling up"
+      }
+    },
+    "advancedPatterns": {
+      "title": "Your Personal Insights",
+      "subtitle": "Advanced pattern analysis based on your data",
+      "unlockRequirement": "Log 7 days of data to unlock personalized insights",
+      "comingSoon": {
+        "title": "Coming Soon",
+        "content": "This content will unlock once you've logged enough data for meaningful pattern analysis.\n\n**What you'll see:**\n- Your personal trigger correlations\n- Time-of-day patterns\n- Weekly trends\n- Weather correlations (if enabled)\n- Sleep-headache connections\n\nKeep tracking, and your personal insights will appear here!"
+      }
+    }
   }
 }

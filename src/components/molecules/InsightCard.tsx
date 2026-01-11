@@ -10,6 +10,7 @@ import {
   Trophy,
   Lock,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export interface Insight {
   id: string;
@@ -102,10 +103,24 @@ export const InsightCard: React.FC<InsightCardProps> = ({
   onTap,
   className,
 }) => {
+  const t = useTranslations("insights");
+  const ti = useTranslations();
   const [isUnlocking, setIsUnlocking] = React.useState(false);
   const [wasLocked, setWasLocked] = React.useState(
     insight.isPersonal && !insight.isUnlocked,
   );
+
+  // Get translated category label
+  const getCategoryLabel = (category: Insight["category"]) => {
+    return t(`category${category.charAt(0).toUpperCase() + category.slice(1)}`);
+  };
+
+  // Translate insight data keys
+  const insightTitle = insight.title.startsWith("insightData.") ? ti(insight.title) : insight.title;
+  const insightDescription = insight.description.startsWith("insightData.") ? ti(insight.description) : insight.description;
+  const insightUnlockCondition = insight.unlockCondition?.startsWith("insightData.")
+    ? ti(insight.unlockCondition)
+    : insight.unlockCondition;
 
   // Detect unlock transition
   React.useEffect(() => {
@@ -147,8 +162,8 @@ export const InsightCard: React.FC<InsightCardProps> = ({
       aria-disabled={isLocked}
       aria-label={
         isLocked
-          ? `Locked insight: ${insight.unlockCondition || "Complete requirements to unlock"}`
-          : insight.title
+          ? `${t("lockedInsight")}: ${insightUnlockCondition || t("completeRequirements")}`
+          : insightTitle
       }
       data-testid={`insight-card-${insight.id}`}
     >
@@ -182,7 +197,7 @@ export const InsightCard: React.FC<InsightCardProps> = ({
                   : styles.titleColor,
               )}
             >
-              {isLocked ? "Personal Insight" : insight.title}
+              {isLocked ? t("personalInsightLocked") : insightTitle}
             </h3>
             <p
               className={cn(
@@ -192,16 +207,16 @@ export const InsightCard: React.FC<InsightCardProps> = ({
               data-testid="insight-description"
             >
               {isLocked
-                ? "This personal insight will be revealed once you meet the unlock requirements."
-                : insight.description}
+                ? t("lockedInsightDesc")
+                : insightDescription}
             </p>
 
             {/* Unlock condition badge */}
-            {isLocked && insight.unlockCondition && (
+            {isLocked && insightUnlockCondition && (
               <div className="mt-3 flex items-center gap-2">
                 <Lock className="h-3 w-3 text-gray-400" aria-hidden="true" />
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  {insight.unlockCondition}
+                  {insightUnlockCondition}
                 </p>
               </div>
             )}
@@ -216,8 +231,7 @@ export const InsightCard: React.FC<InsightCardProps> = ({
                     styles.iconColor,
                   )}
                 >
-                  {insight.category.charAt(0).toUpperCase() +
-                    insight.category.slice(1)}
+                  {getCategoryLabel(insight.category)}
                 </span>
               </div>
             )}
