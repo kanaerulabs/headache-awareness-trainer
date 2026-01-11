@@ -11,6 +11,7 @@ import { useTranslations } from "next-intl";
 
 export function EducationHub() {
   const t = useTranslations("learn");
+  const tc = useTranslations("content");
   const { contentProgress, isContentUnlocked, getTotalProgress } =
     useEducationStore();
 
@@ -62,8 +63,8 @@ export function EducationHub() {
               <ContentCard
                 key={content.id}
                 id={content.id}
-                title={content.title}
-                subtitle={content.subtitle}
+                title={tc(content.titleKey)}
+                subtitle={tc(content.subtitleKey)}
                 icon={content.icon}
                 estimatedMinutes={content.estimatedMinutes}
                 isLocked={false}
@@ -92,12 +93,12 @@ export function EducationHub() {
                 <ContentCard
                   key={content.id}
                   id={content.id}
-                  title={content.title}
-                  subtitle={content.subtitle}
+                  title={tc(content.titleKey)}
+                  subtitle={tc(content.subtitleKey)}
                   icon={content.icon}
                   estimatedMinutes={content.estimatedMinutes}
                   isLocked={!unlocked}
-                  unlockRequirement={content.unlockRequirement}
+                  unlockRequirement={content.unlockRequirementKey ? tc(content.unlockRequirementKey) : undefined}
                   progress={progress?.progressPercent ?? 0}
                   isCompleted={progress?.completed ?? false}
                 />

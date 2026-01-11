@@ -12,6 +12,7 @@ import {
   useEducationStore,
 } from "@/interface-adapters/store/educationStore";
 import { educationalContent } from "@/data/educationalContent";
+import { useTranslations } from "next-intl";
 
 interface ContentViewerProps {
   contentId: ContentType;
@@ -19,6 +20,8 @@ interface ContentViewerProps {
 
 export function ContentViewer({ contentId }: ContentViewerProps) {
   const router = useRouter();
+  const t = useTranslations("learn");
+  const tc = useTranslations("content");
   const {
     markContentViewed,
     markContentCompleted,
@@ -152,9 +155,9 @@ export function ContentViewer({ contentId }: ContentViewerProps) {
   if (!content) {
     return (
       <div className="text-center py-12">
-        <p className="text-muted-foreground">Content not found</p>
+        <p className="text-muted-foreground">{t("contentNotFound")}</p>
         <Button variant="link" onClick={handleBack}>
-          Back to Learn
+          {t("backToLearn")}
         </Button>
       </div>
     );
@@ -165,12 +168,12 @@ export function ContentViewer({ contentId }: ContentViewerProps) {
     return (
       <div className="text-center py-12">
         <div className="text-4xl mb-4">🔒</div>
-        <h2 className="text-xl font-semibold mb-2">Content Locked</h2>
+        <h2 className="text-xl font-semibold mb-2">{t("contentLocked")}</h2>
         <p className="text-muted-foreground mb-4">
-          {content.unlockRequirement}
+          {content.unlockRequirementKey ? tc(content.unlockRequirementKey) : ""}
         </p>
         <Button variant="outline" onClick={handleBack}>
-          Back to Learn
+          {t("backToLearn")}
         </Button>
       </div>
     );
@@ -182,7 +185,7 @@ export function ContentViewer({ contentId }: ContentViewerProps) {
       <div className="flex items-center justify-between">
         <Button variant="ghost" size="sm" onClick={handleBack}>
           <ChevronLeft className="mr-1 h-4 w-4" />
-          Back
+          {t("back")}
         </Button>
         <Badge variant="outline">
           {currentSectionIndex + 1} / {totalSections}
@@ -194,8 +197,8 @@ export function ContentViewer({ contentId }: ContentViewerProps) {
         <div className="flex items-center gap-3">
           <span className="text-4xl">{content.icon}</span>
           <div>
-            <h1 className="text-2xl font-bold">{content.title}</h1>
-            <p className="text-muted-foreground">{content.subtitle}</p>
+            <h1 className="text-2xl font-bold">{tc(content.titleKey)}</h1>
+            <p className="text-muted-foreground">{tc(content.subtitleKey)}</p>
           </div>
         </div>
         <Progress
@@ -207,10 +210,10 @@ export function ContentViewer({ contentId }: ContentViewerProps) {
       {/* Section content */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">{currentSection?.title}</CardTitle>
+          <CardTitle className="text-lg">{currentSection ? tc(currentSection.titleKey) : ""}</CardTitle>
         </CardHeader>
         <CardContent className="prose prose-sm max-w-none">
-          {currentSection && renderContent(currentSection.content)}
+          {currentSection && renderContent(tc(currentSection.contentKey))}
         </CardContent>
       </Card>
 
@@ -221,10 +224,10 @@ export function ContentViewer({ contentId }: ContentViewerProps) {
           onClick={handlePrevious}
           disabled={currentSectionIndex === 0}
         >
-          Previous
+          {t("previous")}
         </Button>
         <Button onClick={handleNext}>
-          {isLastSection ? "Complete" : "Next"}
+          {isLastSection ? t("complete") : t("next")}
         </Button>
       </div>
 

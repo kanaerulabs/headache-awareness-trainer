@@ -138,31 +138,29 @@ const getWeekEnd = (weekStart: Date): Date => {
 
 /**
  * General insights (research-backed, available from Day 1)
+ * NOTE: title and description use translation keys from "insightData" namespace
  */
 const GENERAL_INSIGHTS: Insight[] = [
   {
     id: "gen-1",
-    title: "Hydration Matters",
-    description:
-      "Studies show dehydration is a common headache trigger. Try drinking 8 glasses of water daily.",
+    title: "insightData.gen1Title",
+    description: "insightData.gen1Desc",
     category: "tip",
     isPersonal: false,
     isUnlocked: true,
   },
   {
     id: "gen-2",
-    title: "Sleep Consistency",
-    description:
-      "Research indicates irregular sleep patterns can trigger headaches. Aim for consistent sleep times.",
+    title: "insightData.gen2Title",
+    description: "insightData.gen2Desc",
     category: "tip",
     isPersonal: false,
     isUnlocked: true,
   },
   {
     id: "gen-3",
-    title: "Jaw Tension Connection",
-    description:
-      "TMJ disorders and jaw clenching are strongly linked to tension headaches.",
+    title: "insightData.gen3Title",
+    description: "insightData.gen3Desc",
     category: "trigger",
     isPersonal: false,
     isUnlocked: true,
@@ -171,37 +169,35 @@ const GENERAL_INSIGHTS: Insight[] = [
 
 /**
  * Personal insights (unlocked after Week 2)
+ * NOTE: title, description, and unlockCondition use translation keys from "insightData" namespace
  */
 const PERSONAL_INSIGHTS: Insight[] = [
   {
     id: "pers-1",
-    title: "Your Sleep Pattern",
-    description:
-      "Based on your data, poor sleep quality appears linked to headaches the following day.",
+    title: "insightData.pers1Title",
+    description: "insightData.pers1Desc",
     category: "pattern",
     isPersonal: true,
     isUnlocked: false,
-    unlockCondition: "Week 2+",
+    unlockCondition: "insightData.week2Plus",
   },
   {
     id: "pers-2",
-    title: "Stress Trigger",
-    description:
-      "Your headaches correlate with high stress levels. Consider stress management techniques.",
+    title: "insightData.pers2Title",
+    description: "insightData.pers2Desc",
     category: "trigger",
     isPersonal: true,
     isUnlocked: false,
-    unlockCondition: "Week 2+",
+    unlockCondition: "insightData.week2Plus",
   },
   {
     id: "pers-3",
-    title: "Morning Headaches",
-    description:
-      "You experience most headaches in the morning, which may indicate sleep-related triggers.",
+    title: "insightData.pers3Title",
+    description: "insightData.pers3Desc",
     category: "pattern",
     isPersonal: true,
     isUnlocked: false,
-    unlockCondition: "Week 2+",
+    unlockCondition: "insightData.week2Plus",
   },
 ];
 
