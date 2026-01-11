@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { ContentViewer } from "@/components/organisms/ContentViewer";
 import { educationalContent } from "@/data/educationalContent";
 import { ContentType } from "@/interface-adapters/store/educationStore";
+import { getTranslations } from "next-intl/server";
 
 interface PageProps {
   params: Promise<{ contentId: string }>;
@@ -23,9 +24,12 @@ export async function generateMetadata({ params }: PageProps) {
     };
   }
 
+  // Get server-side translations for metadata
+  const t = await getTranslations("content");
+
   return {
-    title: `${content.title} | Headache Awareness Trainer`,
-    description: content.subtitle,
+    title: `${t(content.titleKey)} | Headache Awareness Trainer`,
+    description: t(content.subtitleKey),
   };
 }
 
