@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import { useTranslations } from "next-intl";
 
 /**
  * Quick Check-in Page
@@ -30,52 +31,53 @@ import { format } from "date-fns";
  * - Quick dismiss "All good!" button
  */
 
-const moodOptions: Array<{ value: CheckInMood; emoji: string; label: string }> =
+const moodOptions: Array<{ value: CheckInMood; emoji: string; labelKey: string }> =
   [
-    { value: "calm", emoji: "😌", label: "Calm" },
-    { value: "ok", emoji: "🙂", label: "OK" },
-    { value: "stressed", emoji: "😰", label: "Stressed" },
-    { value: "anxious", emoji: "😟", label: "Anxious" },
-    { value: "avoidant", emoji: "😶", label: "Avoidant" },
+    { value: "calm", emoji: "😌", labelKey: "moods.calm" },
+    { value: "ok", emoji: "🙂", labelKey: "moods.ok" },
+    { value: "stressed", emoji: "😰", labelKey: "moods.stressed" },
+    { value: "anxious", emoji: "😟", labelKey: "moods.anxious" },
+    { value: "avoidant", emoji: "😶", labelKey: "moods.avoidant" },
   ];
 
 const sleepOptions: Array<{
   value: SleepQuality;
   emoji: string;
-  label: string;
+  labelKey: string;
 }> = [
-  { value: "good", emoji: "😴", label: "Good" },
-  { value: "ok", emoji: "😐", label: "OK" },
-  { value: "poor", emoji: "😩", label: "Poor" },
+  { value: "good", emoji: "😴", labelKey: "sleep.good" },
+  { value: "ok", emoji: "😐", labelKey: "sleep.ok" },
+  { value: "poor", emoji: "😩", labelKey: "sleep.poor" },
 ];
 
-const tensionAreas: Array<{ value: BodyTensionArea; label: string }> = [
-  { value: "jaw", label: "Jaw" },
-  { value: "neck", label: "Neck" },
-  { value: "shoulders", label: "Shoulders" },
+const tensionAreas: Array<{ value: BodyTensionArea; labelKey: string }> = [
+  { value: "jaw", labelKey: "tension.jaw" },
+  { value: "neck", labelKey: "tension.neck" },
+  { value: "shoulders", labelKey: "tension.shoulders" },
 ];
 
-const physicalOptions: Array<{ value: PhysicalFactor; label: string }> = [
-  { value: "acidity", label: "Acidity" },
-  { value: "fatigue", label: "Fatigue" },
-  { value: "none", label: "None" },
+const physicalOptions: Array<{ value: PhysicalFactor; labelKey: string }> = [
+  { value: "acidity", labelKey: "physical.acidity" },
+  { value: "fatigue", labelKey: "physical.fatigue" },
+  { value: "none", labelKey: "physical.none" },
 ];
 
 /**
- * Get greeting based on time of day
+ * Get greeting key based on time of day
  */
-function getGreeting(): string {
+function getGreetingKey(): string {
   const hour = new Date().getHours();
 
-  if (hour >= 5 && hour < 12) return "Good morning!";
-  if (hour >= 12 && hour < 17) return "Good afternoon!";
-  if (hour >= 17 && hour < 21) return "Good evening!";
-  return "Good night!";
+  if (hour >= 5 && hour < 12) return "greetingMorning";
+  if (hour >= 12 && hour < 17) return "greetingAfternoon";
+  if (hour >= 17 && hour < 21) return "greetingEvening";
+  return "greetingNight";
 }
 
 export default function CheckinPage() {
   const { initializeDB, addCheckIn, addQuickDismiss, getCheckInsForDate, isDBReady } =
     useCheckInStore();
+  const t = useTranslations("checkin");
 
   // Form state
   const [mood, setMood] = useState<CheckInMood | null>(null);
@@ -210,13 +212,13 @@ export default function CheckinPage() {
         {/* Header */}
         <div className="text-center space-y-2" data-testid="checkin-header">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-            Quick Check-in
+            {t("title")}
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-400">
-            {getGreeting()}
+            {t(getGreetingKey())}
           </p>
           <p className="text-sm text-gray-500 dark:text-gray-500">
-            Take a moment to track how you&apos;re feeling
+            {t("subtitle")}
           </p>
         </div>
 
@@ -230,7 +232,7 @@ export default function CheckinPage() {
           >
             <div className="flex items-center gap-2 text-green-800 dark:text-green-200">
               <span className="text-2xl" aria-hidden="true">✓</span>
-              <span className="font-medium">Check-in saved successfully!</span>
+              <span className="font-medium">{t("successMessage")}</span>
             </div>
           </Card>
         )}
@@ -240,10 +242,10 @@ export default function CheckinPage() {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                Feeling great today?
+                {t("feelingGreat")}
               </h2>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Quick tap if everything&apos;s good
+                {t("quickTap")}
               </p>
             </div>
             <Button
@@ -254,7 +256,7 @@ export default function CheckinPage() {
               data-testid="quick-dismiss-button"
             >
               <span className="text-xl mr-2">👍</span>
-              All good!
+              {t("allGood")}
             </Button>
           </div>
         </Card>
@@ -265,7 +267,7 @@ export default function CheckinPage() {
             {/* Mood Selection */}
             <div className="space-y-3" data-testid="mood-section">
               <label className="block text-sm font-medium text-gray-900 dark:text-gray-100">
-                How are you feeling? <span className="text-red-500">*</span>
+                {t("howFeeling")} <span className="text-red-500">*</span>
               </label>
               <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                 {moodOptions.map((option) => (
@@ -284,7 +286,7 @@ export default function CheckinPage() {
                   >
                     <span className="text-3xl">{option.emoji}</span>
                     <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
-                      {option.label}
+                      {t(option.labelKey)}
                     </span>
                   </button>
                 ))}
@@ -294,7 +296,7 @@ export default function CheckinPage() {
             {/* Body Tension */}
             <div className="space-y-3" data-testid="tension-section">
               <label className="block text-sm font-medium text-gray-900 dark:text-gray-100">
-                Any body tension?
+                {t("bodyTension")}
               </label>
               <div className="grid grid-cols-3 gap-2">
                 {tensionAreas.map((area) => (
@@ -311,7 +313,7 @@ export default function CheckinPage() {
                     )}
                     data-testid={`tension-${area.value}`}
                   >
-                    {area.label}
+                    {t(area.labelKey)}
                   </button>
                 ))}
               </div>
@@ -320,7 +322,7 @@ export default function CheckinPage() {
             {/* Sleep Quality */}
             <div className="space-y-3" data-testid="sleep-section">
               <label className="block text-sm font-medium text-gray-900 dark:text-gray-100">
-                How did you sleep? <span className="text-red-500">*</span>
+                {t("howSleep")} <span className="text-red-500">*</span>
               </label>
               <div className="grid grid-cols-3 gap-2">
                 {sleepOptions.map((option) => (
@@ -339,7 +341,7 @@ export default function CheckinPage() {
                   >
                     <span className="text-2xl">{option.emoji}</span>
                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                      {option.label}
+                      {t(option.labelKey)}
                     </span>
                   </button>
                 ))}
@@ -349,8 +351,8 @@ export default function CheckinPage() {
             {/* Physical Factors (Optional) */}
             <div className="space-y-3" data-testid="physical-factors-section">
               <label className="block text-sm font-medium text-gray-900 dark:text-gray-100">
-                Physical factors?{" "}
-                <span className="text-gray-500 text-xs">(optional)</span>
+                {t("physicalFactors")}{" "}
+                <span className="text-gray-500 text-xs">({t("optional")})</span>
               </label>
               <div className="grid grid-cols-3 gap-2">
                 {physicalOptions.map((option) => (
@@ -367,7 +369,7 @@ export default function CheckinPage() {
                     )}
                     data-testid={`physical-${option.value}`}
                   >
-                    {option.label}
+                    {t(option.labelKey)}
                   </button>
                 ))}
               </div>
@@ -379,14 +381,14 @@ export default function CheckinPage() {
                 htmlFor="note"
                 className="block text-sm font-medium text-gray-900 dark:text-gray-100"
               >
-                Any notes?{" "}
-                <span className="text-gray-500 text-xs">(optional)</span>
+                {t("anyNotes")}{" "}
+                <span className="text-gray-500 text-xs">({t("optional")})</span>
               </label>
               <textarea
                 id="note"
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
-                placeholder="Anything else to note..."
+                placeholder={t("notesPlaceholder")}
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500"
                 data-testid="note-input"
@@ -401,7 +403,7 @@ export default function CheckinPage() {
               size="lg"
               data-testid="submit-button"
             >
-              {isSubmitting ? "Saving check-in..." : "Save Check-in"}
+              {isSubmitting ? t("submitting") : t("submit")}
             </Button>
           </form>
         </Card>
@@ -410,11 +412,10 @@ export default function CheckinPage() {
         {recentCheckIns.length > 0 && (
           <Card className="p-6" data-testid="recent-checkins">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-              Today&apos;s Check-ins
+              {t("todayCheckins")}
             </h2>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-              You&apos;ve logged {checkInCount}{" "}
-              {checkInCount === 1 ? "time" : "times"} today
+              {t("loggedTimes", { count: checkInCount })}
             </p>
             <div className="space-y-3">
               {recentCheckIns.map((checkIn) => {
@@ -431,8 +432,8 @@ export default function CheckinPage() {
                       <span className="text-2xl">{moodData?.emoji}</span>
                       <div>
                         <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                          {moodData?.label}{" "}
-                          {checkIn.isQuickDismiss && "- All good!"}
+                          {moodData ? t(moodData.labelKey) : ""}{" "}
+                          {checkIn.isQuickDismiss && `- ${t("allGood")}`}
                         </div>
                         <div className="text-xs text-gray-500 dark:text-gray-400">
                           {format(new Date(checkIn.timestamp), "h:mm a")}

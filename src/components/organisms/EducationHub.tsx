@@ -7,8 +7,10 @@ import {
   educationalContent,
   getAvailableContent,
 } from "@/data/educationalContent";
+import { useTranslations } from "next-intl";
 
 export function EducationHub() {
+  const t = useTranslations("learn");
   const { contentProgress, isContentUnlocked, getTotalProgress } =
     useEducationStore();
 
@@ -24,23 +26,23 @@ export function EducationHub() {
       <div className="space-y-4">
         <div>
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">
-            Learn
+            {t("title")}
           </h1>
           <p className="text-sm md:text-base text-muted-foreground">
-            Build awareness before the headache speaks
+            {t("subtitle")}
           </p>
         </div>
 
         {/* Overall progress bar */}
         <div className="space-y-2">
           <div className="flex justify-between text-sm md:text-base">
-            <span className="text-muted-foreground">Your progress</span>
+            <span className="text-muted-foreground">{t("progress")}</span>
             <span className="font-medium">{totalProgress}%</span>
           </div>
           <Progress
             value={totalProgress}
             className="h-2"
-            aria-label={`Overall learning progress: ${totalProgress}%`}
+            aria-label={`${t("progress")}: ${totalProgress}%`}
           />
         </div>
       </div>
@@ -51,7 +53,7 @@ export function EducationHub() {
           id="available-content-heading"
           className="text-lg md:text-xl lg:text-2xl font-semibold mb-4"
         >
-          Start Learning
+          {t("startLearning")}
         </h2>
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
           {availableContent.map((content) => {
@@ -80,7 +82,7 @@ export function EducationHub() {
             id="locked-content-heading"
             className="text-lg md:text-xl lg:text-2xl font-semibold mb-4"
           >
-            Coming Soon
+            {t("comingSoon")}
           </h2>
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
             {lockedContent.map((content) => {

@@ -9,9 +9,30 @@ import { test, expect } from '@playwright/test';
  * - Active state indication
  * - Navigation between pages
  * - Touch interactions
+ *
+ * NOTE: Nav items are: Home, Check-in, Log, Insights, Learn
+ * data-testid format: nav-{label.toLowerCase()} = nav-home, nav-check-in, nav-log, nav-insights, nav-learn
  */
 
 test.describe('Bottom Navigation', () => {
+  // Ensure user has completed onboarding before each test
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+    await page.evaluate(() => {
+      localStorage.setItem('onboarding-storage', JSON.stringify({
+        state: {
+          isCompleted: true,
+          currentStep: 3,
+          totalSteps: 4,
+          headacheType: 'tension',
+          frequency: 'weekly',
+          remindersEnabled: true
+        },
+        version: 0
+      }));
+    });
+  });
+
   test.describe('Mobile Viewport Layout (375x667 - iPhone SE)', () => {
     test.use({ viewport: { width: 375, height: 667 } });
 
@@ -22,12 +43,12 @@ test.describe('Bottom Navigation', () => {
       const bottomNav = page.locator('[data-testid="bottom-nav"]');
       await expect(bottomNav).toBeVisible();
 
-      // Verify all nav items are visible
+      // Verify all nav items are visible (Home, Check-in, Log, Insights, Learn)
       await expect(page.locator('[data-testid="nav-home"]')).toBeVisible();
-      await expect(page.locator('[data-testid="nav-learn"]')).toBeVisible();
+      await expect(page.locator('[data-testid="nav-check-in"]')).toBeVisible();
       await expect(page.locator('[data-testid="nav-log"]')).toBeVisible();
       await expect(page.locator('[data-testid="nav-insights"]')).toBeVisible();
-      await expect(page.locator('[data-testid="nav-settings"]')).toBeVisible();
+      await expect(page.locator('[data-testid="nav-learn"]')).toBeVisible();
     });
 
     test('should span full width of mobile viewport', async ({ page }) => {
@@ -49,38 +70,38 @@ test.describe('Bottom Navigation', () => {
     test('should center tabs evenly across bottom nav', async ({ page }) => {
       await page.goto('/');
 
-      // Get all nav links
+      // Get all nav links (in order: Home, Check-in, Log, Insights, Learn)
       const homeLink = page.locator('[data-testid="nav-home"]');
-      const learnLink = page.locator('[data-testid="nav-learn"]');
+      const checkinLink = page.locator('[data-testid="nav-check-in"]');
       const logLink = page.locator('[data-testid="nav-log"]');
 
       const homeBox = await homeLink.boundingBox();
-      const learnBox = await learnLink.boundingBox();
+      const checkinBox = await checkinLink.boundingBox();
       const logBox = await logLink.boundingBox();
 
-      if (homeBox && learnBox && logBox) {
+      if (homeBox && checkinBox && logBox) {
         // Calculate spacing between tabs
-        const spacing1 = learnBox.x - (homeBox.x + homeBox.width);
-        const spacing2 = logBox.x - (learnBox.x + learnBox.width);
+        const spacing1 = checkinBox.x - (homeBox.x + homeBox.width);
+        const spacing2 = logBox.x - (checkinBox.x + checkinBox.width);
 
         // Spacing should be roughly equal (within 10px tolerance)
         expect(Math.abs(spacing1 - spacing2)).toBeLessThan(10);
 
         // Each tab should have roughly equal width
-        expect(Math.abs(homeBox.width - learnBox.width)).toBeLessThan(20);
+        expect(Math.abs(homeBox.width - checkinBox.width)).toBeLessThan(20);
       }
     });
 
     test('should highlight active tab', async ({ page }) => {
       await page.goto('/');
 
-      // Home tab should be active
+      // Home tab should be active (text-purple-600)
       const homeLink = page.locator('[data-testid="nav-home"]');
       const homeClasses = await homeLink.getAttribute('class');
       expect(homeClasses).toContain('purple'); // Active color
 
       // Navigate to Learn page
-      await page.locator('[data-testid="nav-learn"]').click();
+      await page.locator('[data-testid="nav-learn"]').click({ force: true });
       await expect(page).toHaveURL('/learn');
 
       // Learn tab should be active
@@ -177,11 +198,11 @@ test.describe('Bottom Navigation', () => {
       await expect(page).toHaveURL('/insights');
     });
 
-    test('should navigate to Settings on Settings tab click', async ({ page }) => {
+    test('should navigate to Check-in on Check-in tab click', async ({ page }) => {
       await page.goto('/');
 
-      await page.locator('[data-testid="nav-settings"]').click({ force: true });
-      await expect(page).toHaveURL('/settings');
+      await page.locator('[data-testid="nav-check-in"]').click({ force: true });
+      await expect(page).toHaveURL('/checkin');
     });
   });
 
@@ -244,32 +265,69 @@ test.describe('Bottom Navigation', () => {
     test('should maintain tab spacing on tablet', async ({ page }) => {
       await page.goto('/');
 
-      // All tabs should be visible with proper spacing
+      // All tabs should be visible with proper spacing (Home, Check-in, Log, Insights, Learn)
       await expect(page.locator('[data-testid="nav-home"]')).toBeVisible();
-      await expect(page.locator('[data-testid="nav-learn"]')).toBeVisible();
+      await expect(page.locator('[data-testid="nav-check-in"]')).toBeVisible();
       await expect(page.locator('[data-testid="nav-log"]')).toBeVisible();
       await expect(page.locator('[data-testid="nav-insights"]')).toBeVisible();
-      await expect(page.locator('[data-testid="nav-settings"]')).toBeVisible();
+      await expect(page.locator('[data-testid="nav-learn"]')).toBeVisible();
     });
   });
 
   test.describe('Desktop Viewport (1280x720)', () => {
-    test.use({ viewport: { width: 1280, height: 720 } });
+    test('should display sidebar navigation on desktop', async ({ page }, testInfo) => {
+      // Skip on mobile device projects - viewport override doesn't work well with device emulation
+      const projectName = testInfo.project.name;
+      if (projectName.includes('Mobile') || projectName.includes('iPhone') || projectName.includes('iPad')) {
+        test.skip();
+        return;
+      }
 
-    test('should display bottom navigation on desktop', async ({ page }) => {
+      // Set viewport to desktop size and navigate
+      await page.setViewportSize({ width: 1280, height: 720 });
       await page.goto('/');
 
-      // Bottom nav should be visible (mobile-first design)
+      // On desktop (lg+), sidebar nav should be visible instead of bottom nav
+      const sidebarNav = page.locator('[data-testid="sidebar-nav"]');
+      await expect(sidebarNav).toBeVisible();
+
+      // Bottom nav should be hidden on desktop
       const bottomNav = page.locator('[data-testid="bottom-nav"]');
-      await expect(bottomNav).toBeVisible();
+      await expect(bottomNav).not.toBeVisible();
     });
 
-    test('should handle mouse clicks on desktop', async ({ page }) => {
+    test('should handle mouse clicks on desktop sidebar', async ({ page }, testInfo) => {
+      // Skip on mobile device projects
+      const projectName = testInfo.project.name;
+      if (projectName.includes('Mobile') || projectName.includes('iPhone') || projectName.includes('iPad')) {
+        test.skip();
+        return;
+      }
+
+      // Set viewport to desktop size and navigate
+      await page.setViewportSize({ width: 1280, height: 720 });
       await page.goto('/');
 
-      // Click Learn tab via JavaScript to bypass Next.js dev overlay
-      await page.locator('[data-testid="nav-learn"]').click({ force: true });
+      // Click Learn tab in sidebar
+      await page.locator('[data-testid="sidebar-nav-learn"]').click();
       await expect(page).toHaveURL('/learn');
+    });
+
+    test('should display settings link in sidebar', async ({ page }, testInfo) => {
+      // Skip on mobile device projects
+      const projectName = testInfo.project.name;
+      if (projectName.includes('Mobile') || projectName.includes('iPhone') || projectName.includes('iPad')) {
+        test.skip();
+        return;
+      }
+
+      // Set viewport to desktop size and navigate
+      await page.setViewportSize({ width: 1280, height: 720 });
+      await page.goto('/');
+
+      // Settings should be visible in sidebar
+      const settingsLink = page.locator('[data-testid="sidebar-nav-settings"]');
+      await expect(settingsLink).toBeVisible();
     });
   });
 
@@ -290,11 +348,12 @@ test.describe('Bottom Navigation', () => {
     test('should show visible labels for all tabs', async ({ page }) => {
       await page.goto('/');
 
-      // All tabs should have visible text labels
+      // All tabs should have visible text labels (Home, Check-in, Log, Insights, Learn)
       await expect(page.locator('[data-testid="nav-home"]')).toBeVisible();
-      await expect(page.locator('[data-testid="nav-learn"]')).toBeVisible();
+      await expect(page.locator('[data-testid="nav-check-in"]')).toBeVisible();
+      await expect(page.locator('[data-testid="nav-log"]')).toBeVisible();
       await expect(page.locator('[data-testid="nav-insights"]')).toBeVisible();
-      await expect(page.locator('[data-testid="nav-settings"]')).toBeVisible();
+      await expect(page.locator('[data-testid="nav-learn"]')).toBeVisible();
     });
 
     test('should support keyboard navigation', async ({ page }) => {
@@ -318,14 +377,12 @@ test.describe('Bottom Navigation', () => {
  * Bottom Navigation (BottomNav.tsx):
  * - [data-testid="bottom-nav"] - Bottom navigation container
  * - [data-testid="nav-home"] - Home navigation link
- * - [data-testid="nav-learn"] - Learn navigation link
+ * - [data-testid="nav-check-in"] - Check-in navigation link
  * - [data-testid="nav-log"] - Log navigation link
  * - [data-testid="nav-insights"] - Insights navigation link
- * - [data-testid="nav-settings"] - Settings navigation link
+ * - [data-testid="nav-learn"] - Learn navigation link
  *
- * Home Page:
- * - [data-testid="empty-state"] - Empty state message (for overlap test)
- *
- * NOTE: Bottom navigation component uses data-testid attributes for stable
+ * NOTE: data-testid format is nav-{label.toLowerCase()}
+ * Bottom navigation component uses data-testid attributes for stable
  * test selectors as per E2E testing best practices.
  */

@@ -13,6 +13,7 @@ import { MoodStressTracker } from "@/components/molecules/MoodStressTracker";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { AlertCircle, Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 /**
  * Quick Logging Page - Frictionless headache entry with progressive feature unlocking
@@ -46,6 +47,7 @@ export default function QuickLoggingPage() {
     isSubmitting,
     submitError,
   } = useQuickLogging();
+  const t = useTranslations("log");
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -56,7 +58,7 @@ export default function QuickLoggingPage() {
             data-testid="page-title"
             className="text-2xl font-bold text-gray-900 dark:text-gray-100 text-center"
           >
-            How are you feeling?
+            {t("title")}
           </h1>
         </div>
       </header>
@@ -87,7 +89,7 @@ export default function QuickLoggingPage() {
             </div>
             <div className="relative flex justify-center text-sm">
               <span className="px-4 bg-gray-50 dark:bg-gray-900 text-gray-500 dark:text-gray-400">
-                or log your headache
+                {t("orLogHeadache")}
               </span>
             </div>
           </div>
@@ -100,7 +102,7 @@ export default function QuickLoggingPage() {
             <div className="flex items-center gap-2 mb-4">
               <div className="w-2 h-2 rounded-full bg-blue-600" />
               <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                Required Information
+                {t("requiredInfo")}
               </h2>
             </div>
 
@@ -119,7 +121,7 @@ export default function QuickLoggingPage() {
                 value={formState.note}
                 onChange={setNote}
                 disabled={isSubmitting}
-                placeholder="Describe what you're feeling (optional)"
+                placeholder={t("describeFeeling")}
               />
             </div>
           </section>
@@ -145,10 +147,10 @@ export default function QuickLoggingPage() {
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-2 h-2 rounded-full bg-blue-600" />
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                  Additional Details
+                  {t("additionalDetails")}
                 </h2>
                 <span className="ml-auto text-xs px-2 py-1 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 font-medium">
-                  Week 2+
+                  {t("week2Plus")}
                 </span>
               </div>
 
@@ -181,10 +183,10 @@ export default function QuickLoggingPage() {
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-2 h-2 rounded-full bg-purple-600" />
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                  Mind & Body Tracking
+                  {t("mindBody")}
                 </h2>
                 <span className="ml-auto text-xs px-2 py-1 rounded-full bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 font-medium">
-                  Week 3+
+                  {t("week3Plus")}
                 </span>
               </div>
 
@@ -221,7 +223,7 @@ export default function QuickLoggingPage() {
               <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
               <div className="flex-1">
                 <h3 className="text-sm font-medium text-red-800 dark:text-red-300">
-                  Submission Error
+                  {t("submissionError")}
                 </h3>
                 <p className="text-sm text-red-700 dark:text-red-400 mt-1">
                   {submitError}
@@ -250,10 +252,10 @@ export default function QuickLoggingPage() {
             {isSubmitting ? (
               <>
                 <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
-                Logging Entry...
+                {t("submitting")}
               </>
             ) : (
-              "Log Entry"
+              t("submit")
             )}
           </Button>
 
@@ -264,7 +266,7 @@ export default function QuickLoggingPage() {
                 className="text-xs text-gray-500 dark:text-gray-400"
                 data-testid="week2-unlock-hint"
               >
-                🔒 More features unlock after 7 days of use
+                🔒 {t("moreFeatures7Days")}
               </p>
             )}
             {unlockedFeatures.week2Features &&
@@ -273,7 +275,7 @@ export default function QuickLoggingPage() {
                   className="text-xs text-gray-500 dark:text-gray-400"
                   data-testid="week3-unlock-hint"
                 >
-                  🔒 Advanced tracking unlocks after 14 days
+                  🔒 {t("advancedTracking14Days")}
                 </p>
               )}
             {unlockedFeatures.week3Features && (
@@ -281,7 +283,7 @@ export default function QuickLoggingPage() {
                 className="text-xs text-green-600 dark:text-green-400"
                 data-testid="all-features-unlocked"
               >
-                ✨ All features unlocked!
+                ✨ {t("allFeaturesUnlocked")}
               </p>
             )}
           </div>

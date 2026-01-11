@@ -1,8 +1,14 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { BottomNav, BottomNavSpacer } from "@/components/organisms/BottomNav";
+import {
+  BottomNav,
+  BottomNavSpacer,
+  MainContentWrapper,
+} from "@/components/organisms/BottomNav";
 import { InstallPrompt } from "@/components/organisms/InstallPrompt";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,25 +36,32 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <head>
         <link rel="apple-touch-icon" href="/icon-192x192.svg" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       </head>
       <body className={`${inter.className} pt-safe`}>
-        <main className="min-h-screen-safe">
-          {children}
-        </main>
-        <BottomNavSpacer />
-        <BottomNav />
-        <InstallPrompt />
+        <NextIntlClientProvider messages={messages}>
+          <BottomNav />
+          <MainContentWrapper>
+            <main className="min-h-screen-safe">
+              {children}
+            </main>
+            <BottomNavSpacer />
+          </MainContentWrapper>
+          <InstallPrompt />
+        </NextIntlClientProvider>
       </body>
     </html>
   );

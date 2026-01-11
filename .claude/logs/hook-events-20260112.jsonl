@@ -1,0 +1,30 @@
+{
+  "event_id": "F5EF2D76-4197-4DC8-AD3B-A97B09DA3059",
+  "timestamp": "2026-01-12T00:04:57+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 70366,
+  "ppid": 70365,
+  "session_time": 1768143897
+}
+{
+  "event_id": "DC765BFC-B844-4B3A-85FB-E3B1F26A2DE2",
+  "timestamp": "2026-01-12T00:06:34+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 70492,
+  "ppid": 70491,
+  "session_time": 1768143994
+}
+{
+  "event_id": "06973795-F1A9-4CAF-8626-C436A6F3ED52",
+  "timestamp": "2026-01-12T01:30:29+09:00",
+  "hook_name": "coverage-enforcer",
+  "event_type": "start",
+  "context": "Analyzing test coverage",
+  "pid": 81285,
+  "ppid": 81284,
+  "session_time": 1768149029
+}

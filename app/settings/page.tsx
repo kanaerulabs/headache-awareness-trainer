@@ -26,8 +26,10 @@ import {
   ClearDataDialog,
   ThemeToggle,
   AboutHelp,
+  LanguageSwitcher,
 } from "@/components/organisms/settings";
 import { ArrowLeft } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 /**
  * Settings Page
@@ -56,6 +58,7 @@ import { ArrowLeft } from "lucide-react";
  */
 export default function SettingsPage() {
   const router = useRouter();
+  const t = useTranslations("settings");
 
   const handleBack = () => {
     router.push("/");
@@ -66,7 +69,7 @@ export default function SettingsPage() {
       className="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-950 p-4 sm:p-6"
       data-testid="settings-page"
       role="main"
-      aria-label="Settings"
+      aria-label={t("title")}
     >
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header with Back Button */}
@@ -77,16 +80,16 @@ export default function SettingsPage() {
               size="icon"
               onClick={handleBack}
               data-testid="back-button"
-              aria-label="Go back to dashboard"
+              aria-label={t("goBack")}
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div>
               <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100">
-                Settings
+                {t("title")}
               </h1>
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                Customize your headache tracking experience
+                {t("customize")}
               </p>
             </div>
           </div>
@@ -103,7 +106,7 @@ export default function SettingsPage() {
             <AccordionItem value="reminders" data-testid="accordion-reminders">
               <Card>
                 <AccordionTrigger className="px-6 py-4 hover:no-underline">
-                  <CardTitle>Reminders</CardTitle>
+                  <CardTitle>{t("reminders")}</CardTitle>
                 </AccordionTrigger>
                 <AccordionContent>
                   <CardContent className="pt-0">
@@ -117,7 +120,7 @@ export default function SettingsPage() {
             <AccordionItem value="tracking" data-testid="accordion-tracking">
               <Card>
                 <AccordionTrigger className="px-6 py-4 hover:no-underline">
-                  <CardTitle>Tracking Preferences</CardTitle>
+                  <CardTitle>{t("trackingPreferences")}</CardTitle>
                 </AccordionTrigger>
                 <AccordionContent>
                   <CardContent className="pt-0 space-y-4">
@@ -136,7 +139,7 @@ export default function SettingsPage() {
             >
               <Card>
                 <AccordionTrigger className="px-6 py-4 hover:no-underline">
-                  <CardTitle>Headache Types</CardTitle>
+                  <CardTitle>{t("headacheTypes")}</CardTitle>
                 </AccordionTrigger>
                 <AccordionContent>
                   <CardContent className="pt-0">
@@ -150,11 +153,13 @@ export default function SettingsPage() {
             <AccordionItem value="display" data-testid="accordion-display">
               <Card>
                 <AccordionTrigger className="px-6 py-4 hover:no-underline">
-                  <CardTitle>Display</CardTitle>
+                  <CardTitle>{t("display")}</CardTitle>
                 </AccordionTrigger>
                 <AccordionContent>
                   <CardContent className="pt-0 space-y-4">
                     <ThemeToggle />
+                    <Separator />
+                    <LanguageSwitcher />
                     <Separator />
                     <IntensityScaleSettings />
                   </CardContent>
@@ -166,7 +171,7 @@ export default function SettingsPage() {
             <AccordionItem value="data" data-testid="accordion-data">
               <Card>
                 <AccordionTrigger className="px-6 py-4 hover:no-underline">
-                  <CardTitle>Data Management</CardTitle>
+                  <CardTitle>{t("data")}</CardTitle>
                 </AccordionTrigger>
                 <AccordionContent>
                   <CardContent className="pt-0 space-y-4">
@@ -174,7 +179,7 @@ export default function SettingsPage() {
                     <Separator />
                     <div data-testid="danger-zone">
                       <h3 className="text-lg font-semibold text-red-600 dark:text-red-400 mb-2">
-                        Danger Zone
+                        {t("dangerZone")}
                       </h3>
                       <ClearDataDialog />
                     </div>
@@ -187,7 +192,7 @@ export default function SettingsPage() {
             <AccordionItem value="about" data-testid="accordion-about">
               <Card>
                 <AccordionTrigger className="px-6 py-4 hover:no-underline">
-                  <CardTitle>About & Help</CardTitle>
+                  <CardTitle>{t("about")}</CardTitle>
                 </AccordionTrigger>
                 <AccordionContent>
                   <CardContent className="pt-0">
@@ -211,9 +216,9 @@ export default function SettingsPage() {
           >
             <Card>
               <CardHeader>
-                <CardTitle id="reminders-heading">Reminders</CardTitle>
+                <CardTitle id="reminders-heading">{t("reminders")}</CardTitle>
                 <CardDescription>
-                  Configure when and how you want to be reminded
+                  {t("remindersDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -230,10 +235,10 @@ export default function SettingsPage() {
             <Card>
               <CardHeader>
                 <CardTitle id="tracking-heading">
-                  Tracking Preferences
+                  {t("trackingPreferences")}
                 </CardTitle>
                 <CardDescription>
-                  Choose what factors to track for your headaches
+                  {t("trackingPreferencesDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -252,10 +257,10 @@ export default function SettingsPage() {
             <Card>
               <CardHeader>
                 <CardTitle id="headache-types-heading">
-                  Headache Types
+                  {t("headacheTypes")}
                 </CardTitle>
                 <CardDescription>
-                  Customize headache types you experience
+                  {t("headacheTypesDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -271,13 +276,15 @@ export default function SettingsPage() {
           >
             <Card>
               <CardHeader>
-                <CardTitle id="display-heading">Display</CardTitle>
+                <CardTitle id="display-heading">{t("display")}</CardTitle>
                 <CardDescription>
-                  Customize appearance and display preferences
+                  {t("displayDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <ThemeToggle />
+                <Separator />
+                <LanguageSwitcher />
                 <Separator />
                 <IntensityScaleSettings />
               </CardContent>
@@ -288,9 +295,9 @@ export default function SettingsPage() {
           <section aria-labelledby="data-heading" data-testid="section-data">
             <Card>
               <CardHeader>
-                <CardTitle id="data-heading">Data Management</CardTitle>
+                <CardTitle id="data-heading">{t("data")}</CardTitle>
                 <CardDescription>
-                  Export or delete your headache tracking data
+                  {t("dataDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -298,10 +305,10 @@ export default function SettingsPage() {
                 <Separator />
                 <div data-testid="danger-zone">
                   <h3 className="text-lg font-semibold text-red-600 dark:text-red-400 mb-2">
-                    Danger Zone
+                    {t("dangerZone")}
                   </h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Irreversible actions that will permanently delete your data
+                    {t("dangerZoneDesc")}
                   </p>
                   <ClearDataDialog />
                 </div>
@@ -313,9 +320,9 @@ export default function SettingsPage() {
           <section aria-labelledby="about-heading" data-testid="section-about">
             <Card>
               <CardHeader>
-                <CardTitle id="about-heading">About & Help</CardTitle>
+                <CardTitle id="about-heading">{t("about")}</CardTitle>
                 <CardDescription>
-                  Learn more about this app and get help
+                  {t("aboutDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent>

@@ -75,8 +75,8 @@ test.describe('Learn Page', () => {
     test('should display "Start Learning" section', async ({ page }) => {
       await page.goto('/learn');
 
-      // Verify section heading
-      await expect(page.locator('#available-content-heading, text=Start Learning')).toBeVisible();
+      // Verify section heading - use ID selector or text
+      await expect(page.locator('#available-content-heading').or(page.getByText('Start Learning'))).toBeVisible();
     });
   });
 
