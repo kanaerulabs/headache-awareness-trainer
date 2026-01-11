@@ -18,6 +18,7 @@ import {
   useSettingsStore,
   type ReminderStyle,
 } from "@/interface-adapters/store/settingsStore";
+import { useTranslations } from "next-intl";
 
 export interface ReminderSettingsProps {
   /**
@@ -26,32 +27,9 @@ export interface ReminderSettingsProps {
   className?: string;
 }
 
-const DAYS = [
-  { value: "mon", label: "Mon" },
-  { value: "tue", label: "Tue" },
-  { value: "wed", label: "Wed" },
-  { value: "thu", label: "Thu" },
-  { value: "fri", label: "Fri" },
-  { value: "sat", label: "Sat" },
-  { value: "sun", label: "Sun" },
-] as const;
+const DAYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"] as const;
 
-const REMINDER_STYLES: {
-  value: ReminderStyle;
-  label: string;
-  description: string;
-}[] = [
-  {
-    value: "gentle",
-    label: "Gentle",
-    description: "Single notification that can be dismissed",
-  },
-  {
-    value: "persistent",
-    label: "Persistent",
-    description: "Repeats until acknowledged",
-  },
-];
+const REMINDER_STYLES: ReminderStyle[] = ["gentle", "persistent"];
 
 /**
  * ReminderSettings Component
@@ -63,6 +41,7 @@ const REMINDER_STYLES: {
  * - Choose reminder style (gentle/persistent)
  */
 export function ReminderSettings({ className }: ReminderSettingsProps) {
+  const t = useTranslations("settings");
   const {
     reminders,
     setRemindersEnabled,
@@ -79,13 +58,13 @@ export function ReminderSettings({ className }: ReminderSettingsProps) {
     // Validate time format (HH:MM)
     const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
     if (!timeRegex.test(newTime)) {
-      alert("Please enter a valid time in HH:MM format (e.g., 09:00)");
+      alert(t("invalidTimeFormat"));
       return;
     }
 
     // Check if time already exists
     if (reminders.times.includes(newTime)) {
-      alert("This time is already added");
+      alert(t("timeAlreadyAdded"));
       return;
     }
 
@@ -102,7 +81,7 @@ export function ReminderSettings({ className }: ReminderSettingsProps) {
     if (isSelected) {
       // Don't allow removing the last day
       if (reminders.days.length === 1) {
-        alert("At least one day must be selected");
+        alert(t("atLeastOneDay"));
         return;
       }
       setReminderDays(reminders.days.filter((d) => d !== day));
@@ -114,9 +93,9 @@ export function ReminderSettings({ className }: ReminderSettingsProps) {
   return (
     <Card className={cn("", className)} data-testid="reminder-settings">
       <CardHeader>
-        <CardTitle>Reminder Settings</CardTitle>
+        <CardTitle>{t("reminders")}</CardTitle>
         <CardDescription>
-          Configure when and how you want to be reminded to log your headaches
+          {t("remindersDesc")}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -124,10 +103,10 @@ export function ReminderSettings({ className }: ReminderSettingsProps) {
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
             <Label htmlFor="reminders-enabled" className="text-base">
-              Enable Reminders
+              {t("enableReminders")}
             </Label>
             <p className="text-sm text-muted-foreground">
-              Receive notifications to log your headaches
+              {t("enableRemindersDesc")}
             </p>
           </div>
           <Switch
@@ -142,7 +121,7 @@ export function ReminderSettings({ className }: ReminderSettingsProps) {
           <>
             {/* Reminder Times */}
             <div className="space-y-3">
-              <Label className="text-base">Reminder Times</Label>
+              <Label className="text-base">{t("reminderTimes")}</Label>
               <div className="flex gap-2">
                 <Input
                   type="time"
@@ -157,7 +136,7 @@ export function ReminderSettings({ className }: ReminderSettingsProps) {
                   variant="outline"
                   data-testid="add-time-button"
                 >
-                  Add Time
+                  {t("addTime")}
                 </Button>
               </div>
 
@@ -177,7 +156,7 @@ export function ReminderSettings({ className }: ReminderSettingsProps) {
                         size="sm"
                         data-testid={`remove-time-${time}`}
                       >
-                        Remove
+                        {t("remove")}
                       </Button>
                     </div>
                   ))}
@@ -186,30 +165,30 @@ export function ReminderSettings({ className }: ReminderSettingsProps) {
 
               {reminders.times.length === 0 && (
                 <p className="text-sm text-muted-foreground">
-                  No reminder times set. Add at least one time above.
+                  {t("noTimesSet")}
                 </p>
               )}
             </div>
 
             {/* Active Days */}
             <div className="space-y-3">
-              <Label className="text-base">Active Days</Label>
+              <Label className="text-base">{t("activeDays")}</Label>
               <div className="flex gap-2 flex-wrap">
                 {DAYS.map((day) => {
-                  const isSelected = reminders.days.includes(day.value);
+                  const isSelected = reminders.days.includes(day);
                   return (
                     <button
-                      key={day.value}
-                      onClick={() => handleToggleDay(day.value)}
+                      key={day}
+                      onClick={() => handleToggleDay(day)}
                       className={cn(
                         "px-4 py-2 rounded-md border font-medium transition-colors",
                         isSelected
                           ? "bg-primary text-primary-foreground border-primary"
                           : "bg-background hover:bg-accent hover:text-accent-foreground",
                       )}
-                      data-testid={`day-toggle-${day.value}`}
+                      data-testid={`day-toggle-${day}`}
                     >
-                      {day.label}
+                      {t(`days.${day}`)}
                     </button>
                   );
                 })}
@@ -218,25 +197,25 @@ export function ReminderSettings({ className }: ReminderSettingsProps) {
 
             {/* Reminder Style */}
             <div className="space-y-3">
-              <Label className="text-base">Reminder Style</Label>
+              <Label className="text-base">{t("reminderStyle")}</Label>
               <div className="space-y-2">
                 {REMINDER_STYLES.map((style) => {
-                  const isSelected = reminders.style === style.value;
+                  const isSelected = reminders.style === style;
                   return (
                     <button
-                      key={style.value}
-                      onClick={() => setReminderStyle(style.value)}
+                      key={style}
+                      onClick={() => setReminderStyle(style)}
                       className={cn(
                         "w-full text-left p-4 rounded-md border transition-colors",
                         isSelected
                           ? "bg-accent border-primary ring-2 ring-primary ring-offset-2"
                           : "bg-background hover:bg-accent",
                       )}
-                      data-testid={`style-${style.value}`}
+                      data-testid={`style-${style}`}
                     >
-                      <div className="font-medium">{style.label}</div>
+                      <div className="font-medium">{t(style)}</div>
                       <div className="text-sm text-muted-foreground">
-                        {style.description}
+                        {t(`${style}Desc`)}
                       </div>
                     </button>
                   );

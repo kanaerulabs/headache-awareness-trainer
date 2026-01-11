@@ -15,6 +15,7 @@ import {
   useSettingsStore,
   type TrackedFactors,
 } from "@/interface-adapters/store/settingsStore";
+import { useTranslations } from "next-intl";
 
 export interface TrackedFactorsSettingsProps {
   /**
@@ -25,58 +26,16 @@ export interface TrackedFactorsSettingsProps {
 
 const FACTOR_CONFIG: {
   key: keyof TrackedFactors;
-  label: string;
-  description: string;
   icon: string;
 }[] = [
-  {
-    key: "sleep",
-    label: "Sleep Quality",
-    description: "Track sleep patterns and their impact on headaches",
-    icon: "😴",
-  },
-  {
-    key: "hydration",
-    label: "Hydration",
-    description: "Monitor water intake throughout the day",
-    icon: "💧",
-  },
-  {
-    key: "caffeine",
-    label: "Caffeine Intake",
-    description: "Track coffee, tea, and other caffeinated beverages",
-    icon: "☕",
-  },
-  {
-    key: "alcohol",
-    label: "Alcohol Consumption",
-    description: "Monitor alcohol intake and timing",
-    icon: "🍷",
-  },
-  {
-    key: "stress",
-    label: "Stress Levels",
-    description: "Track daily stress and tension",
-    icon: "😰",
-  },
-  {
-    key: "weather",
-    label: "Weather Changes",
-    description: "Note weather patterns and barometric pressure",
-    icon: "🌤️",
-  },
-  {
-    key: "menstrual",
-    label: "Menstrual Cycle",
-    description: "Track cycle phase and hormonal changes",
-    icon: "📅",
-  },
-  {
-    key: "medication",
-    label: "Medication",
-    description: "Log medications taken and timing",
-    icon: "💊",
-  },
+  { key: "sleep", icon: "😴" },
+  { key: "hydration", icon: "💧" },
+  { key: "caffeine", icon: "☕" },
+  { key: "alcohol", icon: "🍷" },
+  { key: "stress", icon: "😰" },
+  { key: "weather", icon: "🌤️" },
+  { key: "menstrual", icon: "📅" },
+  { key: "medication", icon: "💊" },
 ];
 
 /**
@@ -88,14 +47,15 @@ const FACTOR_CONFIG: {
 export function TrackedFactorsSettings({
   className,
 }: TrackedFactorsSettingsProps) {
+  const t = useTranslations("settings");
   const { trackedFactors, toggleTrackedFactor } = useSettingsStore();
 
   return (
     <Card className={cn("", className)} data-testid="tracked-factors-settings">
       <CardHeader>
-        <CardTitle>Tracked Factors</CardTitle>
+        <CardTitle>{t("trackedFactors")}</CardTitle>
         <CardDescription>
-          Choose which factors you want to track in your daily check-ins
+          {t("trackedFactorsDesc")}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -114,10 +74,10 @@ export function TrackedFactorsSettings({
                   htmlFor={`factor-${factor.key}`}
                   className="text-base cursor-pointer"
                 >
-                  {factor.label}
+                  {t(`factors.${factor.key}`)}
                 </Label>
                 <p className="text-sm text-muted-foreground">
-                  {factor.description}
+                  {t(`factors.${factor.key}Desc`)}
                 </p>
               </div>
             </div>
