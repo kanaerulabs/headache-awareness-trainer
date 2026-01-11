@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 export interface TensionTrackerProps {
   /**
@@ -27,25 +28,25 @@ const tensionLabels = [
   {
     min: 0,
     max: 2,
-    label: "Relaxed",
+    labelKey: "relaxed" as const,
     color: "text-green-600 dark:text-green-400",
   },
   {
     min: 3,
     max: 5,
-    label: "Mild Tension",
+    labelKey: "mildTension" as const,
     color: "text-yellow-600 dark:text-yellow-400",
   },
   {
     min: 6,
     max: 8,
-    label: "Moderate Tension",
+    labelKey: "moderateTension" as const,
     color: "text-orange-600 dark:text-orange-400",
   },
   {
     min: 9,
     max: 10,
-    label: "Severe Tension",
+    labelKey: "severeTension" as const,
     color: "text-red-600 dark:text-red-400",
   },
 ] as const;
@@ -72,6 +73,8 @@ export const TensionTracker: React.FC<TensionTrackerProps> = ({
   disabled = false,
   className,
 }) => {
+  const t = useTranslations("components.tensionTracker");
+
   const currentLabel = tensionLabels.find(
     (label) => value >= label.min && value <= label.max,
   );
@@ -92,7 +95,7 @@ export const TensionTracker: React.FC<TensionTrackerProps> = ({
         id="tension-label"
         className="block text-sm font-medium text-gray-900 dark:text-gray-100"
       >
-        How tense does your body feel?
+        {t("label")}
       </label>
 
       {/* Body silhouette visualization */}
@@ -263,7 +266,7 @@ export const TensionTracker: React.FC<TensionTrackerProps> = ({
             aria-valuemin={0}
             aria-valuemax={10}
             aria-valuenow={value}
-            aria-valuetext={`Tension level ${value} out of 10 - ${currentLabel?.label}`}
+            aria-valuetext={t("ariaValueText", { value, label: currentLabel ? t(`levels.${currentLabel.labelKey}`) : "" })}
             className={cn(
               "flex-1 h-2 rounded-lg appearance-none cursor-pointer",
               "bg-gray-200 dark:bg-gray-700",
@@ -285,7 +288,7 @@ export const TensionTracker: React.FC<TensionTrackerProps> = ({
           </div>
           {currentLabel && (
             <div className={cn("text-sm font-medium mt-1", currentLabel.color)}>
-              {currentLabel.label}
+              {t(`levels.${currentLabel.labelKey}`)}
             </div>
           )}
         </div>
@@ -293,7 +296,7 @@ export const TensionTracker: React.FC<TensionTrackerProps> = ({
 
       {/* Helper text */}
       <div className="text-xs text-gray-500 dark:text-gray-400 text-center">
-        0 = Completely relaxed, 10 = Extremely tense
+        {t("helperText")}
       </div>
     </div>
   );

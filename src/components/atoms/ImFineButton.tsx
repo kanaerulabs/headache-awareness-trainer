@@ -1,12 +1,15 @@
+"use client";
+
 import * as React from "react";
 import { Button, type ButtonProps } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export interface ImFineButtonProps extends Omit<ButtonProps, "children"> {
   /**
    * Optional custom text to display on the button
-   * @default "I'm fine today"
+   * If not provided, uses translation
    */
   text?: string;
   /**
@@ -30,7 +33,9 @@ export interface ImFineButtonProps extends Omit<ButtonProps, "children"> {
 export const ImFineButton = React.forwardRef<
   HTMLButtonElement,
   ImFineButtonProps
->(({ text = "I'm fine today", showIcon = true, className, ...props }, ref) => {
+>(({ text, showIcon = true, className, ...props }, ref) => {
+  const t = useTranslations("components.imFineButton");
+  const buttonText = text ?? t("text");
   return (
     <Button
       ref={ref}
@@ -46,11 +51,11 @@ export const ImFineButton = React.forwardRef<
         "focus-visible:ring-green-500",
         className,
       )}
-      aria-label={text}
+      aria-label={buttonText}
       {...props}
     >
       {showIcon && <Check className="h-5 w-5" aria-hidden="true" />}
-      {text}
+      {buttonText}
     </Button>
   );
 });

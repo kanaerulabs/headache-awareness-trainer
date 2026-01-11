@@ -4,6 +4,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Mic } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
 export interface NoteInputProps {
   /**
@@ -25,7 +26,7 @@ export interface NoteInputProps {
   maxLength?: number;
   /**
    * Placeholder text
-   * @default "How are you feeling?"
+   * If not provided, uses translation
    */
   placeholder?: string;
   /**
@@ -63,10 +64,12 @@ export const NoteInput: React.FC<NoteInputProps> = ({
   onChange,
   onVoiceInput,
   maxLength = 500,
-  placeholder = "How are you feeling?",
+  placeholder,
   disabled = false,
   className,
 }) => {
+  const t = useTranslations("components.noteInput");
+  const placeholderText = placeholder ?? t("placeholder");
   const charactersLeft = maxLength - value.length;
   const isNearLimit = charactersLeft <= 50;
   const isAtLimit = charactersLeft <= 0;
@@ -85,7 +88,7 @@ export const NoteInput: React.FC<NoteInputProps> = ({
         htmlFor="note-input"
         className="block text-sm font-medium text-gray-900 dark:text-gray-100"
       >
-        Notes (optional)
+        {t("label")}
       </label>
 
       {/* Textarea with voice input button */}
@@ -94,11 +97,11 @@ export const NoteInput: React.FC<NoteInputProps> = ({
           id="note-input"
           value={value}
           onChange={handleChange}
-          placeholder={placeholder}
+          placeholder={placeholderText}
           disabled={disabled}
           maxLength={maxLength}
           rows={4}
-          aria-label="Headache notes"
+          aria-label={t("ariaLabel")}
           aria-describedby="character-count"
           className={cn(
             "w-full rounded-lg border-2 border-gray-300 px-4 py-3 pr-14",
@@ -121,8 +124,8 @@ export const NoteInput: React.FC<NoteInputProps> = ({
             onClick={onVoiceInput}
             disabled={disabled}
             tabIndex={-1}
-            aria-label="Voice input (coming soon)"
-            title="Voice input (coming soon)"
+            aria-label={t("voiceInputLabel")}
+            title={t("voiceInputLabel")}
             className={cn(
               "absolute top-2 right-2",
               "h-10 w-10",
@@ -148,11 +151,11 @@ export const NoteInput: React.FC<NoteInputProps> = ({
         aria-atomic="true"
       >
         <span>
-          {value.length} / {maxLength} characters
+          {t("characters", { count: value.length, max: maxLength })}
         </span>
         {isNearLimit && (
           <span className="font-medium">
-            {isAtLimit ? "Limit reached" : `${charactersLeft} left`}
+            {isAtLimit ? t("limitReached") : t("remaining", { count: charactersLeft })}
           </span>
         )}
       </div>

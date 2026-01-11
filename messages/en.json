@@ -441,6 +441,120 @@
     "pers3Desc": "You experience most headaches in the morning, which may indicate sleep-related triggers.",
     "week2Plus": "Week 2+"
   },
+  "components": {
+    "imFineButton": {
+      "text": "I'm fine today"
+    },
+    "intensitySlider": {
+      "label": "How intense is your headache?",
+      "selectedIntensity": "Selected intensity:",
+      "levels": {
+        "1": "Minimal",
+        "2": "Mild",
+        "3": "Moderate",
+        "4": "Severe",
+        "5": "Extreme"
+      },
+      "ariaLabel": "Intensity level {value} - {label}"
+    },
+    "noteInput": {
+      "label": "Notes (optional)",
+      "placeholder": "How are you feeling?",
+      "ariaLabel": "Headache notes",
+      "voiceInputLabel": "Voice input (coming soon)",
+      "characters": "{count} / {max} characters",
+      "limitReached": "Limit reached",
+      "remaining": "{count} left"
+    },
+    "contextTagChips": {
+      "label": "Context (optional)",
+      "tagsSelected": "{count} {count, plural, =1 {tag} other {tags}} selected",
+      "tags": {
+        "woke-up-with-it": "Woke up with it",
+        "came-on-gradually": "Came on gradually",
+        "sudden-onset": "Sudden onset",
+        "morning": "Morning",
+        "evening": "Evening",
+        "after-meal": "After meal",
+        "after-exercise": "After exercise",
+        "weather-change": "Weather change"
+      }
+    },
+    "headacheTypeSelector": {
+      "label": "What type of headache is this?",
+      "selectedType": "Selected type:",
+      "types": {
+        "tension": {
+          "label": "Tension",
+          "description": "Tight band around head"
+        },
+        "migraine": {
+          "label": "Migraine",
+          "description": "Throbbing, one-sided"
+        },
+        "cluster": {
+          "label": "Cluster",
+          "description": "Intense, behind eye"
+        },
+        "sinus": {
+          "label": "Sinus",
+          "description": "Face/forehead pressure"
+        },
+        "other": {
+          "label": "Other",
+          "description": "Different pattern"
+        }
+      }
+    },
+    "locationPicker": {
+      "label": "Where does it hurt? (Select all that apply)",
+      "tapToMark": "Tap areas on the diagram to mark pain locations",
+      "selectedLocations": "Selected locations:",
+      "removeLocation": "Remove {location}",
+      "locations": {
+        "front": "Front",
+        "back": "Back",
+        "top": "Top",
+        "left-side": "Left Side",
+        "right-side": "Right Side",
+        "behind-eyes": "Behind Eyes",
+        "neck": "Neck",
+        "shoulders": "Shoulders",
+        "jaw": "Jaw"
+      }
+    },
+    "tensionTracker": {
+      "label": "How tense does your body feel?",
+      "helperText": "0 = Completely relaxed, 10 = Extremely tense",
+      "ariaValueText": "Tension level {value} out of 10 - {label}",
+      "levels": {
+        "relaxed": "Relaxed",
+        "mildTension": "Mild Tension",
+        "moderateTension": "Moderate Tension",
+        "severeTension": "Severe Tension"
+      }
+    },
+    "moodStressTracker": {
+      "moodLabel": "How are you feeling overall?",
+      "currentMood": "Current mood:",
+      "stressLabel": "What is your stress level?",
+      "stressHelperText": "0 = No stress, 10 = Extremely stressed",
+      "stressAriaValueText": "Stress level {value} out of 10 - {label}",
+      "moods": {
+        "great": "Great",
+        "good": "Good",
+        "neutral": "Neutral",
+        "low": "Low",
+        "bad": "Bad"
+      },
+      "stressLevels": {
+        "calm": "Calm",
+        "mildStress": "Mild Stress",
+        "moderateStress": "Moderate Stress",
+        "highStress": "High Stress"
+      }
+    }
+  },
   "content": {
     "tensionHeadache": {
       "title": "What is a Tension Headache?",
