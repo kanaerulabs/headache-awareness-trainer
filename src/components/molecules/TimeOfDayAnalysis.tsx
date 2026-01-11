@@ -4,6 +4,7 @@ import * as React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
+import { useTranslations } from "next-intl";
 
 export interface TimeOfDayData {
   timeOfDay: "morning" | "afternoon" | "evening" | "night";
@@ -34,14 +35,6 @@ const TIME_COLORS = {
   night: "#1e3a8a", // Dark Blue
 } as const;
 
-// Display names for time periods
-const TIME_LABELS = {
-  morning: "Morning",
-  afternoon: "Afternoon",
-  evening: "Evening",
-  night: "Night",
-} as const;
-
 /**
  * TimeOfDayAnalysis - Donut chart showing when headaches occur
  *
@@ -65,7 +58,13 @@ export const TimeOfDayAnalysis: React.FC<TimeOfDayAnalysisProps> = ({
   onSegmentTap,
   className,
 }) => {
+  const t = useTranslations("insights");
   const [hoveredIndex, setHoveredIndex] = React.useState<number | null>(null);
+
+  // Get translated time labels
+  const getTimeLabel = (timeOfDay: "morning" | "afternoon" | "evening" | "night") => {
+    return t(timeOfDay);
+  };
 
   // Calculate most common time
   const mostCommonTime = React.useMemo(() => {
@@ -84,16 +83,16 @@ export const TimeOfDayAnalysis: React.FC<TimeOfDayAnalysisProps> = ({
       >
         <CardHeader>
           <CardTitle className="text-base sm:text-lg">
-            Time of Day Analysis
+            {t("timeOfDayTitle")}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col items-center justify-center h-64 text-center">
             <p className="text-muted-foreground text-sm">
-              No headache data available yet
+              {t("noTimeData")}
             </p>
             <p className="text-muted-foreground text-xs mt-2">
-              Log some headaches to see patterns by time of day
+              {t("logToSeePatterns")}
             </p>
           </div>
         </CardContent>
@@ -122,9 +121,9 @@ export const TimeOfDayAnalysis: React.FC<TimeOfDayAnalysisProps> = ({
       const data = payload[0].payload as TimeOfDayData;
       return (
         <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-3">
-          <p className="font-semibold text-sm">{TIME_LABELS[data.timeOfDay]}</p>
+          <p className="font-semibold text-sm">{getTimeLabel(data.timeOfDay)}</p>
           <p className="text-sm text-muted-foreground">
-            {data.count} headache{data.count !== 1 ? "s" : ""} (
+            {t("headacheCount", { count: data.count })} (
             {data.percentage.toFixed(0)}%)
           </p>
         </div>
@@ -140,7 +139,7 @@ export const TimeOfDayAnalysis: React.FC<TimeOfDayAnalysisProps> = ({
     >
       <CardHeader>
         <CardTitle className="text-base sm:text-lg">
-          Time of Day Analysis
+          {t("timeOfDayTitle")}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -160,7 +159,7 @@ export const TimeOfDayAnalysis: React.FC<TimeOfDayAnalysisProps> = ({
                 onMouseLeave={() => setHoveredIndex(null)}
                 onClick={(entry) => handlePieClick(entry as TimeOfDayData)}
                 cursor={onSegmentTap ? "pointer" : "default"}
-                aria-label="Time of day headache distribution chart"
+                aria-label={t("timeOfDayTitle")}
               >
                 {chartData.map((entry, index) => (
                   <Cell
@@ -185,10 +184,10 @@ export const TimeOfDayAnalysis: React.FC<TimeOfDayAnalysisProps> = ({
               aria-live="polite"
             >
               <p className="text-xs text-muted-foreground uppercase tracking-wide">
-                Most Common
+                {t("mostCommon")}
               </p>
               <p className="text-lg sm:text-xl font-bold mt-1">
-                {TIME_LABELS[mostCommonTime.timeOfDay]}
+                {getTimeLabel(mostCommonTime.timeOfDay)}
               </p>
               <p className="text-sm text-muted-foreground">
                 {mostCommonTime.percentage.toFixed(0)}%
@@ -210,7 +209,7 @@ export const TimeOfDayAnalysis: React.FC<TimeOfDayAnalysisProps> = ({
               )}
               onClick={() => onSegmentTap?.(entry.timeOfDay)}
               disabled={!onSegmentTap}
-              aria-label={`${TIME_LABELS[entry.timeOfDay]}: ${entry.count} headaches, ${entry.percentage.toFixed(0)}%`}
+              aria-label={`${getTimeLabel(entry.timeOfDay)}: ${entry.count} headaches, ${entry.percentage.toFixed(0)}%`}
             >
               <div
                 className="w-3 h-3 rounded-full flex-shrink-0"
@@ -219,7 +218,7 @@ export const TimeOfDayAnalysis: React.FC<TimeOfDayAnalysisProps> = ({
               />
               <div className="flex-1 text-left min-w-0">
                 <p className="text-xs sm:text-sm font-medium truncate">
-                  {TIME_LABELS[entry.timeOfDay]}
+                  {getTimeLabel(entry.timeOfDay)}
                 </p>
                 <p className="text-xs text-muted-foreground">
                   {entry.count} ({entry.percentage.toFixed(0)}%)
