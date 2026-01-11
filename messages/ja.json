@@ -441,6 +441,120 @@
     "pers3Desc": "朝に頭痛が多い傾向があり、睡眠関連のトリガーが示唆されます。",
     "week2Plus": "2週目以降"
   },
+  "components": {
+    "imFineButton": {
+      "text": "今日は大丈夫"
+    },
+    "intensitySlider": {
+      "label": "頭痛の強さは？",
+      "selectedIntensity": "選択した強度：",
+      "levels": {
+        "1": "軽微",
+        "2": "軽度",
+        "3": "中程度",
+        "4": "重度",
+        "5": "極度"
+      },
+      "ariaLabel": "強度レベル {value} - {label}"
+    },
+    "noteInput": {
+      "label": "メモ（任意）",
+      "placeholder": "今の気分は？",
+      "ariaLabel": "頭痛メモ",
+      "voiceInputLabel": "音声入力（近日公開）",
+      "characters": "{count} / {max} 文字",
+      "limitReached": "上限に達しました",
+      "remaining": "あと{count}文字"
+    },
+    "contextTagChips": {
+      "label": "状況（任意）",
+      "tagsSelected": "{count}個のタグを選択中",
+      "tags": {
+        "woke-up-with-it": "起きた時から",
+        "came-on-gradually": "徐々に",
+        "sudden-onset": "突然",
+        "morning": "朝",
+        "evening": "夕方",
+        "after-meal": "食後",
+        "after-exercise": "運動後",
+        "weather-change": "天気の変化"
+      }
+    },
+    "headacheTypeSelector": {
+      "label": "どんな種類の頭痛ですか？",
+      "selectedType": "選択したタイプ：",
+      "types": {
+        "tension": {
+          "label": "緊張型",
+          "description": "頭を締め付けるような痛み"
+        },
+        "migraine": {
+          "label": "片頭痛",
+          "description": "ズキズキ、片側の痛み"
+        },
+        "cluster": {
+          "label": "群発頭痛",
+          "description": "激しい、目の奥の痛み"
+        },
+        "sinus": {
+          "label": "副鼻腔炎性",
+          "description": "顔/額の圧迫感"
+        },
+        "other": {
+          "label": "その他",
+          "description": "違うパターン"
+        }
+      }
+    },
+    "locationPicker": {
+      "label": "どこが痛いですか？（該当するものをすべて選択）",
+      "tapToMark": "図をタップして痛みの場所をマーク",
+      "selectedLocations": "選択した場所：",
+      "removeLocation": "{location}を削除",
+      "locations": {
+        "front": "前頭部",
+        "back": "後頭部",
+        "top": "頭頂部",
+        "left-side": "左側",
+        "right-side": "右側",
+        "behind-eyes": "目の奥",
+        "neck": "首",
+        "shoulders": "肩",
+        "jaw": "顎"
+      }
+    },
+    "tensionTracker": {
+      "label": "体の緊張度は？",
+      "helperText": "0 = 完全にリラックス、10 = 極度に緊張",
+      "ariaValueText": "緊張レベル {value}/10 - {label}",
+      "levels": {
+        "relaxed": "リラックス",
+        "mildTension": "軽い緊張",
+        "moderateTension": "中程度の緊張",
+        "severeTension": "強い緊張"
+      }
+    },
+    "moodStressTracker": {
+      "moodLabel": "全体的な気分は？",
+      "currentMood": "現在の気分：",
+      "stressLabel": "ストレスレベルは？",
+      "stressHelperText": "0 = ストレスなし、10 = 極度のストレス",
+      "stressAriaValueText": "ストレスレベル {value}/10 - {label}",
+      "moods": {
+        "great": "最高",
+        "good": "良い",
+        "neutral": "普通",
+        "low": "低め",
+        "bad": "悪い"
+      },
+      "stressLevels": {
+        "calm": "穏やか",
+        "mildStress": "軽いストレス",
+        "moderateStress": "中程度のストレス",
+        "highStress": "強いストレス"
+      }
+    }
+  },
   "content": {
     "tensionHeadache": {
       "title": "緊張型頭痛とは？",

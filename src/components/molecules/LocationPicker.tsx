@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 export type HeadacheLocation =
   | "front"
@@ -37,55 +38,46 @@ export interface LocationPickerProps {
 const locationConfig = [
   {
     value: "front" as const,
-    label: "Front",
     position: "top-[25%] left-[50%] -translate-x-1/2",
     size: "w-16 h-12",
   },
   {
     value: "back" as const,
-    label: "Back",
     position: "top-[30%] left-[50%] -translate-x-1/2",
     size: "w-16 h-12",
   },
   {
     value: "top" as const,
-    label: "Top",
     position: "top-[15%] left-[50%] -translate-x-1/2",
     size: "w-14 h-10",
   },
   {
     value: "left-side" as const,
-    label: "Left Side",
     position: "top-[25%] left-[20%]",
     size: "w-12 h-12",
   },
   {
     value: "right-side" as const,
-    label: "Right Side",
     position: "top-[25%] right-[20%]",
     size: "w-12 h-12",
   },
   {
     value: "behind-eyes" as const,
-    label: "Behind Eyes",
     position: "top-[28%] left-[50%] -translate-x-1/2",
     size: "w-20 h-8",
   },
   {
     value: "neck" as const,
-    label: "Neck",
     position: "top-[50%] left-[50%] -translate-x-1/2",
     size: "w-12 h-16",
   },
   {
     value: "shoulders" as const,
-    label: "Shoulders",
     position: "top-[55%] left-[50%] -translate-x-1/2",
     size: "w-32 h-12",
   },
   {
     value: "jaw" as const,
-    label: "Jaw",
     position: "top-[38%] left-[50%] -translate-x-1/2",
     size: "w-16 h-10",
   },
@@ -122,6 +114,8 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({
   disabled = false,
   className,
 }) => {
+  const t = useTranslations("components.locationPicker");
+
   const handleKeyDown = (
     event: React.KeyboardEvent,
     location: HeadacheLocation,
@@ -139,7 +133,7 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({
         id="location-label"
         className="block text-sm font-medium text-gray-900 dark:text-gray-100"
       >
-        Where does it hurt? (Select all that apply)
+        {t("label")}
       </label>
 
       {/* Interactive body diagram */}
@@ -163,6 +157,7 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({
           >
             {locationConfig.map((config) => {
               const isSelected = selectedLocations.includes(config.value);
+              const locationLabel = t(`locations.${config.value}`);
 
               return (
                 <button
@@ -170,7 +165,7 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({
                   type="button"
                   role="checkbox"
                   aria-checked={isSelected}
-                  aria-label={`${config.label} location`}
+                  aria-label={`${locationLabel}`}
                   disabled={disabled}
                   onClick={() => onLocationToggle(config.value)}
                   onKeyDown={(e) => handleKeyDown(e, config.value)}
@@ -205,7 +200,7 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({
                         : "text-gray-700 dark:text-gray-300 bg-white/90 dark:bg-gray-900/90 rounded-lg",
                     )}
                   >
-                    {config.label}
+                    {locationLabel}
                   </span>
                 </button>
               );
@@ -215,7 +210,7 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({
 
         {/* Legend below diagram */}
         <div className="mt-4 text-xs text-gray-600 dark:text-gray-400 text-center">
-          Tap areas on the diagram to mark pain locations
+          {t("tapToMark")}
         </div>
       </div>
 
@@ -223,7 +218,7 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({
       {selectedLocations.length > 0 && (
         <div className="space-y-2">
           <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Selected locations:
+            {t("selectedLocations")}
           </div>
           <div
             className="flex flex-wrap gap-2"
@@ -231,18 +226,18 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({
             aria-atomic="true"
           >
             {selectedLocations.map((location) => {
-              const config = locationConfig.find((c) => c.value === location);
+              const locationLabel = t(`locations.${location}`);
               return (
                 <span
                   key={location}
                   className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200"
                 >
-                  {config?.label}
+                  {locationLabel}
                   <button
                     type="button"
                     onClick={() => onLocationToggle(location)}
                     disabled={disabled}
-                    aria-label={`Remove ${config?.label}`}
+                    aria-label={t("removeLocation", { location: locationLabel })}
                     className="ml-1 hover:text-red-600 dark:hover:text-red-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 rounded"
                   >
                     ×

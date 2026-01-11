@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 export interface IntensitySliderProps {
   /**
@@ -26,35 +27,35 @@ export interface IntensitySliderProps {
 const intensityConfig = [
   {
     value: 1 as const,
-    label: "Minimal",
+    labelKey: "1" as const,
     color: "bg-green-500",
     hoverColor: "hover:bg-green-600",
     activeColor: "ring-green-500",
   },
   {
     value: 2 as const,
-    label: "Mild",
+    labelKey: "2" as const,
     color: "bg-yellow-500",
     hoverColor: "hover:bg-yellow-600",
     activeColor: "ring-yellow-500",
   },
   {
     value: 3 as const,
-    label: "Moderate",
+    labelKey: "3" as const,
     color: "bg-orange-500",
     hoverColor: "hover:bg-orange-600",
     activeColor: "ring-orange-500",
   },
   {
     value: 4 as const,
-    label: "Severe",
+    labelKey: "4" as const,
     color: "bg-red-500",
     hoverColor: "hover:bg-red-600",
     activeColor: "ring-red-500",
   },
   {
     value: 5 as const,
-    label: "Extreme",
+    labelKey: "5" as const,
     color: "bg-red-800",
     hoverColor: "hover:bg-red-900",
     activeColor: "ring-red-800",
@@ -85,6 +86,8 @@ export const IntensitySlider: React.FC<IntensitySliderProps> = ({
   disabled = false,
   className,
 }) => {
+  const t = useTranslations("components.intensitySlider");
+
   const handleKeyDown = (
     event: React.KeyboardEvent,
     newValue: 1 | 2 | 3 | 4 | 5,
@@ -102,7 +105,7 @@ export const IntensitySlider: React.FC<IntensitySliderProps> = ({
         id="intensity-label"
         className="block text-sm font-medium text-gray-900 dark:text-gray-100"
       >
-        How intense is your headache?
+        {t("label")}
       </label>
 
       {/* Intensity buttons */}
@@ -120,7 +123,7 @@ export const IntensitySlider: React.FC<IntensitySliderProps> = ({
               type="button"
               role="radio"
               aria-checked={isSelected}
-              aria-label={`Intensity level ${config.value} - ${config.label}`}
+              aria-label={t("ariaLabel", { value: config.value, label: t(`levels.${config.labelKey}`) })}
               disabled={disabled}
               onClick={() => onChange(config.value)}
               onKeyDown={(e) => handleKeyDown(e, config.value)}
@@ -142,7 +145,7 @@ export const IntensitySlider: React.FC<IntensitySliderProps> = ({
                 {config.value}
               </span>
               <span className="text-[10px] sm:text-xs leading-tight">
-                {config.label}
+                {t(`levels.${config.labelKey}`)}
               </span>
             </button>
           );
@@ -155,9 +158,9 @@ export const IntensitySlider: React.FC<IntensitySliderProps> = ({
         aria-live="polite"
         aria-atomic="true"
       >
-        Selected intensity:{" "}
+        {t("selectedIntensity")}{" "}
         <span className="font-semibold">
-          {value} - {intensityConfig[value - 1].label}
+          {value} - {t(`levels.${intensityConfig[value - 1].labelKey}`)}
         </span>
       </div>
     </div>

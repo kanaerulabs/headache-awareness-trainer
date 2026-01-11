@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 export type Mood = "great" | "good" | "neutral" | "low" | "bad";
 
@@ -36,7 +37,6 @@ export interface MoodStressTrackerProps {
 const moodConfig = [
   {
     value: "great" as const,
-    label: "Great",
     emoji: "😊",
     color: "bg-green-500",
     hoverColor: "hover:bg-green-600",
@@ -44,7 +44,6 @@ const moodConfig = [
   },
   {
     value: "good" as const,
-    label: "Good",
     emoji: "🙂",
     color: "bg-blue-500",
     hoverColor: "hover:bg-blue-600",
@@ -52,7 +51,6 @@ const moodConfig = [
   },
   {
     value: "neutral" as const,
-    label: "Neutral",
     emoji: "😐",
     color: "bg-gray-500",
     hoverColor: "hover:bg-gray-600",
@@ -60,7 +58,6 @@ const moodConfig = [
   },
   {
     value: "low" as const,
-    label: "Low",
     emoji: "😔",
     color: "bg-orange-500",
     hoverColor: "hover:bg-orange-600",
@@ -68,7 +65,6 @@ const moodConfig = [
   },
   {
     value: "bad" as const,
-    label: "Bad",
     emoji: "😞",
     color: "bg-red-500",
     hoverColor: "hover:bg-red-600",
@@ -80,25 +76,25 @@ const stressLabels = [
   {
     min: 0,
     max: 2,
-    label: "Calm",
+    labelKey: "calm" as const,
     color: "text-green-600 dark:text-green-400",
   },
   {
     min: 3,
     max: 5,
-    label: "Mild Stress",
+    labelKey: "mildStress" as const,
     color: "text-yellow-600 dark:text-yellow-400",
   },
   {
     min: 6,
     max: 8,
-    label: "Moderate Stress",
+    labelKey: "moderateStress" as const,
     color: "text-orange-600 dark:text-orange-400",
   },
   {
     min: 9,
     max: 10,
-    label: "High Stress",
+    labelKey: "highStress" as const,
     color: "text-red-600 dark:text-red-400",
   },
 ] as const;
@@ -133,6 +129,8 @@ export const MoodStressTracker: React.FC<MoodStressTrackerProps> = ({
   disabled = false,
   className,
 }) => {
+  const t = useTranslations("components.moodStressTracker");
+
   const handleMoodKeyDown = (event: React.KeyboardEvent, newMood: Mood) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
@@ -153,7 +151,7 @@ export const MoodStressTracker: React.FC<MoodStressTrackerProps> = ({
           id="mood-label"
           className="block text-sm font-medium text-gray-900 dark:text-gray-100"
         >
-          How are you feeling overall?
+          {t("moodLabel")}
         </label>
 
         {/* Mood buttons */}
@@ -164,6 +162,7 @@ export const MoodStressTracker: React.FC<MoodStressTrackerProps> = ({
         >
           {moodConfig.map((config) => {
             const isSelected = mood === config.value;
+            const moodLabel = t(`moods.${config.value}`);
 
             return (
               <button
@@ -171,7 +170,7 @@ export const MoodStressTracker: React.FC<MoodStressTrackerProps> = ({
                 type="button"
                 role="radio"
                 aria-checked={isSelected}
-                aria-label={`Mood: ${config.label}`}
+                aria-label={`${t("moodLabel")}: ${moodLabel}`}
                 disabled={disabled}
                 onClick={() => onMoodChange(config.value)}
                 onKeyDown={(e) => handleMoodKeyDown(e, config.value)}
@@ -201,7 +200,7 @@ export const MoodStressTracker: React.FC<MoodStressTrackerProps> = ({
                 <span className="text-3xl" aria-hidden="true">
                   {config.emoji}
                 </span>
-                <span className="text-xs font-medium">{config.label}</span>
+                <span className="text-xs font-medium">{moodLabel}</span>
               </button>
             );
           })}
@@ -214,10 +213,10 @@ export const MoodStressTracker: React.FC<MoodStressTrackerProps> = ({
             aria-live="polite"
             aria-atomic="true"
           >
-            Current mood:{" "}
+            {t("currentMood")}{" "}
             <span className="font-semibold">
               {moodConfig.find((c) => c.value === mood)?.emoji}{" "}
-              {moodConfig.find((c) => c.value === mood)?.label}
+              {t(`moods.${mood}`)}
             </span>
           </div>
         )}
@@ -233,7 +232,7 @@ export const MoodStressTracker: React.FC<MoodStressTrackerProps> = ({
           id="stress-label"
           className="block text-sm font-medium text-gray-900 dark:text-gray-100"
         >
-          What is your stress level?
+          {t("stressLabel")}
         </label>
 
         {/* Slider control */}
@@ -254,7 +253,7 @@ export const MoodStressTracker: React.FC<MoodStressTrackerProps> = ({
               aria-valuemin={0}
               aria-valuemax={10}
               aria-valuenow={stressLevel}
-              aria-valuetext={`Stress level ${stressLevel} out of 10 - ${currentStressLabel?.label}`}
+              aria-valuetext={t("stressAriaValueText", { value: stressLevel, label: currentStressLabel ? t(`stressLevels.${currentStressLabel.labelKey}`) : "" })}
               className={cn(
                 "flex-1 h-2 rounded-lg appearance-none cursor-pointer",
                 "bg-gray-200 dark:bg-gray-700",
@@ -281,7 +280,7 @@ export const MoodStressTracker: React.FC<MoodStressTrackerProps> = ({
                   currentStressLabel.color,
                 )}
               >
-                {currentStressLabel.label}
+                {t(`stressLevels.${currentStressLabel.labelKey}`)}
               </div>
             )}
           </div>
@@ -289,7 +288,7 @@ export const MoodStressTracker: React.FC<MoodStressTrackerProps> = ({
 
         {/* Helper text */}
         <div className="text-xs text-gray-500 dark:text-gray-400 text-center">
-          0 = No stress, 10 = Extremely stressed
+          {t("stressHelperText")}
         </div>
       </div>
     </div>

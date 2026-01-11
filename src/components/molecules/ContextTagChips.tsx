@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 export interface ContextTagChipsProps {
   /**
@@ -27,14 +28,14 @@ export interface ContextTagChipsProps {
  * Available context tags for headache logging
  */
 const availableTags = [
-  { id: "woke-up-with-it", label: "Woke up with it" },
-  { id: "came-on-gradually", label: "Came on gradually" },
-  { id: "sudden-onset", label: "Sudden onset" },
-  { id: "morning", label: "Morning" },
-  { id: "evening", label: "Evening" },
-  { id: "after-meal", label: "After meal" },
-  { id: "after-exercise", label: "After exercise" },
-  { id: "weather-change", label: "Weather change" },
+  "woke-up-with-it",
+  "came-on-gradually",
+  "sudden-onset",
+  "morning",
+  "evening",
+  "after-meal",
+  "after-exercise",
+  "weather-change",
 ] as const;
 
 /**
@@ -72,6 +73,8 @@ export const ContextTagChips: React.FC<ContextTagChipsProps> = ({
   disabled = false,
   className,
 }) => {
+  const t = useTranslations("components.contextTagChips");
+
   const handleKeyDown = (event: React.KeyboardEvent, tag: string) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
@@ -86,7 +89,7 @@ export const ContextTagChips: React.FC<ContextTagChipsProps> = ({
         id="context-tags-label"
         className="block text-sm font-medium text-gray-900 dark:text-gray-100"
       >
-        Context (optional)
+        {t("label")}
       </label>
 
       {/* Tag chips */}
@@ -95,19 +98,20 @@ export const ContextTagChips: React.FC<ContextTagChipsProps> = ({
         aria-labelledby="context-tags-label"
         className="flex flex-wrap gap-1.5 sm:gap-2"
       >
-        {availableTags.map((tag) => {
-          const isSelected = selectedTags.includes(tag.id);
+        {availableTags.map((tagId) => {
+          const isSelected = selectedTags.includes(tagId);
+          const tagLabel = t(`tags.${tagId}`);
 
           return (
             <button
-              key={tag.id}
+              key={tagId}
               type="button"
               role="checkbox"
               aria-checked={isSelected}
-              aria-label={tag.label}
+              aria-label={tagLabel}
               disabled={disabled}
-              onClick={() => onTagToggle(tag.id)}
-              onKeyDown={(e) => handleKeyDown(e, tag.id)}
+              onClick={() => onTagToggle(tagId)}
+              onKeyDown={(e) => handleKeyDown(e, tagId)}
               className={cn(
                 "inline-flex items-center rounded-full px-3 py-1.5 sm:px-4 sm:py-2",
                 "text-xs sm:text-sm font-medium transition-all whitespace-nowrap",
@@ -123,7 +127,7 @@ export const ContextTagChips: React.FC<ContextTagChipsProps> = ({
                   "dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700",
               )}
             >
-              {tag.label}
+              {tagLabel}
             </button>
           );
         })}
@@ -136,8 +140,7 @@ export const ContextTagChips: React.FC<ContextTagChipsProps> = ({
           aria-live="polite"
           aria-atomic="true"
         >
-          {selectedTags.length} {selectedTags.length === 1 ? "tag" : "tags"}{" "}
-          selected
+          {t("tagsSelected", { count: selectedTags.length })}
         </div>
       )}
     </div>
