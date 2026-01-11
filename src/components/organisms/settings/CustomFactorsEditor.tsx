@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useSettingsStore } from "@/interface-adapters/store/settingsStore";
+import { useTranslations } from "next-intl";
 
 export interface CustomFactorsEditorProps {
   /**
@@ -29,6 +30,7 @@ export interface CustomFactorsEditorProps {
  * Includes validation to prevent duplicates and empty factors.
  */
 export function CustomFactorsEditor({ className }: CustomFactorsEditorProps) {
+  const t = useTranslations("settings");
   const { customFactors, addCustomFactor, removeCustomFactor } =
     useSettingsStore();
   const [newFactor, setNewFactor] = useState("");
@@ -41,17 +43,17 @@ export function CustomFactorsEditor({ className }: CustomFactorsEditorProps) {
 
     // Validate input
     if (!trimmedFactor) {
-      setError("Factor name cannot be empty");
+      setError(t("factorEmpty"));
       return;
     }
 
     if (trimmedFactor.length < 2) {
-      setError("Factor name must be at least 2 characters");
+      setError(t("factorMinLength"));
       return;
     }
 
     if (trimmedFactor.length > 50) {
-      setError("Factor name must be less than 50 characters");
+      setError(t("factorMaxLength"));
       return;
     }
 
@@ -61,7 +63,7 @@ export function CustomFactorsEditor({ className }: CustomFactorsEditorProps) {
     );
 
     if (duplicate) {
-      setError("This factor already exists");
+      setError(t("factorExists"));
       return;
     }
 
@@ -80,16 +82,13 @@ export function CustomFactorsEditor({ className }: CustomFactorsEditorProps) {
   return (
     <Card className={cn("", className)} data-testid="custom-factors-editor">
       <CardHeader>
-        <CardTitle>Custom Factors</CardTitle>
-        <CardDescription>
-          Add your own factors to track that are unique to your headache
-          patterns
-        </CardDescription>
+        <CardTitle>{t("customFactors")}</CardTitle>
+        <CardDescription>{t("customFactorsDesc")}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Add Factor Input */}
         <div className="space-y-2">
-          <Label htmlFor="new-factor">Add Custom Factor</Label>
+          <Label htmlFor="new-factor">{t("addCustomFactor")}</Label>
           <div className="flex gap-2">
             <Input
               id="new-factor"
@@ -100,7 +99,7 @@ export function CustomFactorsEditor({ className }: CustomFactorsEditorProps) {
                 setError("");
               }}
               onKeyPress={handleKeyPress}
-              placeholder="e.g., Screen time, Exercise, Diet"
+              placeholder={t("customFactorPlaceholder")}
               className="flex-1"
               data-testid="custom-factor-input"
               aria-invalid={error ? "true" : "false"}
@@ -111,7 +110,7 @@ export function CustomFactorsEditor({ className }: CustomFactorsEditorProps) {
               variant="outline"
               data-testid="add-factor-button"
             >
-              Add
+              {t("add")}
             </Button>
           </div>
           {error && (
@@ -129,7 +128,9 @@ export function CustomFactorsEditor({ className }: CustomFactorsEditorProps) {
         {/* Custom Factors List */}
         {customFactors.length > 0 ? (
           <div className="space-y-2">
-            <Label>Your Custom Factors ({customFactors.length})</Label>
+            <Label>
+              {t("yourCustomFactors")} ({customFactors.length})
+            </Label>
             <div className="space-y-2">
               {customFactors.map((factor) => (
                 <div
@@ -143,9 +144,9 @@ export function CustomFactorsEditor({ className }: CustomFactorsEditorProps) {
                     variant="ghost"
                     size="sm"
                     data-testid={`remove-factor-${factor}`}
-                    aria-label={`Remove ${factor}`}
+                    aria-label={`${t("remove")} ${factor}`}
                   >
-                    Remove
+                    {t("remove")}
                   </Button>
                 </div>
               ))}
@@ -153,10 +154,8 @@ export function CustomFactorsEditor({ className }: CustomFactorsEditorProps) {
           </div>
         ) : (
           <div className="text-center py-6 text-muted-foreground">
-            <p className="text-sm">No custom factors added yet.</p>
-            <p className="text-sm">
-              Add factors that are unique to your headache patterns.
-            </p>
+            <p className="text-sm">{t("noCustomFactors")}</p>
+            <p className="text-sm">{t("addFactorsUnique")}</p>
           </div>
         )}
       </CardContent>

@@ -15,6 +15,7 @@ import {
   useSettingsStore,
   type IntensityScale,
 } from "@/interface-adapters/store/settingsStore";
+import { useTranslations } from "next-intl";
 
 export interface IntensityScaleSettingsProps {
   /**
@@ -25,33 +26,21 @@ export interface IntensityScaleSettingsProps {
 
 const SCALE_OPTIONS: {
   value: IntensityScale;
-  label: string;
-  description: string;
-  preview: string[];
+  labelKey: string;
+  descKey: string;
+  previewKey: string;
 }[] = [
   {
     value: 5,
-    label: "Simple Scale (1-5)",
-    description: "Quick and easy, fewer options to choose from",
-    preview: [
-      "1 - Very Mild",
-      "2 - Mild",
-      "3 - Moderate",
-      "4 - Severe",
-      "5 - Very Severe",
-    ],
+    labelKey: "scale5",
+    descKey: "scale5Desc",
+    previewKey: "scale5Preview",
   },
   {
     value: 10,
-    label: "Detailed Scale (1-10)",
-    description: "More precise tracking with finer gradations",
-    preview: [
-      "1-2 - Barely noticeable",
-      "3-4 - Mild discomfort",
-      "5-6 - Moderate pain",
-      "7-8 - Severe pain",
-      "9-10 - Extreme pain",
-    ],
+    labelKey: "scale10",
+    descKey: "scale10Desc",
+    previewKey: "scale10Preview",
   },
 ];
 
@@ -64,15 +53,14 @@ const SCALE_OPTIONS: {
 export function IntensityScaleSettings({
   className,
 }: IntensityScaleSettingsProps) {
+  const t = useTranslations("settings");
   const { intensityScale, setIntensityScale } = useSettingsStore();
 
   return (
     <Card className={cn("", className)} data-testid="intensity-scale-settings">
       <CardHeader>
-        <CardTitle>Intensity Scale</CardTitle>
-        <CardDescription>
-          Choose how you want to rate headache intensity
-        </CardDescription>
+        <CardTitle>{t("intensityScale")}</CardTitle>
+        <CardDescription>{t("intensityScaleDesc")}</CardDescription>
       </CardHeader>
       <CardContent>
         <RadioGroup
@@ -106,25 +94,25 @@ export function IntensityScaleSettings({
                     htmlFor={`scale-${option.value}`}
                     className="text-base font-medium cursor-pointer"
                   >
-                    {option.label}
+                    {t(option.labelKey)}
                   </Label>
                   <p className="text-sm text-muted-foreground">
-                    {option.description}
+                    {t(option.descKey)}
                   </p>
 
                   {/* Preview */}
                   <div className="mt-3 space-y-1.5 rounded-md bg-muted/50 p-3">
                     <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-                      Preview
+                      {t("preview")}
                     </p>
                     <div className="space-y-1">
-                      {option.preview.map((item, index) => (
+                      {[1, 2, 3, 4, 5].map((index) => (
                         <div
                           key={index}
                           className="text-sm text-foreground"
-                          data-testid={`preview-${option.value}-${index}`}
+                          data-testid={`preview-${option.value}-${index - 1}`}
                         >
-                          {item}
+                          {t(`${option.previewKey}.${index}`)}
                         </div>
                       ))}
                     </div>

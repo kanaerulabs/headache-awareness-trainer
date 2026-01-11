@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useSettingsStore } from "@/interface-adapters/store/settingsStore";
+import { useTranslations } from "next-intl";
 
 export interface HeadacheTypeSettingsProps {
   /**
@@ -30,6 +31,7 @@ export interface HeadacheTypeSettingsProps {
  * Default types cannot be removed.
  */
 export function HeadacheTypeSettings({ className }: HeadacheTypeSettingsProps) {
+  const t = useTranslations("settings");
   const {
     headacheTypes,
     customHeadacheTypes,
@@ -47,17 +49,17 @@ export function HeadacheTypeSettings({ className }: HeadacheTypeSettingsProps) {
 
     // Validate input
     if (!trimmedType) {
-      setError("Headache type cannot be empty");
+      setError(t("typeEmpty"));
       return;
     }
 
     if (trimmedType.length < 2) {
-      setError("Headache type must be at least 2 characters");
+      setError(t("typeMinLength"));
       return;
     }
 
     if (trimmedType.length > 30) {
-      setError("Headache type must be less than 30 characters");
+      setError(t("typeMaxLength"));
       return;
     }
 
@@ -71,7 +73,7 @@ export function HeadacheTypeSettings({ className }: HeadacheTypeSettingsProps) {
     );
 
     if (duplicateInDefault || duplicateInCustom) {
-      setError("This headache type already exists");
+      setError(t("typeExists"));
       return;
     }
 
@@ -90,15 +92,13 @@ export function HeadacheTypeSettings({ className }: HeadacheTypeSettingsProps) {
   return (
     <Card className={cn("", className)} data-testid="headache-type-settings">
       <CardHeader>
-        <CardTitle>Headache Types</CardTitle>
-        <CardDescription>
-          Default headache types and your custom types for logging
-        </CardDescription>
+        <CardTitle>{t("headacheTypes")}</CardTitle>
+        <CardDescription>{t("headacheTypesDesc")}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Default Types */}
         <div className="space-y-2">
-          <Label>Default Types</Label>
+          <Label>{t("defaultTypes")}</Label>
           <div className="flex flex-wrap gap-2">
             {headacheTypes.map((type) => (
               <Badge
@@ -112,13 +112,13 @@ export function HeadacheTypeSettings({ className }: HeadacheTypeSettingsProps) {
             ))}
           </div>
           <p className="text-xs text-muted-foreground">
-            Default types cannot be removed
+            {t("defaultTypesNote")}
           </p>
         </div>
 
         {/* Add Custom Type Input */}
         <div className="space-y-2">
-          <Label htmlFor="new-type">Add Custom Type</Label>
+          <Label htmlFor="new-type">{t("addCustomType")}</Label>
           <div className="flex gap-2">
             <Input
               id="new-type"
@@ -129,7 +129,7 @@ export function HeadacheTypeSettings({ className }: HeadacheTypeSettingsProps) {
                 setError("");
               }}
               onKeyPress={handleKeyPress}
-              placeholder="e.g., Allergy, Hunger, Eye strain"
+              placeholder={t("customTypePlaceholder")}
               className="flex-1"
               data-testid="custom-type-input"
               aria-invalid={error ? "true" : "false"}
@@ -140,7 +140,7 @@ export function HeadacheTypeSettings({ className }: HeadacheTypeSettingsProps) {
               variant="outline"
               data-testid="add-type-button"
             >
-              Add
+              {t("add")}
             </Button>
           </div>
           {error && (
@@ -158,7 +158,9 @@ export function HeadacheTypeSettings({ className }: HeadacheTypeSettingsProps) {
         {/* Custom Types List */}
         {customHeadacheTypes.length > 0 ? (
           <div className="space-y-2">
-            <Label>Your Custom Types ({customHeadacheTypes.length})</Label>
+            <Label>
+              {t("yourCustomTypes")} ({customHeadacheTypes.length})
+            </Label>
             <div className="space-y-2">
               {customHeadacheTypes.map((type) => (
                 <div
@@ -172,9 +174,9 @@ export function HeadacheTypeSettings({ className }: HeadacheTypeSettingsProps) {
                     variant="ghost"
                     size="sm"
                     data-testid={`remove-type-${type}`}
-                    aria-label={`Remove ${type}`}
+                    aria-label={`${t("remove")} ${type}`}
                   >
-                    Remove
+                    {t("remove")}
                   </Button>
                 </div>
               ))}
@@ -182,7 +184,7 @@ export function HeadacheTypeSettings({ className }: HeadacheTypeSettingsProps) {
           </div>
         ) : (
           <div className="text-center py-4 text-muted-foreground">
-            <p className="text-sm">No custom headache types added yet.</p>
+            <p className="text-sm">{t("noCustomTypes")}</p>
           </div>
         )}
       </CardContent>

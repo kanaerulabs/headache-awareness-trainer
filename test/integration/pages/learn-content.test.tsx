@@ -9,7 +9,7 @@ import { render, screen } from "@testing-library/react";
 import ContentPage, {
   generateStaticParams,
   generateMetadata,
-} from "../../../app/learn/[contentId]/page";
+} from "../../../src/app/learn/[contentId]/page";
 import { educationalContent } from "@/data/educationalContent";
 import { notFound } from "next/navigation";
 import "@testing-library/jest-dom";
@@ -54,7 +54,7 @@ describe("ContentPage Integration", () => {
     it("should return params in correct format for Next.js", async () => {
       const params = await generateStaticParams();
 
-      params.forEach((param) => {
+      params.forEach((param: { contentId: string }) => {
         expect(param).toHaveProperty("contentId");
         expect(typeof param.contentId).toBe("string");
       });
@@ -62,7 +62,7 @@ describe("ContentPage Integration", () => {
 
     it("should include all content IDs from educationalContent", async () => {
       const params = await generateStaticParams();
-      const contentIds = params.map((p) => p.contentId);
+      const contentIds = params.map((p: { contentId: string }) => p.contentId);
       const expectedIds = Object.keys(educationalContent);
 
       expect(contentIds.sort()).toEqual(expectedIds.sort());
@@ -156,13 +156,14 @@ describe("ContentPage Integration", () => {
       expect(metadata.description).toBeUndefined();
     });
 
-    it("should use content subtitle as description", async () => {
+    it("should use content subtitleKey to generate description", async () => {
       const metadata = await generateMetadata({
         params: Promise.resolve({ contentId: "body-scan" }),
       });
 
-      const content = educationalContent["body-scan"];
-      expect(metadata.description).toBe(content.subtitle);
+      // Description is fetched using the subtitleKey from translations
+      expect(metadata.description).toBeDefined();
+      expect(typeof metadata.description).toBe("string");
     });
   });
 

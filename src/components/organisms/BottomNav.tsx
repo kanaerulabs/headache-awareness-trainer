@@ -106,7 +106,7 @@ export function BottomNav() {
                     </span>
                     <span
                       className={cn(
-                        "text-xs mt-1 font-medium transition-opacity duration-200",
+                        "text-[10px] mt-1 font-medium transition-opacity duration-200 whitespace-nowrap",
                         isActive ? "opacity-100" : "opacity-70",
                       )}
                     >

@@ -13,6 +13,7 @@ import {
   useSettingsStore,
   type Theme,
 } from "@/interface-adapters/store/settingsStore";
+import { useTranslations } from "next-intl";
 
 export interface ThemeToggleProps {
   /**
@@ -23,28 +24,11 @@ export interface ThemeToggleProps {
 
 const THEME_OPTIONS: {
   value: Theme;
-  label: string;
-  description: string;
   icon: string;
 }[] = [
-  {
-    value: "light",
-    label: "Light",
-    description: "Always use light theme",
-    icon: "☀️",
-  },
-  {
-    value: "dark",
-    label: "Dark",
-    description: "Always use dark theme",
-    icon: "🌙",
-  },
-  {
-    value: "system",
-    label: "System",
-    description: "Follow system preference",
-    icon: "💻",
-  },
+  { value: "light", icon: "☀️" },
+  { value: "dark", icon: "🌙" },
+  { value: "system", icon: "💻" },
 ];
 
 /**
@@ -54,14 +38,21 @@ const THEME_OPTIONS: {
  * Theme is applied immediately and persisted across sessions.
  */
 export function ThemeToggle({ className }: ThemeToggleProps) {
+  const t = useTranslations("settings");
   const { theme, setTheme } = useSettingsStore();
+
+  const getThemeTip = () => {
+    if (theme === "system") return t("themeTipSystem");
+    if (theme === "dark") return t("themeTipDark");
+    return t("themeTipLight");
+  };
 
   return (
     <Card className={cn("", className)} data-testid="theme-toggle">
       <CardHeader>
-        <CardTitle>Appearance</CardTitle>
+        <CardTitle>{t("appearance")}</CardTitle>
         <CardDescription>
-          Choose how the app looks on your device
+          {t("appearanceDesc")}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -79,14 +70,14 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
                     : "bg-background hover:bg-accent hover:text-accent-foreground",
                 )}
                 data-testid={`theme-${option.value}`}
-                aria-label={`Switch to ${option.label} theme`}
+                aria-label={t(`${option.value}Desc`)}
                 aria-pressed={isSelected}
               >
                 <span className="text-3xl" aria-hidden="true">
                   {option.icon}
                 </span>
                 <div className="text-center">
-                  <div className="font-medium text-sm">{option.label}</div>
+                  <div className="font-medium text-sm">{t(option.value)}</div>
                   <div
                     className={cn(
                       "text-xs mt-1",
@@ -95,7 +86,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
                         : "text-muted-foreground",
                     )}
                   >
-                    {option.description}
+                    {t(`${option.value}Desc`)}
                   </div>
                 </div>
               </button>
@@ -106,12 +97,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
         {/* Theme Info */}
         <div className="mt-4 p-3 rounded-md bg-muted/50">
           <p className="text-xs text-muted-foreground">
-            <strong>Tip:</strong>{" "}
-            {theme === "system"
-              ? "The app will automatically switch between light and dark modes based on your device settings."
-              : theme === "dark"
-                ? "Dark mode reduces eye strain in low-light environments."
-                : "Light mode provides better visibility in bright environments."}
+            <strong>Tip:</strong> {getThemeTip()}
           </p>
         </div>
       </CardContent>
