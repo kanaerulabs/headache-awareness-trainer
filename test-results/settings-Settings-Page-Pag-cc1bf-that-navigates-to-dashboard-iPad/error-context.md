@@ -1,0 +1,70 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - img [ref=e5]
+      - generic [ref=e8]:
+        - heading "Headache Trainer" [level=1] [ref=e9]
+        - paragraph [ref=e10]: Track & Learn
+    - generic [ref=e11]:
+      - link "Home" [ref=e12] [cursor=pointer]:
+        - /url: /
+        - img [ref=e14]
+        - generic [ref=e17]: Home
+      - link "Check-in" [ref=e18] [cursor=pointer]:
+        - /url: /checkin
+        - img [ref=e20]
+        - generic [ref=e24]: Check-in
+      - link "Log" [ref=e25] [cursor=pointer]:
+        - /url: /log
+        - img [ref=e27]
+        - generic [ref=e29]: Log
+      - link "Insights" [ref=e30] [cursor=pointer]:
+        - /url: /insights
+        - img [ref=e32]
+        - generic [ref=e34]: Insights
+      - link "Learn" [ref=e35] [cursor=pointer]:
+        - /url: /learn
+        - img [ref=e37]
+        - generic [ref=e39]: Learn
+    - link "Settings" [ref=e41] [cursor=pointer]:
+      - /url: /settings
+      - img [ref=e43]
+      - generic [ref=e46]: Settings
+  - main [ref=e48]:
+    - generic [ref=e51]:
+      - generic [ref=e53]:
+        - generic [ref=e54]: Step 1 of 4
+        - generic [ref=e55]: 25%
+      - generic [ref=e59]:
+        - generic [ref=e60]:
+          - heading "Welcome to Headache Awareness Trainer" [level=2] [ref=e61]
+          - paragraph [ref=e62]: Learn to recognize and manage your headaches effectively
+        - generic [ref=e64]:
+          - generic [ref=e65]:
+            - img [ref=e67]
+            - generic [ref=e69]:
+              - heading "Take control of your headaches" [level=3] [ref=e70]
+              - list [ref=e71]:
+                - listitem [ref=e72]:
+                  - generic [ref=e73]: ✓
+                  - generic [ref=e74]: Track patterns and triggers with ease
+                - listitem [ref=e75]:
+                  - generic [ref=e76]: ✓
+                  - generic [ref=e77]: Personalized insights based on your data
+                - listitem [ref=e78]:
+                  - generic [ref=e79]: ✓
+                  - generic [ref=e80]: Evidence-based awareness techniques
+                - listitem [ref=e81]:
+                  - generic [ref=e82]: ✓
+                  - generic [ref=e83]: Private and secure - all data stays on your device
+          - generic [ref=e84]:
+            - button "Get Started" [ref=e85] [cursor=pointer]
+            - button "Skip for now" [ref=e86] [cursor=pointer]
+          - paragraph [ref=e87]: Takes less than 30 seconds • You can change these settings anytime
+  - button "Open Next.js Dev Tools" [ref=e93] [cursor=pointer]:
+    - img [ref=e94]
+  - alert [ref=e97]: Headache Awareness Trainer
+```

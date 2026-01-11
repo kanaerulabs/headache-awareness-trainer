@@ -1,0 +1,60 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - link "Home" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img [ref=e6]
+        - generic [ref=e9]: Home
+      - link "Check-in" [ref=e10] [cursor=pointer]:
+        - /url: /checkin
+        - img [ref=e12]
+        - generic [ref=e16]: Check-in
+      - link [ref=e17] [cursor=pointer]:
+        - /url: /log
+        - img [ref=e19]
+      - link "Insights" [ref=e21] [cursor=pointer]:
+        - /url: /insights
+        - img [ref=e23]
+        - generic [ref=e25]: Insights
+      - link "Learn" [ref=e26] [cursor=pointer]:
+        - /url: /learn
+        - img [ref=e28]
+        - generic [ref=e30]: Learn
+  - main [ref=e32]:
+    - generic [ref=e35]:
+      - generic [ref=e37]:
+        - generic [ref=e38]: Step 1 of 4
+        - generic [ref=e39]: 25%
+      - generic [ref=e43]:
+        - generic [ref=e44]:
+          - heading "Welcome to Headache Awareness Trainer" [level=2] [ref=e45]
+          - paragraph [ref=e46]: Learn to recognize and manage your headaches effectively
+        - generic [ref=e48]:
+          - generic [ref=e49]:
+            - img [ref=e51]
+            - generic [ref=e53]:
+              - heading "Take control of your headaches" [level=3] [ref=e54]
+              - list [ref=e55]:
+                - listitem [ref=e56]:
+                  - generic [ref=e57]: ✓
+                  - generic [ref=e58]: Track patterns and triggers with ease
+                - listitem [ref=e59]:
+                  - generic [ref=e60]: ✓
+                  - generic [ref=e61]: Personalized insights based on your data
+                - listitem [ref=e62]:
+                  - generic [ref=e63]: ✓
+                  - generic [ref=e64]: Evidence-based awareness techniques
+                - listitem [ref=e65]:
+                  - generic [ref=e66]: ✓
+                  - generic [ref=e67]: Private and secure - all data stays on your device
+          - generic [ref=e68]:
+            - button "Get Started" [ref=e69] [cursor=pointer]
+            - button "Skip for now" [ref=e70] [cursor=pointer]
+          - paragraph [ref=e71]: Takes less than 30 seconds • You can change these settings anytime
+  - button "Open Next.js Dev Tools" [ref=e78] [cursor=pointer]:
+    - img [ref=e79]
+  - alert [ref=e82]
+```

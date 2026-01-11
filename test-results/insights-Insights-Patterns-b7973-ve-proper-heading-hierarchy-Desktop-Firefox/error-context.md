@@ -1,0 +1,231 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - img [ref=e5]
+      - generic [ref=e8]:
+        - heading "Headache Trainer" [level=1] [ref=e9]
+        - paragraph [ref=e10]: Track & Learn
+    - generic [ref=e11]:
+      - link "Home" [ref=e12] [cursor=pointer]:
+        - /url: /
+        - img [ref=e14]
+        - generic [ref=e17]: Home
+      - link "Check-in" [ref=e18] [cursor=pointer]:
+        - /url: /checkin
+        - img [ref=e20]
+        - generic [ref=e24]: Check-in
+      - link "Log" [ref=e25] [cursor=pointer]:
+        - /url: /log
+        - img [ref=e27]
+        - generic [ref=e31]: Log
+      - link "Insights" [ref=e32] [cursor=pointer]:
+        - /url: /insights
+        - img [ref=e34]
+        - generic [ref=e39]: Insights
+      - link "Learn" [ref=e41] [cursor=pointer]:
+        - /url: /learn
+        - img [ref=e43]
+        - generic [ref=e46]: Learn
+    - link "Settings" [ref=e48] [cursor=pointer]:
+      - /url: /settings
+      - img [ref=e50]
+      - generic [ref=e53]: Settings
+  - main [ref=e55]:
+    - main "Insights & Patterns" [ref=e56]:
+      - generic [ref=e57]:
+        - generic [ref=e58]:
+          - heading "Insights & Patterns" [level=1] [ref=e59]
+          - paragraph [ref=e60]: Discover patterns and triggers in your headache journey
+        - region "Time Period Filter" [ref=e61]:
+          - heading "Time Period Filter" [level=2] [ref=e62]
+          - tablist "Time period filter" [ref=e63]:
+            - tab "30 Days" [selected] [ref=e64] [cursor=pointer]
+            - tab "90 Days" [ref=e65] [cursor=pointer]
+            - tab "All Time" [ref=e66] [cursor=pointer]
+        - region "Monthly Calendar View" [ref=e67]:
+          - heading "Monthly Calendar View" [level=2] [ref=e68]
+          - generic [ref=e69]:
+            - generic [ref=e71]:
+              - generic [ref=e72]: January 2026
+              - generic [ref=e73]:
+                - button "Previous month" [ref=e74] [cursor=pointer]:
+                  - img
+                - button "Next month" [ref=e75] [cursor=pointer]:
+                  - img
+            - generic [ref=e76]:
+              - grid "Calendar for January 2026" [ref=e77]:
+                - generic [ref=e78]: Sun
+                - generic [ref=e79]: Mon
+                - generic [ref=e80]: Tue
+                - generic [ref=e81]: Wed
+                - generic [ref=e82]: Thu
+                - generic [ref=e83]: Fri
+                - generic [ref=e84]: Sat
+              - generic [ref=e85]:
+                - button "January 1" [ref=e90] [cursor=pointer]:
+                  - generic [ref=e92]: "1"
+                - button "January 2" [ref=e93] [cursor=pointer]:
+                  - generic [ref=e95]: "2"
+                - button "January 3" [ref=e96] [cursor=pointer]:
+                  - generic [ref=e98]: "3"
+                - button "January 4" [ref=e99] [cursor=pointer]:
+                  - generic [ref=e101]: "4"
+                - button "January 5" [ref=e102] [cursor=pointer]:
+                  - generic [ref=e104]: "5"
+                - button "January 6" [ref=e105] [cursor=pointer]:
+                  - generic [ref=e107]: "6"
+                - button "January 7" [ref=e108] [cursor=pointer]:
+                  - generic [ref=e110]: "7"
+                - button "January 8" [ref=e111] [cursor=pointer]:
+                  - generic [ref=e113]: "8"
+                - button "January 9" [ref=e114] [cursor=pointer]:
+                  - generic [ref=e116]: "9"
+                - button "January 10" [ref=e117] [cursor=pointer]:
+                  - generic [ref=e119]: "10"
+                - button "January 11" [ref=e120] [cursor=pointer]:
+                  - generic [ref=e122]: "11"
+                - button "January 12" [ref=e123] [cursor=pointer]:
+                  - generic [ref=e125]: "12"
+                - button "January 13" [ref=e126] [cursor=pointer]:
+                  - generic [ref=e128]: "13"
+                - button "January 14" [ref=e129] [cursor=pointer]:
+                  - generic [ref=e131]: "14"
+                - button "January 15" [ref=e132] [cursor=pointer]:
+                  - generic [ref=e134]: "15"
+                - button "January 16" [ref=e135] [cursor=pointer]:
+                  - generic [ref=e137]: "16"
+                - button "January 17" [ref=e138] [cursor=pointer]:
+                  - generic [ref=e140]: "17"
+                - button "January 18" [ref=e141] [cursor=pointer]:
+                  - generic [ref=e143]: "18"
+                - button "January 19" [ref=e144] [cursor=pointer]:
+                  - generic [ref=e146]: "19"
+                - button "January 20" [ref=e147] [cursor=pointer]:
+                  - generic [ref=e149]: "20"
+                - button "January 21" [ref=e150] [cursor=pointer]:
+                  - generic [ref=e152]: "21"
+                - button "January 22" [ref=e153] [cursor=pointer]:
+                  - generic [ref=e155]: "22"
+                - button "January 23" [ref=e156] [cursor=pointer]:
+                  - generic [ref=e158]: "23"
+                - button "January 24" [ref=e159] [cursor=pointer]:
+                  - generic [ref=e161]: "24"
+                - button "January 25" [ref=e162] [cursor=pointer]:
+                  - generic [ref=e164]: "25"
+                - button "January 26" [ref=e165] [cursor=pointer]:
+                  - generic [ref=e167]: "26"
+                - button "January 27" [ref=e168] [cursor=pointer]:
+                  - generic [ref=e170]: "27"
+                - button "January 28" [ref=e171] [cursor=pointer]:
+                  - generic [ref=e173]: "28"
+                - button "January 29" [ref=e174] [cursor=pointer]:
+                  - generic [ref=e176]: "29"
+                - button "January 30" [ref=e177] [cursor=pointer]:
+                  - generic [ref=e179]: "30"
+                - button "January 31" [ref=e180] [cursor=pointer]:
+                  - generic [ref=e182]: "31"
+              - generic [ref=e184]:
+                - generic [ref=e187]: No headache
+                - generic [ref=e190]: Mild (1-2)
+                - generic [ref=e193]: Moderate (3)
+                - generic [ref=e196]: Severe (4-5)
+                - generic [ref=e199]: Check-in
+        - region "What triggers your headaches?" [ref=e200]:
+          - generic [ref=e201]:
+            - generic [ref=e202]:
+              - generic [ref=e203]: What triggers your headaches?
+              - paragraph [ref=e204]: Correlation analysis between headaches and lifestyle factors
+            - region "Headache trigger correlations" [ref=e206]:
+              - status [ref=e207]: No correlation data available yet. Keep logging check-ins to discover patterns.
+        - region "Headaches over time" [ref=e208]:
+          - generic [ref=e209]:
+            - generic [ref=e210]:
+              - generic [ref=e211]: Headaches over time
+              - paragraph [ref=e212]: Track your headache frequency and intensity trends
+            - region "Headache trend chart" [ref=e214]:
+              - tablist "Time period filter" [ref=e215]:
+                - tab "Show trends for 30 Days" [selected] [ref=e216] [cursor=pointer]: 30 Days
+                - tab "Show trends for 90 Days" [ref=e217] [cursor=pointer]: 90 Days
+                - tab "Show trends for All Time" [ref=e218] [cursor=pointer]: All Time
+              - generic [ref=e221]:
+                - img [ref=e222]:
+                  - generic [ref=e237]:
+                    - generic [ref=e240]: Dec 15
+                    - generic [ref=e243]: Dec 22
+                    - generic [ref=e246]: Dec 29
+                    - generic [ref=e249]: Jan 5
+                  - generic [ref=e250]:
+                    - generic [ref=e252]:
+                      - generic [ref=e255]: "0"
+                      - generic [ref=e258]: "1"
+                      - generic [ref=e261]: "2"
+                      - generic [ref=e264]: "3"
+                      - generic [ref=e267]: "4"
+                    - generic [ref=e268]: Headaches per Week
+                - list [ref=e284]:
+                  - listitem [ref=e285]:
+                    - img [ref=e286]
+                    - text: Headaches per Week
+                  - listitem [ref=e288]:
+                    - img [ref=e289]
+                    - text: Average Intensity
+              - generic [ref=e291]:
+                - generic [ref=e292]:
+                  - paragraph [ref=e293]: Total Headaches
+                  - paragraph [ref=e294]: "0"
+                - generic [ref=e295]:
+                  - paragraph [ref=e296]: Average per Week
+                  - paragraph [ref=e297]: "0.0"
+                - generic [ref=e298]:
+                  - paragraph [ref=e299]: Average Intensity
+                  - paragraph [ref=e300]: 0.0/10
+        - region "When do headaches occur?" [ref=e301]:
+          - heading "When do headaches occur?" [level=2] [ref=e302]
+          - generic [ref=e303]:
+            - generic [ref=e305]: Time of Day Analysis
+            - generic [ref=e307]:
+              - paragraph [ref=e308]: No headache data available yet
+              - paragraph [ref=e309]: Log some headaches to see patterns by time of day
+        - region "Personal Insights" [ref=e310]:
+          - button "Personal Insights Personalized insights based on your data (Unlocks Week 2+)" [ref=e313] [cursor=pointer]:
+            - generic [ref=e314]:
+              - generic [ref=e315]: Personal Insights
+              - paragraph [ref=e316]: Personalized insights based on your data (Unlocks Week 2+)
+            - img [ref=e317]
+        - region "General Insights" [ref=e319]:
+          - generic [ref=e320]:
+            - button "General Insights Research-backed headache insights and tips" [expanded] [ref=e322] [cursor=pointer]:
+              - generic [ref=e323]:
+                - generic [ref=e324]: General Insights
+                - paragraph [ref=e325]: Research-backed headache insights and tips
+              - img [ref=e326]
+            - generic [ref=e328]:
+              - generic "Hydration Matters" [ref=e329]:
+                - generic [ref=e331]:
+                  - img [ref=e333]
+                  - generic [ref=e337]:
+                    - heading "Hydration Matters" [level=3] [ref=e338]
+                    - paragraph [ref=e339]: Studies show dehydration is a common headache trigger. Try drinking 8 glasses of water daily.
+                    - generic [ref=e341]: Tip
+              - generic "Sleep Consistency" [ref=e342]:
+                - generic [ref=e344]:
+                  - img [ref=e346]
+                  - generic [ref=e350]:
+                    - heading "Sleep Consistency" [level=3] [ref=e351]
+                    - paragraph [ref=e352]: Research indicates irregular sleep patterns can trigger headaches. Aim for consistent sleep times.
+                    - generic [ref=e354]: Tip
+              - generic "Jaw Tension Connection" [ref=e355]:
+                - generic [ref=e357]:
+                  - img [ref=e359]
+                  - generic [ref=e363]:
+                    - heading "Jaw Tension Connection" [level=3] [ref=e364]
+                    - paragraph [ref=e365]: TMJ disorders and jaw clenching are strongly linked to tension headaches.
+                    - generic [ref=e367]: Trigger
+  - button "Open Next.js Dev Tools" [ref=e373] [cursor=pointer]:
+    - img [ref=e374]
+  - alert [ref=e378]
+  - generic [ref=e379]: "0"
+```

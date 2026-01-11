@@ -1,0 +1,108 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - img [ref=e5]
+      - generic [ref=e8]:
+        - heading "Headache Trainer" [level=1] [ref=e9]
+        - paragraph [ref=e10]: Track & Learn
+    - generic [ref=e11]:
+      - link "Home" [ref=e12] [cursor=pointer]:
+        - /url: /
+        - img [ref=e14]
+        - generic [ref=e17]: Home
+      - link "Check-in" [ref=e18] [cursor=pointer]:
+        - /url: /checkin
+        - img [ref=e20]
+        - generic [ref=e24]: Check-in
+      - link "Log" [ref=e26] [cursor=pointer]:
+        - /url: /log
+        - img [ref=e28]
+        - generic [ref=e30]: Log
+      - link "Insights" [ref=e31] [cursor=pointer]:
+        - /url: /insights
+        - img [ref=e33]
+        - generic [ref=e35]: Insights
+      - link "Learn" [ref=e36] [cursor=pointer]:
+        - /url: /learn
+        - img [ref=e38]
+        - generic [ref=e40]: Learn
+    - link "Settings" [ref=e42] [cursor=pointer]:
+      - /url: /settings
+      - img [ref=e44]
+      - generic [ref=e47]: Settings
+  - main [ref=e49]:
+    - generic [ref=e51]:
+      - generic [ref=e52]:
+        - heading "Quick Check-in" [level=1] [ref=e53]
+        - paragraph [ref=e54]: Good night!
+        - paragraph [ref=e55]: Take a moment to track how you're feeling
+      - generic [ref=e57]:
+        - generic [ref=e58]:
+          - heading "Feeling great today?" [level=2] [ref=e59]
+          - paragraph [ref=e60]: Quick tap if everything's good
+        - button "👍 All good!" [ref=e61] [cursor=pointer]:
+          - generic [ref=e62]: 👍
+          - text: All good!
+      - generic [ref=e64]:
+        - generic [ref=e65]:
+          - generic [ref=e66]: How are you feeling? *
+          - generic [ref=e67]:
+            - button "😌 Calm" [ref=e68] [cursor=pointer]:
+              - generic [ref=e69]: 😌
+              - generic [ref=e70]: Calm
+            - button "🙂 OK" [ref=e71] [cursor=pointer]:
+              - generic [ref=e72]: 🙂
+              - generic [ref=e73]: OK
+            - button "😰 Stressed" [ref=e74] [cursor=pointer]:
+              - generic [ref=e75]: 😰
+              - generic [ref=e76]: Stressed
+            - button "😟 Anxious" [ref=e77] [cursor=pointer]:
+              - generic [ref=e78]: 😟
+              - generic [ref=e79]: Anxious
+            - button "😶 Avoidant" [ref=e80] [cursor=pointer]:
+              - generic [ref=e81]: 😶
+              - generic [ref=e82]: Avoidant
+        - generic [ref=e83]:
+          - generic [ref=e84]: Any body tension?
+          - generic [ref=e85]:
+            - button "Jaw" [ref=e86] [cursor=pointer]
+            - button "Neck" [ref=e87] [cursor=pointer]
+            - button "Shoulders" [ref=e88] [cursor=pointer]
+        - generic [ref=e89]:
+          - generic [ref=e90]: How did you sleep? *
+          - generic [ref=e91]:
+            - button "😴 Good" [ref=e92] [cursor=pointer]:
+              - generic [ref=e93]: 😴
+              - generic [ref=e94]: Good
+            - button "😐 OK" [ref=e95] [cursor=pointer]:
+              - generic [ref=e96]: 😐
+              - generic [ref=e97]: OK
+            - button "😩 Poor" [ref=e98] [cursor=pointer]:
+              - generic [ref=e99]: 😩
+              - generic [ref=e100]: Poor
+        - generic [ref=e101]:
+          - generic [ref=e102]: Physical factors? (optional)
+          - generic [ref=e103]:
+            - button "Acidity" [ref=e104] [cursor=pointer]
+            - button "Fatigue" [ref=e105] [cursor=pointer]
+            - button "None" [ref=e106] [cursor=pointer]
+        - generic [ref=e107]:
+          - generic [ref=e108]: Any notes? (optional)
+          - textbox "Any notes? (optional)" [ref=e109]:
+            - /placeholder: Anything else to note...
+        - button "Save Check-in" [disabled]
+      - generic [ref=e110]:
+        - heading "Today's Check-ins" [level=2] [ref=e111]
+        - paragraph [ref=e112]: You've logged 1 time today
+        - generic [ref=e115]:
+          - generic [ref=e116]: 😌
+          - generic [ref=e117]:
+            - generic [ref=e118]: Calm
+            - generic [ref=e119]: 11:32 PM
+  - button "Open Next.js Dev Tools" [ref=e125] [cursor=pointer]:
+    - img [ref=e126]
+  - alert [ref=e129]
+```

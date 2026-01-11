@@ -1,0 +1,96 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - link "Home" [ref=e4]:
+        - /url: /
+        - img [ref=e6]
+        - generic [ref=e9]: Home
+      - link "Check-in" [ref=e10]:
+        - /url: /checkin
+        - img [ref=e12]
+        - generic [ref=e16]: Check-in
+      - link [ref=e17]:
+        - /url: /log
+        - img [ref=e19]
+      - link "Insights" [ref=e21]:
+        - /url: /insights
+        - img [ref=e23]
+        - generic [ref=e25]: Insights
+      - link "Learn" [ref=e26]:
+        - /url: /learn
+        - img [ref=e28]
+        - generic [ref=e30]: Learn
+  - main [ref=e32]:
+    - main "Dashboard" [ref=e33]:
+      - generic [ref=e34]:
+        - generic [ref=e35]:
+          - heading "Dashboard" [level=1] [ref=e36]
+          - paragraph [ref=e37]: Your headache awareness journey
+        - button "Tap to refresh insight" [ref=e38] [cursor=pointer]:
+          - generic [ref=e40]:
+            - img [ref=e42]
+            - generic [ref=e44]:
+              - heading "Quick Insight" [level=3] [ref=e45]
+              - paragraph [ref=e46]: Welcome! Start tracking to see your progress.
+              - paragraph [ref=e47]: Tap to refresh
+        - generic [ref=e48]:
+          - generic [ref=e52]:
+            - img [ref=e54]
+            - generic [ref=e56]:
+              - generic [ref=e57]:
+                - generic [ref=e58]: "0"
+                - generic [ref=e59]: days
+              - paragraph [ref=e60]: No streak yet
+          - generic [ref=e61]:
+            - 'status "Headache trend: Stable" [ref=e63]':
+              - img [ref=e64]
+              - generic [ref=e65]: Stable
+            - generic [ref=e66]:
+              - generic [ref=e68]: This Week
+              - generic [ref=e69]:
+                - generic [ref=e70]:
+                  - generic [ref=e71]:
+                    - img [ref=e73]
+                    - generic [ref=e83]: "0"
+                    - generic [ref=e84]: Headaches
+                  - generic [ref=e85]:
+                    - img [ref=e87]
+                    - generic [ref=e91]: "0"
+                    - generic [ref=e92]: Check-ins
+                - paragraph [ref=e93]: No entries yet this week
+        - region "Quick Actions" [ref=e94]:
+          - heading "Quick Actions" [level=2] [ref=e95]
+          - generic [ref=e96]:
+            - button "Log a headache episode" [ref=e97] [cursor=pointer]:
+              - img
+              - generic [ref=e98]: Log Headache
+            - button "Record a wellness check-in" [ref=e99] [cursor=pointer]:
+              - img
+              - generic [ref=e100]: Quick Check-in
+        - region "Recent Activity" [ref=e101]:
+          - heading "Recent Activity" [level=2] [ref=e102]
+          - generic [ref=e103]:
+            - generic [ref=e105]: Recent Activity
+            - status [ref=e107]:
+              - img [ref=e108]
+              - paragraph [ref=e112]: No recent entries
+              - paragraph [ref=e113]: Log your first headache or check-in to see activity here
+  - button "Open Next.js Dev Tools" [ref=e120] [cursor=pointer]:
+    - img [ref=e121]
+  - alert [ref=e126]
+  - dialog "Install Headache Trainer" [ref=e127]:
+    - generic [ref=e128]:
+      - button "Dismiss install prompt" [ref=e129] [cursor=pointer]:
+        - img [ref=e130]
+      - generic [ref=e133]:
+        - img [ref=e135]
+        - generic [ref=e137]:
+          - heading "Install Headache Trainer" [level=3] [ref=e138]
+          - paragraph [ref=e139]: Tap the share button and select 'Add to Home Screen' for the best experience
+          - generic [ref=e140]:
+            - img [ref=e142]
+            - generic [ref=e144]: Tap share, then "Add to Home Screen"
+```

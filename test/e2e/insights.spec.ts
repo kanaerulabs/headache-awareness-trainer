@@ -264,8 +264,9 @@ test.describe('Insights & Patterns Page', () => {
       // Wait for page to load
       await page.waitForTimeout(2000);
 
-      // Verify heading
-      await expect(page.getByRole('heading', { name: 'What triggers your headaches?' })).toBeVisible();
+      // Verify heading - CardTitle is a div with id, not an h1-h6 element
+      await expect(page.locator('#correlations-heading')).toBeVisible();
+      await expect(page.locator('#correlations-heading')).toContainText('What triggers your headaches?');
     });
 
     test('should display correlation description', async ({ page }) => {
@@ -315,8 +316,9 @@ test.describe('Insights & Patterns Page', () => {
       // Wait for page to load
       await page.waitForTimeout(2000);
 
-      // Verify heading
-      await expect(page.getByRole('heading', { name: 'Headaches over time' })).toBeVisible();
+      // Verify heading - CardTitle is a div with id, not an h1-h6 element
+      await expect(page.locator('#trends-heading')).toBeVisible();
+      await expect(page.locator('#trends-heading')).toContainText('Headaches over time');
     });
 
     test('should display trend description', async ({ page }) => {
@@ -397,8 +399,9 @@ test.describe('Insights & Patterns Page', () => {
       // Wait for page to load
       await page.waitForTimeout(2000);
 
-      // Verify heading
-      await expect(page.getByRole('heading', { name: 'Personal Insights' })).toBeVisible();
+      // Verify heading - CardTitle is a div with id, not an h1-h6 element
+      await expect(page.locator('#personal-insights-heading')).toBeVisible();
+      await expect(page.locator('#personal-insights-heading')).toContainText('Personal Insights');
     });
 
     test('should display unlock message', async ({ page }) => {
@@ -415,10 +418,8 @@ test.describe('Insights & Patterns Page', () => {
 
       const personalInsightsSection = page.locator('[data-testid="personal-insights-section"]');
 
-      // Find the collapsible button
-      const toggleButton = personalInsightsSection.locator('button').filter({
-        has: page.getByRole('heading', { name: 'Personal Insights' })
-      });
+      // Find the collapsible button - CardTitle is a div, not h1-h6, so use text filter
+      const toggleButton = personalInsightsSection.locator('button[aria-controls="personal-insights-content"]');
 
       await expect(toggleButton).toHaveAttribute('aria-expanded', 'false');
     });
@@ -429,10 +430,8 @@ test.describe('Insights & Patterns Page', () => {
 
       const personalInsightsSection = page.locator('[data-testid="personal-insights-section"]');
 
-      // Find and click the toggle button
-      const toggleButton = personalInsightsSection.locator('button').filter({
-        has: page.getByRole('heading', { name: 'Personal Insights' })
-      });
+      // Find and click the toggle button - CardTitle is a div, not h1-h6, so use aria-controls
+      const toggleButton = personalInsightsSection.locator('button[aria-controls="personal-insights-content"]');
 
       await toggleButton.click();
 
@@ -453,10 +452,8 @@ test.describe('Insights & Patterns Page', () => {
 
       const personalInsightsSection = page.locator('[data-testid="personal-insights-section"]');
 
-      // Find toggle button
-      const toggleButton = personalInsightsSection.locator('button').filter({
-        has: page.getByRole('heading', { name: 'Personal Insights' })
-      });
+      // Find toggle button - CardTitle is a div, not h1-h6, so use aria-controls
+      const toggleButton = personalInsightsSection.locator('button[aria-controls="personal-insights-content"]');
 
       // Expand
       await toggleButton.click();
@@ -476,10 +473,8 @@ test.describe('Insights & Patterns Page', () => {
 
       const personalInsightsSection = page.locator('[data-testid="personal-insights-section"]');
 
-      // Expand section
-      const toggleButton = personalInsightsSection.locator('button').filter({
-        has: page.getByRole('heading', { name: 'Personal Insights' })
-      });
+      // Expand section - CardTitle is a div, not h1-h6, so use aria-controls
+      const toggleButton = personalInsightsSection.locator('button[aria-controls="personal-insights-content"]');
       await toggleButton.click();
       await page.waitForTimeout(300);
 
@@ -506,8 +501,9 @@ test.describe('Insights & Patterns Page', () => {
       // Wait for page to load
       await page.waitForTimeout(2000);
 
-      // Verify heading
-      await expect(page.getByRole('heading', { name: 'General Insights' })).toBeVisible();
+      // Verify heading - CardTitle is a div with id, not an h1-h6 element
+      await expect(page.locator('#general-insights-heading')).toBeVisible();
+      await expect(page.locator('#general-insights-heading')).toContainText('General Insights');
     });
 
     test('should display description', async ({ page }) => {
@@ -524,10 +520,8 @@ test.describe('Insights & Patterns Page', () => {
 
       const generalInsightsSection = page.locator('[data-testid="general-insights-section"]');
 
-      // Find the collapsible button
-      const toggleButton = generalInsightsSection.locator('button').filter({
-        has: page.getByRole('heading', { name: 'General Insights' })
-      });
+      // Find the collapsible button - CardTitle is a div, not h1-h6, so use aria-controls
+      const toggleButton = generalInsightsSection.locator('button[aria-controls="general-insights-content"]');
 
       await expect(toggleButton).toHaveAttribute('aria-expanded', 'true');
 
@@ -542,10 +536,8 @@ test.describe('Insights & Patterns Page', () => {
 
       const generalInsightsSection = page.locator('[data-testid="general-insights-section"]');
 
-      // Find and click toggle button
-      const toggleButton = generalInsightsSection.locator('button').filter({
-        has: page.getByRole('heading', { name: 'General Insights' })
-      });
+      // Find and click toggle button - CardTitle is a div, not h1-h6, so use aria-controls
+      const toggleButton = generalInsightsSection.locator('button[aria-controls="general-insights-content"]');
 
       await toggleButton.click();
 
@@ -675,10 +667,8 @@ test.describe('Insights & Patterns Page', () => {
 
       const personalInsightsSection = page.locator('[data-testid="personal-insights-section"]');
 
-      // Find toggle button
-      const toggleButton = personalInsightsSection.locator('button').filter({
-        has: page.getByRole('heading', { name: 'Personal Insights' })
-      });
+      // Find toggle button - CardTitle is a div, not h1-h6, so use aria-controls
+      const toggleButton = personalInsightsSection.locator('button[aria-controls="personal-insights-content"]');
 
       // Focus on button
       await toggleButton.focus();
@@ -751,10 +741,8 @@ test.describe('Insights Page - Responsive Design', () => {
 
       const personalInsightsSection = page.locator('[data-testid="personal-insights-section"]');
 
-      // Find toggle button
-      const toggleButton = personalInsightsSection.locator('button').filter({
-        has: page.getByRole('heading', { name: 'Personal Insights' })
-      });
+      // Find toggle button - CardTitle is a div, not h1-h6, so use aria-controls
+      const toggleButton = personalInsightsSection.locator('button[aria-controls="personal-insights-content"]');
 
       // Toggle should work on mobile
       await toggleButton.click();

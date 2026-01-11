@@ -141,8 +141,8 @@ test.describe('Dashboard Page', () => {
       // Wait for loading to complete
       await page.waitForTimeout(2000);
 
-      // Find and click "Log Headache" button
-      const logButton = page.locator('[data-testid="quick-action-buttons"]').getByRole('button', { name: /log headache/i });
+      // Find and click "Log Headache" button using data-testid
+      const logButton = page.locator('[data-testid="log-headache-button"]');
       await expect(logButton).toBeVisible();
       await logButton.click();
 

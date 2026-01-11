@@ -1,0 +1,110 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - img [ref=e5]
+      - generic [ref=e8]:
+        - heading "Headache Trainer" [level=1] [ref=e9]
+        - paragraph [ref=e10]: Track & Learn
+    - generic [ref=e11]:
+      - link "Home" [ref=e12] [cursor=pointer]:
+        - /url: /
+        - img [ref=e14]
+        - generic [ref=e17]: Home
+      - link "Check-in" [ref=e18] [cursor=pointer]:
+        - /url: /checkin
+        - img [ref=e20]
+        - generic [ref=e24]: Check-in
+      - link "Log" [ref=e25] [cursor=pointer]:
+        - /url: /log
+        - img [ref=e27]
+        - generic [ref=e29]: Log
+      - link "Insights" [ref=e30] [cursor=pointer]:
+        - /url: /insights
+        - img [ref=e32]
+        - generic [ref=e34]: Insights
+      - link "Learn" [ref=e35] [cursor=pointer]:
+        - /url: /learn
+        - img [ref=e37]
+        - generic [ref=e39]: Learn
+    - link "Settings" [ref=e42] [cursor=pointer]:
+      - /url: /settings
+      - img [ref=e44]
+      - generic [ref=e47]: Settings
+  - main [ref=e49]:
+    - main [ref=e50]:
+      - generic [ref=e51]:
+        - generic [ref=e52]:
+          - generic [ref=e53]:
+            - heading "Learn" [level=1] [ref=e54]
+            - paragraph [ref=e55]: Build awareness before the headache speaks
+          - generic [ref=e56]:
+            - generic [ref=e57]:
+              - generic [ref=e58]: Your progress
+              - generic [ref=e59]: 0%
+            - 'progressbar "Overall learning progress: 0%" [ref=e60]'
+        - region "Start Learning" [ref=e62]:
+          - heading "Start Learning" [level=2] [ref=e63]
+          - generic [ref=e64]:
+            - link "What is a Tension Headache? What is a Tension Headache? Understanding the most common type of headache 5 min read" [ref=e65] [cursor=pointer]:
+              - /url: /learn/tension-headache
+              - generic [ref=e66]:
+                - generic [ref=e69]:
+                  - img "What is a Tension Headache?" [ref=e70]: 🧠
+                  - generic [ref=e71]:
+                    - generic [ref=e72]: What is a Tension Headache?
+                    - generic [ref=e73]: Understanding the most common type of headache
+                - generic [ref=e76]: 5 min read
+            - link "How to Do a Body Scan How to Do a Body Scan A step-by-step guide to noticing body tension 8 min read" [ref=e77] [cursor=pointer]:
+              - /url: /learn/body-scan
+              - generic [ref=e78]:
+                - generic [ref=e81]:
+                  - img "How to Do a Body Scan" [ref=e82]: 🧘
+                  - generic [ref=e83]:
+                    - generic [ref=e84]: How to Do a Body Scan
+                    - generic [ref=e85]: A step-by-step guide to noticing body tension
+                - generic [ref=e88]: 8 min read
+            - link "Signs Your Body Gives You Signs Your Body Gives You Learning to read your body's early warning system 6 min read" [ref=e89] [cursor=pointer]:
+              - /url: /learn/body-signals
+              - generic [ref=e90]:
+                - generic [ref=e93]:
+                  - img "Signs Your Body Gives You" [ref=e94]: 📡
+                  - generic [ref=e95]:
+                    - generic [ref=e96]: Signs Your Body Gives You
+                    - generic [ref=e97]: Learning to read your body's early warning system
+                - generic [ref=e100]: 6 min read
+            - link "Headache Type Vocabulary Headache Type Vocabulary Words to describe what you're experiencing 4 min read" [ref=e101] [cursor=pointer]:
+              - /url: /learn/vocabulary-builder
+              - generic [ref=e102]:
+                - generic [ref=e105]:
+                  - img "Headache Type Vocabulary" [ref=e106]: 📚
+                  - generic [ref=e107]:
+                    - generic [ref=e108]: Headache Type Vocabulary
+                    - generic [ref=e109]: Words to describe what you're experiencing
+                - generic [ref=e112]: 4 min read
+            - link "Research-Backed Patterns Research-Backed Patterns What science tells us about headache triggers 7 min read" [ref=e113] [cursor=pointer]:
+              - /url: /learn/general-patterns
+              - generic [ref=e114]:
+                - generic [ref=e117]:
+                  - img "Research-Backed Patterns" [ref=e118]: 🔬
+                  - generic [ref=e119]:
+                    - generic [ref=e120]: Research-Backed Patterns
+                    - generic [ref=e121]: What science tells us about headache triggers
+                - generic [ref=e124]: 7 min read
+        - region "Coming Soon" [ref=e125]:
+          - heading "Coming Soon" [level=2] [ref=e126]
+          - generic [ref=e128]:
+            - generic [ref=e130]:
+              - generic [ref=e131]:
+                - img "Your Personal Insights" [ref=e132]: ✨
+                - generic [ref=e133]:
+                  - generic [ref=e134]: Your Personal Insights
+                  - generic [ref=e135]: Advanced pattern analysis based on your data
+              - generic [ref=e137]: Locked
+            - paragraph [ref=e139]: Log 7 days of data to unlock personalized insights
+  - button "Open Next.js Dev Tools" [ref=e145] [cursor=pointer]:
+    - img [ref=e146]
+  - alert [ref=e149]
+```

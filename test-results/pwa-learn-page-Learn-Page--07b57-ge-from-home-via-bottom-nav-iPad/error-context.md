@@ -1,0 +1,68 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]:
+      - img [ref=e5]
+      - generic [ref=e8]:
+        - heading "Headache Trainer" [level=1] [ref=e9]
+        - paragraph [ref=e10]: Track & Learn
+    - generic [ref=e11]:
+      - link "Home" [ref=e12] [cursor=pointer]:
+        - /url: /
+        - img [ref=e14]
+        - generic [ref=e17]: Home
+      - link "Check-in" [ref=e19] [cursor=pointer]:
+        - /url: /checkin
+        - img [ref=e21]
+        - generic [ref=e25]: Check-in
+      - link "Log" [ref=e26] [cursor=pointer]:
+        - /url: /log
+        - img [ref=e28]
+        - generic [ref=e30]: Log
+      - link "Insights" [ref=e31] [cursor=pointer]:
+        - /url: /insights
+        - img [ref=e33]
+        - generic [ref=e35]: Insights
+      - link "Learn" [ref=e36] [cursor=pointer]:
+        - /url: /learn
+        - img [ref=e38]
+        - generic [ref=e40]: Learn
+    - link "Settings" [ref=e42] [cursor=pointer]:
+      - /url: /settings
+      - img [ref=e44]
+      - generic [ref=e47]: Settings
+  - main [ref=e49]:
+    - main [ref=e50]:
+      - generic [ref=e51]:
+        - generic [ref=e52]:
+          - generic [ref=e53]:
+            - heading "Welcome back!" [level=1] [ref=e54]
+            - paragraph [ref=e55]: Managing your tension headaches
+          - link "Settings" [ref=e56] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e57]
+        - generic [ref=e61]:
+          - img [ref=e63]
+          - generic [ref=e65]:
+            - heading "Tip of the Day" [level=2] [ref=e66]
+            - paragraph [ref=e67]: Notice your posture throughout the day. Tension in the neck and shoulders often precedes headaches. Take short breaks to stretch and reset your alignment.
+        - generic [ref=e68]:
+          - heading "What would you like to do?" [level=2] [ref=e69]
+          - generic [ref=e70]:
+            - button "Log Headache Record an episode" [ref=e71] [cursor=pointer]:
+              - img [ref=e73]
+              - generic [ref=e83]:
+                - heading "Log Headache" [level=3] [ref=e84]
+                - paragraph [ref=e85]: Record an episode
+            - button "Quick Check-in Track how you feel" [ref=e86] [cursor=pointer]:
+              - img [ref=e88]
+              - generic [ref=e91]:
+                - heading "Quick Check-in" [level=3] [ref=e92]
+                - paragraph [ref=e93]: Track how you feel
+        - paragraph [ref=e95]: No headaches logged yet. Start by logging your first episode or explore the learning section to build awareness.
+  - button "Open Next.js Dev Tools" [ref=e101] [cursor=pointer]:
+    - img [ref=e102]
+  - alert [ref=e105]: Headache Trainer
+```

@@ -16,6 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 /**
  * Insights & Patterns Page
@@ -47,6 +48,8 @@ import { cn } from "@/lib/utils";
  * - Accessible (ARIA labels, keyboard nav)
  */
 export default function InsightsPage() {
+  const t = useTranslations("insights");
+
   // Filter state
   const [timeFilter, setTimeFilter] = useState<TimeFilter>(30);
   const [selectedDate, setSelectedDate] = useState<Date>();
@@ -201,12 +204,12 @@ export default function InsightsPage() {
         className="min-h-screen bg-gradient-to-b from-purple-50 to-white dark:from-gray-900 dark:to-gray-950 p-4 sm:p-6"
         data-testid="insights-page"
         role="main"
-        aria-label="Insights & Patterns"
+        aria-label={t("title")}
       >
         <div className="max-w-6xl mx-auto space-y-4 sm:space-y-6">
           {/* Loading announcement for screen readers */}
           <div role="status" aria-live="polite" className="sr-only">
-            Loading insights...
+            {t("loading")}
           </div>
           {/* Loading skeleton */}
           <div className="animate-pulse space-y-4">
@@ -226,28 +229,28 @@ export default function InsightsPage() {
       className="min-h-screen bg-gradient-to-b from-purple-50 to-white dark:from-gray-900 dark:to-gray-950 p-4 sm:p-6 pb-24"
       data-testid="insights-page"
       role="main"
-      aria-label="Insights & Patterns"
+      aria-label={t("title")}
     >
       <div className="max-w-6xl mx-auto space-y-6 sm:space-y-8">
         {/* Page Header */}
         <header className="mb-6">
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100">
-            Insights & Patterns
+            {t("title")}
           </h1>
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-            Discover patterns and triggers in your headache journey
+            {t("subtitle")}
           </p>
         </header>
 
         {/* Filter Tabs */}
         <section aria-labelledby="filter-heading">
           <h2 id="filter-heading" className="sr-only">
-            Time Period Filter
+            {t("timeRange")}
           </h2>
           <div
             className="flex gap-2 p-1 bg-muted rounded-lg max-w-md"
             role="tablist"
-            aria-label="Time period filter"
+            aria-label={t("timeRange")}
           >
             <Button
               variant={timeFilter === 30 ? "default" : "ghost"}
@@ -258,7 +261,7 @@ export default function InsightsPage() {
               aria-selected={timeFilter === 30}
               data-testid="filter-30"
             >
-              30 Days
+              {t("days30")}
             </Button>
             <Button
               variant={timeFilter === 90 ? "default" : "ghost"}
@@ -269,7 +272,7 @@ export default function InsightsPage() {
               aria-selected={timeFilter === 90}
               data-testid="filter-90"
             >
-              90 Days
+              {t("days90")}
             </Button>
             <Button
               variant={timeFilter === "all" ? "default" : "ghost"}
@@ -280,7 +283,7 @@ export default function InsightsPage() {
               aria-selected={timeFilter === "all"}
               data-testid="filter-all"
             >
-              All Time
+              {t("allTime")}
             </Button>
           </div>
         </section>
@@ -312,10 +315,10 @@ export default function InsightsPage() {
                 id="correlations-heading"
                 className="text-xl sm:text-2xl"
               >
-                What triggers your headaches?
+                {t("whatTriggers")}
               </CardTitle>
               <p className="text-sm text-muted-foreground">
-                Correlation analysis between headaches and lifestyle factors
+                {t("correlationDesc")}
               </p>
             </CardHeader>
             <CardContent>
@@ -329,10 +332,10 @@ export default function InsightsPage() {
           <Card>
             <CardHeader>
               <CardTitle id="trends-heading" className="text-xl sm:text-2xl">
-                Headaches over time
+                {t("headachesOverTime")}
               </CardTitle>
               <p className="text-sm text-muted-foreground">
-                Track your headache frequency and intensity trends
+                {t("trendsDesc")}
               </p>
             </CardHeader>
             <CardContent>
@@ -352,7 +355,7 @@ export default function InsightsPage() {
           data-testid="time-of-day-section"
         >
           <h2 id="time-of-day-heading" className="sr-only">
-            When do headaches occur?
+            {t("byTime")}
           </h2>
           <TimeOfDayAnalysis data={timeOfDayData} />
         </section>
@@ -380,10 +383,10 @@ export default function InsightsPage() {
                     id="personal-insights-heading"
                     className="text-xl sm:text-2xl"
                   >
-                    Personal Insights
+                    {t("personalInsights")}
                   </CardTitle>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Personalized insights based on your data (Unlocks Week 2+)
+                    {t("personalInsightsDesc")}
                   </p>
                 </div>
                 {personalInsightsExpanded ? (
@@ -400,9 +403,9 @@ export default function InsightsPage() {
                 ))}
                 {personalInsights.length === 0 && (
                   <div className="text-center py-8 text-muted-foreground">
-                    <p>No personal insights available yet.</p>
+                    <p>{t("noPersonalInsights")}</p>
                     <p className="text-sm mt-2">
-                      Keep logging check-ins to unlock personalized insights.
+                      {t("keepLogging")}
                     </p>
                   </div>
                 )}
@@ -434,10 +437,10 @@ export default function InsightsPage() {
                     id="general-insights-heading"
                     className="text-xl sm:text-2xl"
                   >
-                    General Insights
+                    {t("generalInsights")}
                   </CardTitle>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Research-backed headache insights and tips
+                    {t("generalInsightsDesc")}
                   </p>
                 </div>
                 {generalInsightsExpanded ? (

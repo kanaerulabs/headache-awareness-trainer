@@ -11,6 +11,7 @@ import {
   Settings,
 } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 export default function HomePage() {
   return (
@@ -46,6 +47,11 @@ function HomePageContent() {
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const hasHandledLoggedRef = useRef(false);
   const hasFetchedRef = useRef(false);
+  const t = useTranslations("home");
+  const tHeadache = useTranslations("headacheTypes");
+  const tIntensity = useTranslations("intensity");
+  const tTime = useTranslations("time");
+  const tCommon = useTranslations("common");
 
   // Check if we just logged an entry
   const justLogged = searchParams.get("logged") === "true";
@@ -103,15 +109,15 @@ function HomePageContent() {
   const getHeadacheTypeLabel = () => {
     switch (headacheType) {
       case "tension":
-        return "Tension Headaches";
+        return tHeadache("tension");
       case "migraine":
-        return "Migraines";
+        return tHeadache("migraine");
       case "mixed":
-        return "Mixed Headaches";
+        return tHeadache("mixed");
       case "unsure":
-        return "Headaches";
+        return tHeadache("unsure");
       default:
-        return "Headaches";
+        return tHeadache("unsure");
     }
   };
 
@@ -125,17 +131,17 @@ function HomePageContent() {
         <div className="flex items-start justify-between" data-testid="greeting-section">
           <div className="space-y-2">
             <h1 className="text-3xl font-bold tracking-tight">
-              Welcome back!
+              {t("welcomeBack")}
             </h1>
             <p className="text-lg text-muted-foreground">
-              Managing your {getHeadacheTypeLabel().toLowerCase()}
+              {t("managing", { headacheType: getHeadacheTypeLabel() })}
             </p>
           </div>
           <Link
             href="/settings"
             data-testid="settings-link"
             className="p-2 rounded-full hover:bg-muted transition-colors"
-            aria-label="Settings"
+            aria-label={tCommon("settings")}
           >
             <Settings className="h-6 w-6 text-muted-foreground" />
           </Link>
@@ -151,11 +157,9 @@ function HomePageContent() {
               <Lightbulb className="h-5 w-5 text-primary" />
             </div>
             <div className="space-y-2">
-              <h2 className="font-semibold">Tip of the Day</h2>
+              <h2 className="font-semibold">{t("tipOfDay")}</h2>
               <p className="text-sm text-muted-foreground">
-                Notice your posture throughout the day. Tension in the neck and
-                shoulders often precedes headaches. Take short breaks to stretch
-                and reset your alignment.
+                {t("dailyTip")}
               </p>
             </div>
           </div>
@@ -163,7 +167,7 @@ function HomePageContent() {
 
         {/* Primary Actions - Only the 2 most important */}
         <div className="space-y-4">
-          <h2 className="text-lg font-semibold">What would you like to do?</h2>
+          <h2 className="text-lg font-semibold">{t("whatToDo")}</h2>
           <div
             className="grid grid-cols-2 gap-3"
             data-testid="quick-actions"
@@ -171,8 +175,8 @@ function HomePageContent() {
             {/* Log Headache */}
             <ActionCard
               icon={<Brain className="h-5 w-5" />}
-              title="Log Headache"
-              description="Record an episode"
+              title={t("logHeadache")}
+              description={t("recordEpisode")}
               onClick={() => router.push("/log")}
               testId="log-headache-card"
               variant="primary"
@@ -181,8 +185,8 @@ function HomePageContent() {
             {/* Quick Check-in */}
             <ActionCard
               icon={<Clock className="h-5 w-5" />}
-              title="Quick Check-in"
-              description="Track how you feel"
+              title={t("quickCheckin")}
+              description={t("trackFeeling")}
               onClick={() => router.push("/checkin")}
               testId="checkin-card"
               variant="default"
@@ -193,14 +197,14 @@ function HomePageContent() {
         {/* Recent Entries Section */}
         {isInitialLoading ? (
           <div className="rounded-lg border bg-card p-6 text-center" data-testid="loading-entries">
-            <p className="text-sm text-muted-foreground">Loading entries...</p>
+            <p className="text-sm text-muted-foreground">{t("loadingEntries")}</p>
           </div>
         ) : recentEntries.length > 0 ? (
           <div className="space-y-4" data-testid="recent-entries-section">
-            <h2 className="text-lg font-semibold">Recent Entries</h2>
+            <h2 className="text-lg font-semibold">{t("recentEntries")}</h2>
             <div className="space-y-3">
               {recentEntries.map((entry) => (
-                <EntryCard key={entry.id} entry={entry} />
+                <EntryCard key={entry.id} entry={entry} tIntensity={tIntensity} tTime={tTime} />
               ))}
             </div>
             {recentEntries.length >= 5 && (
@@ -208,7 +212,7 @@ function HomePageContent() {
                 onClick={() => router.push("/insights")}
                 className="text-sm text-primary hover:underline"
               >
-                View all entries →
+                {t("viewAllEntries")}
               </button>
             )}
           </div>
@@ -218,8 +222,7 @@ function HomePageContent() {
             data-testid="empty-state"
           >
             <p className="text-sm text-muted-foreground">
-              No headaches logged yet. Start by logging your first episode or
-              explore the learning section to build awareness.
+              {t("noEntries")}
             </p>
           </div>
         )}
@@ -274,6 +277,8 @@ function ActionCard({
 
 interface EntryCardProps {
   entry: HeadacheEntry;
+  tIntensity: ReturnType<typeof useTranslations<"intensity">>;
+  tTime: ReturnType<typeof useTranslations<"time">>;
 }
 
 const intensityColors = {
@@ -284,15 +289,7 @@ const intensityColors = {
   5: "bg-red-800",
 } as const;
 
-const intensityLabels = {
-  1: "Minimal",
-  2: "Mild",
-  3: "Moderate",
-  4: "Severe",
-  5: "Extreme",
-} as const;
-
-function EntryCard({ entry }: EntryCardProps) {
+function EntryCard({ entry, tIntensity, tTime }: EntryCardProps) {
   const formatDate = (date: Date) => {
     const d = new Date(date);
     const now = new Date();
@@ -300,12 +297,14 @@ function EntryCard({ entry }: EntryCardProps) {
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-    if (diffHours < 1) return "Just now";
-    if (diffHours < 24) return `${diffHours}h ago`;
-    if (diffDays === 1) return "Yesterday";
-    if (diffDays < 7) return `${diffDays} days ago`;
+    if (diffHours < 1) return tTime("justNow");
+    if (diffHours < 24) return tTime("hoursAgo", { hours: diffHours });
+    if (diffDays === 1) return tTime("yesterday");
+    if (diffDays < 7) return tTime("daysAgo", { days: diffDays });
     return d.toLocaleDateString();
   };
+
+  const intensityLabel = tIntensity(String(entry.intensity) as "1" | "2" | "3" | "4" | "5");
 
   return (
     <div
@@ -321,7 +320,7 @@ function EntryCard({ entry }: EntryCardProps) {
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2">
             <span className="font-medium">
-              {intensityLabels[entry.intensity as keyof typeof intensityLabels]} Headache
+              {intensityLabel} {tIntensity("headache")}
             </span>
             <span className="text-xs text-muted-foreground flex items-center gap-1">
               <Clock className="h-3 w-3" />
@@ -345,7 +344,7 @@ function EntryCard({ entry }: EntryCardProps) {
               ))}
               {entry.contextTags.length > 3 && (
                 <span className="text-xs text-muted-foreground">
-                  +{entry.contextTags.length - 3} more
+                  +{entry.contextTags.length - 3}
                 </span>
               )}
             </div>

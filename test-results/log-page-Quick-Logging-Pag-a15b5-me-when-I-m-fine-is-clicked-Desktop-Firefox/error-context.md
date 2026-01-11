@@ -1,0 +1,58 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e5]:
+      - generic [ref=e7]:
+        - generic [ref=e8]: Step 1 of 4
+        - generic [ref=e9]: 25%
+      - generic [ref=e12]:
+        - generic [ref=e13]:
+          - heading "Welcome to Headache Awareness Trainer" [level=2] [ref=e14]
+          - paragraph [ref=e15]: Learn to recognize and manage your headaches effectively
+        - generic [ref=e17]:
+          - generic [ref=e18]:
+            - img [ref=e20]
+            - generic [ref=e26]:
+              - heading "Take control of your headaches" [level=3] [ref=e27]
+              - list [ref=e28]:
+                - listitem [ref=e29]:
+                  - generic [ref=e30]: ✓
+                  - generic [ref=e31]: Track patterns and triggers with ease
+                - listitem [ref=e32]:
+                  - generic [ref=e33]: ✓
+                  - generic [ref=e34]: Personalized insights based on your data
+                - listitem [ref=e35]:
+                  - generic [ref=e36]: ✓
+                  - generic [ref=e37]: Evidence-based awareness techniques
+                - listitem [ref=e38]:
+                  - generic [ref=e39]: ✓
+                  - generic [ref=e40]: Private and secure - all data stays on your device
+          - generic [ref=e41]:
+            - button "Get Started" [ref=e42] [cursor=pointer]
+            - button "Skip for now" [ref=e43] [cursor=pointer]
+          - paragraph [ref=e44]: Takes less than 30 seconds • You can change these settings anytime
+  - navigation [ref=e45]:
+    - generic [ref=e46]:
+      - link "Home" [ref=e47] [cursor=pointer]:
+        - /url: /
+        - img [ref=e49]
+        - generic [ref=e52]: Home
+      - link "Check-in" [ref=e53] [cursor=pointer]:
+        - /url: /checkin
+        - img [ref=e55]
+        - generic [ref=e59]: Check-in
+      - link [ref=e60] [cursor=pointer]:
+        - /url: /log
+        - img [ref=e62]
+      - link "Insights" [ref=e66] [cursor=pointer]:
+        - /url: /insights
+        - img [ref=e68]
+        - generic [ref=e73]: Insights
+      - link "Learn" [ref=e74] [cursor=pointer]:
+        - /url: /learn
+        - img [ref=e76]
+        - generic [ref=e79]: Learn
+  - alert [ref=e80]: Headache Awareness Trainer
+```
