@@ -132,7 +132,7 @@ export function ClearDataDialog({
                 disabled={isClearing}
                 data-testid="clear-data-cancel"
               >
-                {t("common:cancel")}
+                Cancel
               </AlertDialogCancel>
               <AlertDialogAction
                 onClick={(e) => {
