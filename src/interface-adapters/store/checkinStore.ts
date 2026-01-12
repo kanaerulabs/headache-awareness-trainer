@@ -62,7 +62,7 @@ export interface CheckInState {
  * Initialize IndexedDB
  */
 const initDB = async (): Promise<IDBPDatabase<CheckInDB>> => {
-  return openDB<CheckInDB>("headache-checkin-db", 1, {
+  return openDB<CheckInDB>("headache-checkin-db", 2, {
     upgrade(db) {
       // Create checkins store with indexes
       if (!db.objectStoreNames.contains("checkins")) {

@@ -26,7 +26,7 @@ interface CheckInDB extends DBSchema {
 }
 
 const DB_NAME = "headache-checkin-db";
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 /**
  * IndexedDB Repository Implementation

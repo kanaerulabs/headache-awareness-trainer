@@ -115,7 +115,7 @@ export interface LoggingState {
  * Initialize IndexedDB
  */
 const initDB = async (): Promise<IDBPDatabase<LoggingDB>> => {
-  return openDB<LoggingDB>("headache-logging-db", 1, {
+  return openDB<LoggingDB>("headache-logging-db", 2, {
     upgrade(db) {
       // Create entries store with timestamp index
       if (!db.objectStoreNames.contains("entries")) {

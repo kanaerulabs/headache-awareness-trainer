@@ -64,7 +64,7 @@ interface HeadacheTrackerDB extends DBSchema {
 }
 
 const DB_NAME = "headache-tracker-db";
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 let dbPromise: Promise<IDBPDatabase<HeadacheTrackerDB>> | null = null;
 
