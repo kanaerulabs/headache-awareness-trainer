@@ -1,10 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useDashboardStore } from "@/interface-adapters/store/dashboardStore";
-import { useLoggingStore } from "@/interface-adapters/store/loggingStore";
-import { useCheckInStore } from "@/interface-adapters/store/checkinStore";
+import { useDashboard } from "@/interface-adapters/hooks/useDashboard";
 import { QuickInsightCard } from "@/components/molecules/QuickInsightCard";
 import { StreakDisplay } from "@/components/molecules/StreakDisplay";
 import { WeeklySummaryCard } from "@/components/molecules/WeeklySummaryCard";
@@ -14,10 +11,37 @@ import {
   RecentEntriesList,
   type RecentEntry,
 } from "@/components/molecules/RecentEntriesList";
+import { HeadacheEntryProps } from "@/domains/headache-entry/headache-entry.entity";
+import { CheckInProps } from "@/domains/checkin/checkin.entity";
 import { useTranslations } from "next-intl";
 
 type IntensityKey = 1 | 2 | 3 | 4 | 5;
 type MoodKey = "calm" | "ok" | "stressed" | "anxious" | "avoidant";
+type TrendDirection = "improving" | "stable" | "declining";
+
+/**
+ * Generate insight message based on current data
+ */
+function getInsightMessage(
+  streak: number,
+  trend: TrendDirection,
+  headacheCount: number,
+  t: ReturnType<typeof useTranslations<"dashboard">>
+): string {
+  if (streak >= 7) {
+    return t("insights.greatStreak", { days: streak });
+  }
+  if (trend === "improving") {
+    return t("insights.improving");
+  }
+  if (trend === "declining" && headacheCount > 3) {
+    return t("insights.concerningTrend");
+  }
+  if (headacheCount === 0) {
+    return t("insights.noHeadachesThisWeek");
+  }
+  return t("insights.keepTracking");
+}
 
 /**
  * Dashboard / Home Screen
@@ -48,40 +72,23 @@ export default function DashboardPage() {
   const router = useRouter();
   const t = useTranslations("dashboard");
 
-  // Dashboard store state
+  // Use Clean Architecture hook for dashboard data
   const {
-    currentStreak,
-    thisWeekHeadaches,
-    thisWeekCheckins,
-    trend,
-    currentInsight,
-    recentEntries,
+    isReady,
     isLoading,
+    data,
     refreshDashboard,
-  } = useDashboardStore();
+  } = useDashboard();
 
-  // Store initialization functions
-  const initializeLoggingDB = useLoggingStore((state) => state.initializeDB);
-  const initializeCheckInDB = useCheckInStore((state) => state.initializeDB);
+  // Extract data with defaults
+  const currentStreak = data?.streak.currentStreak ?? 0;
+  const thisWeekHeadaches = data?.weeklySummary.headacheCount ?? 0;
+  const thisWeekCheckins = data?.weeklySummary.checkInCount ?? 0;
+  const trend = data?.trend ?? "stable";
+  const recentEntries = data?.recentEntries ?? [];
 
-  /**
-   * Initialize databases and load dashboard data on mount
-   */
-  useEffect(() => {
-    const initialize = async () => {
-      try {
-        // Initialize both databases
-        await Promise.all([initializeLoggingDB(), initializeCheckInDB()]);
-
-        // Refresh dashboard data after stores are initialized
-        await refreshDashboard();
-      } catch (error) {
-        console.error("Failed to initialize dashboard:", error);
-      }
-    };
-
-    initialize();
-  }, [initializeLoggingDB, initializeCheckInDB, refreshDashboard]);
+  // Generate insight message based on streak and trend
+  const currentInsight = getInsightMessage(currentStreak, trend, thisWeekHeadaches, t);
 
   /**
    * Navigate to Log Headache page
@@ -107,44 +114,48 @@ export default function DashboardPage() {
   };
 
   /**
-   * Transform CombinedEntry[] to RecentEntry[] format
+   * Transform recent entries to RecentEntry[] format
+   * The use case returns entries with _type property
    */
   const transformedRecentEntries: RecentEntry[] = recentEntries.map(
-    (combinedEntry) => {
-      if (combinedEntry.type === "headache") {
-        const entry = combinedEntry.entry;
+    (entry) => {
+      // Type guard to check if it's a headache entry
+      const isHeadache = "_type" in entry && entry._type === "headache" || "intensity" in entry;
+
+      if (isHeadache) {
+        const headacheEntry = entry as HeadacheEntryProps & { _type?: string };
         // Generate summary from headache entry using translations
-        const intensityKey = entry.intensity as IntensityKey;
+        const intensityKey = headacheEntry.intensity as IntensityKey;
         const intensityText = t(`intensityLabels.${intensityKey}`);
-        const typeText = entry.headacheType ? ` ${entry.headacheType}` : "";
+        const typeText = headacheEntry.headacheType ? ` ${headacheEntry.headacheType}` : "";
         const summary = `${intensityText}${typeText} ${t("headache")}`;
 
         return {
-          id: entry.id,
+          id: headacheEntry.id,
           type: "headache" as const,
-          timestamp: entry.timestamp,
+          timestamp: headacheEntry.timestamp,
           summary,
         };
       } else {
         // Check-in entry
-        const entry = combinedEntry.entry;
+        const checkInEntry = entry as CheckInProps & { _type?: string };
         // Generate summary from check-in entry using translations
-        const summary = entry.isQuickDismiss
+        const summary = checkInEntry.isQuickDismiss
           ? t("quickCheckinAllGood")
-          : t(`moodLabels.${entry.mood as MoodKey}`);
+          : t(`moodLabels.${checkInEntry.mood as MoodKey}`);
 
         return {
-          id: entry.id,
+          id: checkInEntry.id,
           type: "checkin" as const,
-          timestamp: entry.timestamp,
+          timestamp: checkInEntry.timestamp,
           summary,
         };
       }
     },
   );
 
-  // Loading state (skeleton)
-  if (isLoading) {
+  // Loading state (skeleton) - show while initializing or loading data
+  if (!isReady || isLoading) {
     return (
       <div
         className="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-950 p-4 sm:p-6"

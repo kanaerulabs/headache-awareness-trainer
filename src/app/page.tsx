@@ -1,9 +1,10 @@
 "use client";
 
-import { Suspense, useEffect, useState, useCallback, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useOnboardingStore } from "@/interface-adapters/store/onboardingStore";
-import { useLoggingStore, type HeadacheEntry } from "@/interface-adapters/store/loggingStore";
+import { useHeadacheLogging } from "@/interface-adapters/hooks/useHeadacheLogging";
+import { HeadacheEntryProps } from "@/domains/headache-entry/headache-entry.entity";
 import {
   Brain,
   Lightbulb,
@@ -43,10 +44,16 @@ function HomePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { isCompleted, headacheType } = useOnboardingStore();
-  const [recentEntries, setRecentEntries] = useState<HeadacheEntry[]>([]);
-  const [isInitialLoading, setIsInitialLoading] = useState(true);
+
+  // Use Clean Architecture hook for headache logging
+  const {
+    isReady,
+    isLoading: isInitialLoading,
+    recentEntries,
+    refreshRecentEntries
+  } = useHeadacheLogging();
+
   const hasHandledLoggedRef = useRef(false);
-  const hasFetchedRef = useRef(false);
   const t = useTranslations("home");
   const tHeadache = useTranslations("headacheTypes");
   const tIntensity = useTranslations("intensity");
@@ -63,34 +70,12 @@ function HomePageContent() {
     }
   }, [isCompleted, router]);
 
-  // Fetch recent entries - stable function that doesn't change
-  const fetchEntries = useCallback(async (showLoading = false) => {
-    try {
-      if (showLoading) setIsInitialLoading(true);
-      const store = useLoggingStore.getState();
-      await store.initializeDB();
-      const entries = await store.getRecentEntries(5);
-      setRecentEntries(entries);
-    } catch (error) {
-      console.error("Failed to fetch entries:", error);
-    } finally {
-      setIsInitialLoading(false);
-    }
-  }, []);
-
-  // Initial fetch on mount
-  useEffect(() => {
-    if (!isCompleted || hasFetchedRef.current) return;
-    hasFetchedRef.current = true;
-    fetchEntries(true);
-  }, [isCompleted, fetchEntries]);
-
   // Handle the ?logged=true param - trigger refresh and clear URL
   useEffect(() => {
-    if (justLogged && !hasHandledLoggedRef.current) {
+    if (justLogged && !hasHandledLoggedRef.current && isReady) {
       hasHandledLoggedRef.current = true;
-      // Fetch entries silently (no loading state)
-      fetchEntries(false);
+      // Fetch entries silently
+      refreshRecentEntries();
       // Clear the URL param
       router.replace("/", { scroll: false });
     }
@@ -98,7 +83,7 @@ function HomePageContent() {
     if (!justLogged) {
       hasHandledLoggedRef.current = false;
     }
-  }, [justLogged, router, fetchEntries]);
+  }, [justLogged, router, isReady, refreshRecentEntries]);
 
   // If not completed, show nothing (will redirect)
   if (!isCompleted) {
@@ -195,7 +180,7 @@ function HomePageContent() {
         </div>
 
         {/* Recent Entries Section */}
-        {isInitialLoading ? (
+        {!isReady || isInitialLoading ? (
           <div className="rounded-lg border bg-card p-6 text-center" data-testid="loading-entries">
             <p className="text-sm text-muted-foreground">{t("loadingEntries")}</p>
           </div>
@@ -276,7 +261,7 @@ function ActionCard({
 }
 
 interface EntryCardProps {
-  entry: HeadacheEntry;
+  entry: HeadacheEntryProps;
   tIntensity: ReturnType<typeof useTranslations<"intensity">>;
   tTime: ReturnType<typeof useTranslations<"time">>;
 }

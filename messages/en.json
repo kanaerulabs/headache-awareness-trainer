@@ -31,7 +31,14 @@
     },
     "quickCheckinAllGood": "Quick check-in: All good!",
     "headache": "headache",
-    "checkin": "Check-in"
+    "checkin": "Check-in",
+    "insights": {
+      "greatStreak": "Amazing! You've logged for {days} days in a row!",
+      "improving": "Great progress! Your headaches are improving this week.",
+      "concerningTrend": "You've had several headaches this week. Consider reviewing your triggers.",
+      "noHeadachesThisWeek": "No headaches logged this week - keep it up!",
+      "keepTracking": "Keep tracking to build your headache awareness."
+    }
   },
   "streak": {
     "startToday": "Start your streak today!",

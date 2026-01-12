@@ -31,7 +31,14 @@
     },
     "quickCheckinAllGood": "クイックチェックイン：問題なし！",
     "headache": "頭痛",
-    "checkin": "チェックイン"
+    "checkin": "チェックイン",
+    "insights": {
+      "greatStreak": "素晴らしい！{days}日連続で記録しています！",
+      "improving": "良い調子です！今週は頭痛が改善しています。",
+      "concerningTrend": "今週は頭痛が多いようです。トリガーを確認してみましょう。",
+      "noHeadachesThisWeek": "今週は頭痛の記録がありません - この調子で！",
+      "keepTracking": "記録を続けて頭痛への気づきを深めましょう。"
+    }
   },
   "streak": {
     "startToday": "今日から連続記録を始めよう！",
