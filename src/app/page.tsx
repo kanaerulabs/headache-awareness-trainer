@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { AuthStatus } from "@/components/auth";
 
 export default function HomePage() {
   return (
@@ -129,6 +130,11 @@ function HomePageContent() {
       data-testid="home-page"
     >
       <div className="mx-auto w-full max-w-2xl space-y-8">
+        {/* Auth Status */}
+        <div className="flex justify-end">
+          <AuthStatus variant="compact" showSignOut />
+        </div>
+
         {/* Header with Settings */}
         <div className="flex items-start justify-between" data-testid="greeting-section">
           <div className="space-y-2">
