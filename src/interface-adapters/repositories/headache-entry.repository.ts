@@ -28,7 +28,8 @@ interface HeadacheDB extends DBSchema {
   };
 }
 
-const DB_NAME = "headache-tracking-db";
+// Use the same database as loggingStore for data consistency
+const DB_NAME = "headache-logging-db";
 const DB_VERSION = 1;
 
 /**
