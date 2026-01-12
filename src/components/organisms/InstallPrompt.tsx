@@ -43,21 +43,29 @@ export function InstallPrompt() {
     const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent);
     setIsIOS(isIOSDevice);
 
+    // Check if prompt was recently dismissed (within 1 hour)
+    const dismissedAt = localStorage.getItem("installPromptDismissedAt");
+    const ONE_HOUR_MS = 60 * 60 * 1000;
+    const wasRecentlyDismissed =
+      dismissedAt && Date.now() - parseInt(dismissedAt, 10) < ONE_HOUR_MS;
+
     // Listen for the beforeinstallprompt event (Android/Chrome)
     const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
       // Prevent the mini-infobar from appearing
       e.preventDefault();
       // Save the event for later
       setDeferredPrompt(e);
-      // Show our custom prompt after a delay
-      setTimeout(() => setShowPrompt(true), 3000);
+      // Show our custom prompt after a delay, unless recently dismissed
+      if (!wasRecentlyDismissed) {
+        setTimeout(() => setShowPrompt(true), 3000);
+      }
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
     // Show iOS instructions if on iOS and not standalone
     if (isIOSDevice && !isInStandaloneMode) {
-      // Check if we've shown this before
+      // Check if we've shown this before (for iOS, we only show once ever)
       const hasSeenIOSPrompt = localStorage.getItem("hasSeenIOSInstallPrompt");
       if (!hasSeenIOSPrompt) {
         setTimeout(() => setShowPrompt(true), 3000);
@@ -93,7 +101,11 @@ export function InstallPrompt() {
   const handleDismiss = () => {
     setShowPrompt(false);
     if (isIOS) {
+      // For iOS, only show once ever
       localStorage.setItem("hasSeenIOSInstallPrompt", "true");
+    } else {
+      // For other platforms, show again after 1 hour
+      localStorage.setItem("installPromptDismissedAt", Date.now().toString());
     }
   };
 

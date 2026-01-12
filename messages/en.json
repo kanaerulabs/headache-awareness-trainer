@@ -464,16 +464,61 @@
       "evidenceBased": "Evidence-based awareness techniques",
       "private": "Private and secure - all data stays on your device"
     },
-    "headacheType": "What type of headaches do you experience?",
-    "frequency": "How often do you experience headaches?",
-    "frequencyOptions": {
-      "rarely": "Rarely (few times a year)",
-      "monthly": "Monthly (1-3 times)",
-      "weekly": "Weekly",
-      "daily": "Daily or almost daily"
+    "headacheTypeTitle": "What type of headaches do you experience?",
+    "headacheTypeDesc": "This helps us provide personalized insights",
+    "headacheTypes": {
+      "tension": {
+        "label": "Tension Headaches",
+        "description": "Pressure or tightness around the head, often stress-related"
+      },
+      "migraine": {
+        "label": "Migraines",
+        "description": "Throbbing pain, often with sensitivity to light or sound"
+      },
+      "mixed": {
+        "label": "Mixed/Both Types",
+        "description": "I experience both tension headaches and migraines"
+      },
+      "unsure": {
+        "label": "Not Sure",
+        "description": "I'm not certain what type of headaches I get"
+      }
     },
-    "enableReminders": "Would you like daily check-in reminders?",
-    "reminderBenefit": "Regular check-ins help identify patterns",
+    "frequencyTitle": "How often do you experience headaches?",
+    "frequencyDesc": "This helps us tailor the app to your needs",
+    "frequencyOptions": {
+      "daily": {
+        "label": "Daily",
+        "description": "I experience headaches every day or almost every day"
+      },
+      "fewTimesWeek": {
+        "label": "Few Times a Week",
+        "description": "I get headaches 2-4 times per week"
+      },
+      "weekly": {
+        "label": "Weekly",
+        "description": "I experience headaches about once a week"
+      },
+      "occasional": {
+        "label": "Occasional",
+        "description": "I get headaches less than once a week"
+      }
+    },
+    "reminderTitle": "Would you like reminders?",
+    "reminderDesc": "Gentle notifications can help build a tracking habit",
+    "reminderOptions": {
+      "yesGently": {
+        "label": "Yes, gently remind me",
+        "description": "Get helpful nudges to track your headaches regularly"
+      },
+      "maybeLater": {
+        "label": "Maybe later",
+        "description": "I'll track on my own for now, but I can enable this later"
+      }
+    },
+    "quickSetup": "Takes less than 30 seconds • You can change these settings anytime",
+    "back": "Back",
+    "continue": "Continue",
     "allSet": "You're all set!",
     "startTracking": "Start Tracking"
   },

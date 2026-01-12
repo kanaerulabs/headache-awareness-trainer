@@ -9,39 +9,14 @@ import {
   type HeadacheType,
 } from "@/interface-adapters/store/onboardingStore";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
-interface HeadacheTypeOption {
-  value: HeadacheType;
-  label: string;
-  description: string;
-}
-
-const HEADACHE_TYPES: HeadacheTypeOption[] = [
-  {
-    value: "tension",
-    label: "Tension Headaches",
-    description: "Pressure or tightness around the head, often stress-related",
-  },
-  {
-    value: "migraine",
-    label: "Migraines",
-    description: "Throbbing pain, often with sensitivity to light or sound",
-  },
-  {
-    value: "mixed",
-    label: "Mixed/Both Types",
-    description: "I experience both tension headaches and migraines",
-  },
-  {
-    value: "unsure",
-    label: "Not Sure",
-    description: "I'm not certain what type of headaches I get",
-  },
-];
+const HEADACHE_TYPE_KEYS: HeadacheType[] = ["tension", "migraine", "mixed", "unsure"];
 
 export function HeadacheTypeStep() {
   const { headacheType, setHeadacheType, nextStep, previousStep } =
     useOnboardingStore();
+  const t = useTranslations("onboarding");
 
   const handleContinue = () => {
     if (headacheType) {
@@ -51,19 +26,19 @@ export function HeadacheTypeStep() {
 
   return (
     <WizardStep
-      title="What type of headaches do you experience?"
-      description="This helps us provide personalized insights"
+      title={t("headacheTypeTitle")}
+      description={t("headacheTypeDesc")}
     >
       <div className="flex flex-col space-y-4" data-testid="headache-type-step">
         {/* Headache Type Options */}
         <div className="space-y-3">
-          {HEADACHE_TYPES.map((option) => {
-            const isSelected = headacheType === option.value;
+          {HEADACHE_TYPE_KEYS.map((typeKey) => {
+            const isSelected = headacheType === typeKey;
 
             return (
               <button
-                key={option.value}
-                onClick={() => setHeadacheType(option.value)}
+                key={typeKey}
+                onClick={() => setHeadacheType(typeKey)}
                 className={cn(
                   "w-full rounded-lg border-2 p-4 text-left transition-all",
                   "hover:border-primary/50 hover:bg-accent/50",
@@ -73,13 +48,13 @@ export function HeadacheTypeStep() {
                     ? "border-primary bg-primary/5"
                     : "border-border bg-card",
                 )}
-                data-testid={`headache-type-option-${option.value}`}
+                data-testid={`headache-type-option-${typeKey}`}
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 space-y-1">
-                    <div className="font-medium">{option.label}</div>
+                    <div className="font-medium">{t(`headacheTypes.${typeKey}.label`)}</div>
                     <div className="text-sm text-muted-foreground">
-                      {option.description}
+                      {t(`headacheTypes.${typeKey}.description`)}
                     </div>
                   </div>
 
@@ -106,7 +81,7 @@ export function HeadacheTypeStep() {
             className="w-full"
             data-testid="back-button"
           >
-            Back
+            {t("back")}
           </Button>
 
           <Button
@@ -116,7 +91,7 @@ export function HeadacheTypeStep() {
             disabled={!headacheType}
             data-testid="continue-button"
           >
-            Continue
+            {t("continue")}
           </Button>
         </div>
       </div>
