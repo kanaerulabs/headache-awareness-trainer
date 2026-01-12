@@ -313,7 +313,7 @@ const MICRO_WIN_MESSAGES: Record<string, MicroWinMessage[]> = {
  * Initialize IndexedDB
  */
 const initDB = async (): Promise<IDBPDatabase<GamificationDB>> => {
-  return openDB<GamificationDB>("headache-gamification-db", 1, {
+  return openDB<GamificationDB>("headache-gamification-db", 2, {
     upgrade(db) {
       // Create achievements store
       if (!db.objectStoreNames.contains("achievements")) {

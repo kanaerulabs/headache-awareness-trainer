@@ -30,7 +30,7 @@ interface HeadacheDB extends DBSchema {
 
 // Use the same database as loggingStore for data consistency
 const DB_NAME = "headache-logging-db";
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 /**
  * IndexedDB Repository Implementation
