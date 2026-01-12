@@ -21,6 +21,7 @@ import {
   AboutHelp,
   LanguageSwitcher,
   InstallAppButton,
+  AISettings,
 } from "@/components/organisms/settings";
 import { ArrowLeft } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -134,6 +135,11 @@ export default function SettingsPage() {
             </Card>
           </section>
 
+          {/* AI Settings Section */}
+          <section data-testid="accordion-ai">
+            <AISettings />
+          </section>
+
           {/* About & Help Section */}
           <section data-testid="accordion-about">
             <AboutHelp />
@@ -204,6 +210,11 @@ export default function SettingsPage() {
                 <ClearDataDialog />
               </CardContent>
             </Card>
+          </section>
+
+          {/* AI Settings Section */}
+          <section aria-labelledby="ai-heading" data-testid="section-ai">
+            <AISettings />
           </section>
 
           {/* About & Help Section */}
