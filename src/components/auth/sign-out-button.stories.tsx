@@ -4,34 +4,41 @@
  * Demonstrates different states and variants of the SignOutButton component.
  */
 
-import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { SignOutButton } from './sign-out-button';
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import { SignOutButton } from "./sign-out-button";
 
 const meta: Meta<typeof SignOutButton> = {
-  title: 'Auth/SignOutButton',
+  title: "Auth/SignOutButton",
   component: SignOutButton,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
   argTypes: {
     callbackUrl: {
-      control: 'text',
-      description: 'URL to redirect to after sign-out',
+      control: "text",
+      description: "URL to redirect to after sign-out",
     },
     variant: {
-      control: 'select',
-      options: ['default', 'outline', 'secondary', 'ghost', 'link', 'destructive'],
-      description: 'Button variant style',
+      control: "select",
+      options: [
+        "default",
+        "outline",
+        "secondary",
+        "ghost",
+        "link",
+        "destructive",
+      ],
+      description: "Button variant style",
     },
     size: {
-      control: 'select',
-      options: ['default', 'sm', 'lg', 'icon'],
-      description: 'Button size',
+      control: "select",
+      options: ["default", "sm", "lg", "icon"],
+      description: "Button size",
     },
     className: {
-      control: 'text',
-      description: 'Additional CSS classes',
+      control: "text",
+      description: "Additional CSS classes",
     },
   },
 };
@@ -44,7 +51,7 @@ type Story = StoryObj<typeof SignOutButton>;
  */
 export const Default: Story = {
   args: {
-    callbackUrl: '/',
+    callbackUrl: "/",
   },
 };
 
@@ -53,8 +60,8 @@ export const Default: Story = {
  */
 export const Primary: Story = {
   args: {
-    variant: 'default',
-    callbackUrl: '/',
+    variant: "default",
+    callbackUrl: "/",
   },
 };
 
@@ -63,8 +70,8 @@ export const Primary: Story = {
  */
 export const Destructive: Story = {
   args: {
-    variant: 'destructive',
-    callbackUrl: '/',
+    variant: "destructive",
+    callbackUrl: "/",
   },
 };
 
@@ -73,8 +80,8 @@ export const Destructive: Story = {
  */
 export const Ghost: Story = {
   args: {
-    variant: 'ghost',
-    callbackUrl: '/',
+    variant: "ghost",
+    callbackUrl: "/",
   },
 };
 
@@ -83,8 +90,8 @@ export const Ghost: Story = {
  */
 export const Link: Story = {
   args: {
-    variant: 'link',
-    callbackUrl: '/',
+    variant: "link",
+    callbackUrl: "/",
   },
 };
 
@@ -93,8 +100,8 @@ export const Link: Story = {
  */
 export const Small: Story = {
   args: {
-    size: 'sm',
-    callbackUrl: '/',
+    size: "sm",
+    callbackUrl: "/",
   },
 };
 
@@ -103,8 +110,8 @@ export const Small: Story = {
  */
 export const Large: Story = {
   args: {
-    size: 'lg',
-    callbackUrl: '/',
+    size: "lg",
+    callbackUrl: "/",
   },
 };
 
@@ -113,7 +120,7 @@ export const Large: Story = {
  */
 export const CustomText: Story = {
   args: {
-    children: 'Log Out',
-    callbackUrl: '/',
+    children: "Log Out",
+    callbackUrl: "/",
   },
 };

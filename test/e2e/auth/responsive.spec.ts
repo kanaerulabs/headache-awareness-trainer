@@ -1,4 +1,4 @@
-import { test, expect, devices } from '@playwright/test';
+import { test, expect, devices } from "@playwright/test";
 
 /**
  * E2E Tests for Authentication Responsive Behavior
@@ -15,19 +15,19 @@ import { test, expect, devices } from '@playwright/test';
  * - No layout shifts or overlapping elements
  */
 
-test.describe('Authentication Responsive Design', () => {
-  test.describe('Mobile Viewport (iPhone SE)', () => {
+test.describe("Authentication Responsive Design", () => {
+  test.describe("Mobile Viewport (iPhone SE)", () => {
     test.use({
       viewport: { width: 375, height: 667 },
-      ...devices['iPhone SE'],
+      ...devices["iPhone SE"],
     });
 
     test.beforeEach(async ({ context }) => {
       await context.clearCookies();
     });
 
-    test('should display login page correctly on mobile', async ({ page }) => {
-      await page.goto('/login');
+    test("should display login page correctly on mobile", async ({ page }) => {
+      await page.goto("/login");
 
       // Wait for page to render
       await page.waitForTimeout(1000);
@@ -53,8 +53,8 @@ test.describe('Authentication Responsive Design', () => {
       }
     });
 
-    test('should display app branding on mobile', async ({ page }) => {
-      await page.goto('/login');
+    test("should display app branding on mobile", async ({ page }) => {
+      await page.goto("/login");
       await page.waitForTimeout(1000);
 
       // Verify header with branding
@@ -62,14 +62,18 @@ test.describe('Authentication Responsive Design', () => {
       await expect(loginHeader).toBeVisible();
 
       // App title should be visible
-      await expect(page.getByText('Headache Awareness Trainer')).toBeVisible();
+      await expect(page.getByText("Headache Awareness Trainer")).toBeVisible();
 
       // Tagline should be visible
-      await expect(page.getByText(/Learn to listen to your body/i)).toBeVisible();
+      await expect(
+        page.getByText(/Learn to listen to your body/i),
+      ).toBeVisible();
     });
 
-    test('should display full-width sign-in button on mobile', async ({ page }) => {
-      await page.goto('/login');
+    test("should display full-width sign-in button on mobile", async ({
+      page,
+    }) => {
+      await page.goto("/login");
       await page.waitForTimeout(1000);
 
       const signInButton = page.locator('[data-testid="google-signin-button"]');
@@ -77,7 +81,9 @@ test.describe('Authentication Responsive Design', () => {
 
       // Button should be full-width (or nearly full-width with padding)
       const buttonBox = await signInButton.boundingBox();
-      const formBox = await page.locator('[data-testid="login-form"]').boundingBox();
+      const formBox = await page
+        .locator('[data-testid="login-form"]')
+        .boundingBox();
 
       expect(buttonBox).not.toBeNull();
       expect(formBox).not.toBeNull();
@@ -89,8 +95,10 @@ test.describe('Authentication Responsive Design', () => {
       }
     });
 
-    test('should handle touch interaction on sign-in button', async ({ page }) => {
-      await page.goto('/login');
+    test("should handle touch interaction on sign-in button", async ({
+      page,
+    }) => {
+      await page.goto("/login");
       await page.waitForTimeout(1000);
 
       const signInButton = page.locator('[data-testid="google-signin-button"]');
@@ -103,8 +111,8 @@ test.describe('Authentication Responsive Design', () => {
       await expect(signInButton.getByText(/Signing in/i)).toBeVisible();
     });
 
-    test('should display privacy notice without overflow', async ({ page }) => {
-      await page.goto('/login');
+    test("should display privacy notice without overflow", async ({ page }) => {
+      await page.goto("/login");
       await page.waitForTimeout(1000);
 
       const privacyText = page.getByText(/By signing in, you agree/i);
@@ -119,22 +127,28 @@ test.describe('Authentication Responsive Design', () => {
       }
     });
 
-    test('should not have horizontal scroll on mobile', async ({ page }) => {
-      await page.goto('/login');
+    test("should not have horizontal scroll on mobile", async ({ page }) => {
+      await page.goto("/login");
       await page.waitForTimeout(1000);
 
       // Check if horizontal scrollbar exists
-      const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
-      const clientWidth = await page.evaluate(() => document.documentElement.clientWidth);
+      const scrollWidth = await page.evaluate(
+        () => document.documentElement.scrollWidth,
+      );
+      const clientWidth = await page.evaluate(
+        () => document.documentElement.clientWidth,
+      );
 
       // Scroll width should not exceed client width
       expect(scrollWidth).toBeLessThanOrEqual(clientWidth + 1); // +1 for rounding
     });
 
-    test.skip('should display AuthStatus correctly on mobile when authenticated', async ({ page }) => {
+    test.skip("should display AuthStatus correctly on mobile when authenticated", async ({
+      page,
+    }) => {
       // Prerequisite: User is authenticated
 
-      await page.goto('/');
+      await page.goto("/");
 
       const authStatus = page.locator('[data-testid="auth-status"]');
       await expect(authStatus).toBeVisible();
@@ -151,18 +165,18 @@ test.describe('Authentication Responsive Design', () => {
     });
   });
 
-  test.describe('Tablet Viewport (iPad)', () => {
+  test.describe("Tablet Viewport (iPad)", () => {
     test.use({
       viewport: { width: 768, height: 1024 },
-      ...devices['iPad Pro'],
+      ...devices["iPad Pro"],
     });
 
     test.beforeEach(async ({ context }) => {
       await context.clearCookies();
     });
 
-    test('should display login page correctly on tablet', async ({ page }) => {
-      await page.goto('/login');
+    test("should display login page correctly on tablet", async ({ page }) => {
+      await page.goto("/login");
       await page.waitForTimeout(1000);
 
       const loginPage = page.locator('[data-testid="login-page"]');
@@ -182,8 +196,8 @@ test.describe('Authentication Responsive Design', () => {
       }
     });
 
-    test('should display larger touch targets on tablet', async ({ page }) => {
-      await page.goto('/login');
+    test("should display larger touch targets on tablet", async ({ page }) => {
+      await page.goto("/login");
       await page.waitForTimeout(1000);
 
       const signInButton = page.locator('[data-testid="google-signin-button"]');
@@ -199,8 +213,8 @@ test.describe('Authentication Responsive Design', () => {
       }
     });
 
-    test('should handle touch tap on tablet', async ({ page }) => {
-      await page.goto('/login');
+    test("should handle touch tap on tablet", async ({ page }) => {
+      await page.goto("/login");
       await page.waitForTimeout(1000);
 
       const signInButton = page.locator('[data-testid="google-signin-button"]');
@@ -212,18 +226,22 @@ test.describe('Authentication Responsive Design', () => {
       await expect(signInButton).toBeDisabled();
     });
 
-    test('should not have horizontal scroll on tablet', async ({ page }) => {
-      await page.goto('/login');
+    test("should not have horizontal scroll on tablet", async ({ page }) => {
+      await page.goto("/login");
       await page.waitForTimeout(1000);
 
-      const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
-      const clientWidth = await page.evaluate(() => document.documentElement.clientWidth);
+      const scrollWidth = await page.evaluate(
+        () => document.documentElement.scrollWidth,
+      );
+      const clientWidth = await page.evaluate(
+        () => document.documentElement.clientWidth,
+      );
 
       expect(scrollWidth).toBeLessThanOrEqual(clientWidth + 1);
     });
   });
 
-  test.describe('Desktop Viewport', () => {
+  test.describe("Desktop Viewport", () => {
     test.use({
       viewport: { width: 1280, height: 720 },
     });
@@ -232,8 +250,10 @@ test.describe('Authentication Responsive Design', () => {
       await context.clearCookies();
     });
 
-    test('should display login page with centered form on desktop', async ({ page }) => {
-      await page.goto('/login');
+    test("should display login page with centered form on desktop", async ({
+      page,
+    }) => {
+      await page.goto("/login");
       await page.waitForTimeout(1000);
 
       const loginForm = page.locator('[data-testid="login-form"]');
@@ -257,8 +277,10 @@ test.describe('Authentication Responsive Design', () => {
       }
     });
 
-    test('should display proper spacing and layout on desktop', async ({ page }) => {
-      await page.goto('/login');
+    test("should display proper spacing and layout on desktop", async ({
+      page,
+    }) => {
+      await page.goto("/login");
       await page.waitForTimeout(1000);
 
       const loginPage = page.locator('[data-testid="login-page"]');
@@ -278,22 +300,17 @@ test.describe('Authentication Responsive Design', () => {
       });
 
       // Should have border radius (rounded corners)
-      expect(formStyles.borderRadius).not.toBe('0px');
+      expect(formStyles.borderRadius).not.toBe("0px");
 
       // Should have box shadow
-      expect(formStyles.boxShadow).not.toBe('none');
+      expect(formStyles.boxShadow).not.toBe("none");
     });
 
-    test('should display hover states on desktop', async ({ page }) => {
-      await page.goto('/login');
+    test("should display hover states on desktop", async ({ page }) => {
+      await page.goto("/login");
       await page.waitForTimeout(1000);
 
       const signInButton = page.locator('[data-testid="google-signin-button"]');
-
-      // Get initial button styles
-      const initialStyles = await signInButton.evaluate((el) => {
-        return window.getComputedStyle(el).backgroundColor;
-      });
 
       // Hover over button
       await signInButton.hover();
@@ -306,10 +323,12 @@ test.describe('Authentication Responsive Design', () => {
       await expect(signInButton).toBeVisible();
     });
 
-    test.skip('should display full AuthStatus component on desktop when authenticated', async ({ page }) => {
+    test.skip("should display full AuthStatus component on desktop when authenticated", async ({
+      page,
+    }) => {
       // Prerequisite: User is authenticated
 
-      await page.goto('/');
+      await page.goto("/");
 
       const authStatus = page.locator('[data-testid="auth-status"]');
       await expect(authStatus).toBeVisible();
@@ -324,15 +343,15 @@ test.describe('Authentication Responsive Design', () => {
     });
   });
 
-  test.describe('Viewport Transitions', () => {
+  test.describe("Viewport Transitions", () => {
     test.beforeEach(async ({ context }) => {
       await context.clearCookies();
     });
 
-    test('should handle resize from mobile to desktop', async ({ page }) => {
+    test("should handle resize from mobile to desktop", async ({ page }) => {
       // Start at mobile viewport
       await page.setViewportSize({ width: 375, height: 667 });
-      await page.goto('/login');
+      await page.goto("/login");
       await page.waitForTimeout(1000);
 
       // Verify mobile layout
@@ -353,10 +372,10 @@ test.describe('Authentication Responsive Design', () => {
       }
     });
 
-    test('should handle resize from desktop to mobile', async ({ page }) => {
+    test("should handle resize from desktop to mobile", async ({ page }) => {
       // Start at desktop viewport
       await page.setViewportSize({ width: 1280, height: 720 });
-      await page.goto('/login');
+      await page.goto("/login");
       await page.waitForTimeout(1000);
 
       // Resize to mobile
@@ -368,21 +387,25 @@ test.describe('Authentication Responsive Design', () => {
       await expect(loginForm).toBeVisible();
 
       // Should not have horizontal scroll
-      const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
-      const clientWidth = await page.evaluate(() => document.documentElement.clientWidth);
+      const scrollWidth = await page.evaluate(
+        () => document.documentElement.scrollWidth,
+      );
+      const clientWidth = await page.evaluate(
+        () => document.documentElement.clientWidth,
+      );
       expect(scrollWidth).toBeLessThanOrEqual(clientWidth + 1);
     });
   });
 
-  test.describe('Orientation Changes (Mobile)', () => {
+  test.describe("Orientation Changes (Mobile)", () => {
     test.beforeEach(async ({ context }) => {
       await context.clearCookies();
     });
 
-    test('should handle portrait to landscape on mobile', async ({ page }) => {
+    test("should handle portrait to landscape on mobile", async ({ page }) => {
       // Portrait orientation (mobile default)
       await page.setViewportSize({ width: 375, height: 667 });
-      await page.goto('/login');
+      await page.goto("/login");
       await page.waitForTimeout(1000);
 
       await expect(page.locator('[data-testid="login-page"]')).toBeVisible();
@@ -404,14 +427,14 @@ test.describe('Authentication Responsive Design', () => {
     });
   });
 
-  test.describe('Text Scaling and Accessibility', () => {
+  test.describe("Text Scaling and Accessibility", () => {
     test.beforeEach(async ({ context }) => {
       await context.clearCookies();
     });
 
-    test('should handle increased text size on mobile', async ({ page }) => {
+    test("should handle increased text size on mobile", async ({ page }) => {
       await page.setViewportSize({ width: 375, height: 667 });
-      await page.goto('/login');
+      await page.goto("/login");
       await page.waitForTimeout(1000);
 
       // Simulate text scaling (like iOS accessibility text size)
@@ -434,37 +457,52 @@ test.describe('Authentication Responsive Design', () => {
       await expect(signInButton).toBeVisible();
 
       // Should not have horizontal scroll
-      const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
-      const clientWidth = await page.evaluate(() => document.documentElement.clientWidth);
+      const scrollWidth = await page.evaluate(
+        () => document.documentElement.scrollWidth,
+      );
+      const clientWidth = await page.evaluate(
+        () => document.documentElement.clientWidth,
+      );
       expect(scrollWidth).toBeLessThanOrEqual(clientWidth + 5); // Allow small margin
     });
   });
 
-  test.describe('Layout Consistency', () => {
+  test.describe("Layout Consistency", () => {
     test.beforeEach(async ({ context }) => {
       await context.clearCookies();
     });
 
-    test('should maintain consistent layout across viewports', async ({ page }) => {
+    test("should maintain consistent layout across viewports", async ({
+      page,
+    }) => {
       const viewports = [
-        { width: 375, height: 667, name: 'Mobile' },
-        { width: 768, height: 1024, name: 'Tablet' },
-        { width: 1280, height: 720, name: 'Desktop' },
+        { width: 375, height: 667, name: "Mobile" },
+        { width: 768, height: 1024, name: "Tablet" },
+        { width: 1280, height: 720, name: "Desktop" },
       ];
 
       for (const viewport of viewports) {
-        await page.setViewportSize({ width: viewport.width, height: viewport.height });
-        await page.goto('/login');
+        await page.setViewportSize({
+          width: viewport.width,
+          height: viewport.height,
+        });
+        await page.goto("/login");
         await page.waitForTimeout(1000);
 
         // Core elements should be visible on all viewports
         await expect(page.locator('[data-testid="login-page"]')).toBeVisible();
         await expect(page.locator('[data-testid="login-form"]')).toBeVisible();
-        await expect(page.locator('[data-testid="login-header"]')).toBeVisible();
-        await expect(page.locator('[data-testid="google-signin-button"]')).toBeVisible();
+        await expect(
+          page.locator('[data-testid="login-header"]'),
+        ).toBeVisible();
+        await expect(
+          page.locator('[data-testid="google-signin-button"]'),
+        ).toBeVisible();
 
         // App title should be visible
-        await expect(page.getByText('Headache Awareness Trainer')).toBeVisible();
+        await expect(
+          page.getByText("Headache Awareness Trainer"),
+        ).toBeVisible();
       }
     });
   });

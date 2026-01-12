@@ -5,12 +5,12 @@
  * Pure presentational component with accessibility features.
  */
 
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { signIn } from 'next-auth/react';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { useState } from "react";
+import { signIn } from "next-auth/react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export interface SignInButtonProps {
   /**
@@ -28,13 +28,13 @@ export interface SignInButtonProps {
    * Button variant
    * @default 'default'
    */
-  variant?: 'default' | 'outline' | 'secondary' | 'ghost' | 'link';
+  variant?: "default" | "outline" | "secondary" | "ghost" | "link";
 
   /**
    * Button size
    * @default 'default'
    */
-  size?: 'default' | 'sm' | 'lg' | 'icon';
+  size?: "default" | "sm" | "lg" | "icon";
 
   /**
    * Custom button text
@@ -56,11 +56,11 @@ export interface SignInButtonProps {
  * ```
  */
 export function SignInButton({
-  callbackUrl = '/',
+  callbackUrl = "/",
   className,
-  variant = 'default',
-  size = 'default',
-  children = 'Sign in with Google',
+  variant = "default",
+  size = "default",
+  children = "Sign in with Google",
 }: SignInButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -68,11 +68,11 @@ export function SignInButton({
     try {
       setIsLoading(true);
       // Trigger NextAuth sign-in with Google provider
-      await signIn('google', { callbackUrl });
+      await signIn("google", { callbackUrl });
     } catch (error) {
       // Error handling is managed by NextAuth
       // It will show error page if authentication fails
-      console.error('Sign in error:', error);
+      console.error("Sign in error:", error);
     } finally {
       setIsLoading(false);
     }
@@ -86,7 +86,7 @@ export function SignInButton({
       size={size}
       className={cn(className)}
       data-testid="sign-in-button"
-      aria-label={isLoading ? 'Signing in...' : 'Sign in with Google'}
+      aria-label={isLoading ? "Signing in..." : "Sign in with Google"}
       aria-busy={isLoading}
     >
       {isLoading ? (

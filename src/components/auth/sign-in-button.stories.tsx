@@ -4,34 +4,34 @@
  * Demonstrates different states and variants of the SignInButton component.
  */
 
-import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { SignInButton } from './sign-in-button';
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import { SignInButton } from "./sign-in-button";
 
 const meta: Meta<typeof SignInButton> = {
-  title: 'Auth/SignInButton',
+  title: "Auth/SignInButton",
   component: SignInButton,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
   argTypes: {
     callbackUrl: {
-      control: 'text',
-      description: 'URL to redirect to after sign-in',
+      control: "text",
+      description: "URL to redirect to after sign-in",
     },
     variant: {
-      control: 'select',
-      options: ['default', 'outline', 'secondary', 'ghost', 'link'],
-      description: 'Button variant style',
+      control: "select",
+      options: ["default", "outline", "secondary", "ghost", "link"],
+      description: "Button variant style",
     },
     size: {
-      control: 'select',
-      options: ['default', 'sm', 'lg', 'icon'],
-      description: 'Button size',
+      control: "select",
+      options: ["default", "sm", "lg", "icon"],
+      description: "Button size",
     },
     className: {
-      control: 'text',
-      description: 'Additional CSS classes',
+      control: "text",
+      description: "Additional CSS classes",
     },
   },
 };
@@ -44,7 +44,7 @@ type Story = StoryObj<typeof SignInButton>;
  */
 export const Default: Story = {
   args: {
-    callbackUrl: '/dashboard',
+    callbackUrl: "/dashboard",
   },
 };
 
@@ -53,8 +53,8 @@ export const Default: Story = {
  */
 export const Outline: Story = {
   args: {
-    variant: 'outline',
-    callbackUrl: '/dashboard',
+    variant: "outline",
+    callbackUrl: "/dashboard",
   },
 };
 
@@ -63,8 +63,8 @@ export const Outline: Story = {
  */
 export const Secondary: Story = {
   args: {
-    variant: 'secondary',
-    callbackUrl: '/dashboard',
+    variant: "secondary",
+    callbackUrl: "/dashboard",
   },
 };
 
@@ -73,8 +73,8 @@ export const Secondary: Story = {
  */
 export const Ghost: Story = {
   args: {
-    variant: 'ghost',
-    callbackUrl: '/dashboard',
+    variant: "ghost",
+    callbackUrl: "/dashboard",
   },
 };
 
@@ -83,8 +83,8 @@ export const Ghost: Story = {
  */
 export const Link: Story = {
   args: {
-    variant: 'link',
-    callbackUrl: '/dashboard',
+    variant: "link",
+    callbackUrl: "/dashboard",
   },
 };
 
@@ -93,8 +93,8 @@ export const Link: Story = {
  */
 export const Small: Story = {
   args: {
-    size: 'sm',
-    callbackUrl: '/dashboard',
+    size: "sm",
+    callbackUrl: "/dashboard",
   },
 };
 
@@ -103,8 +103,8 @@ export const Small: Story = {
  */
 export const Large: Story = {
   args: {
-    size: 'lg',
-    callbackUrl: '/dashboard',
+    size: "lg",
+    callbackUrl: "/dashboard",
   },
 };
 
@@ -113,8 +113,8 @@ export const Large: Story = {
  */
 export const CustomText: Story = {
   args: {
-    children: 'Login with Google Account',
-    callbackUrl: '/dashboard',
+    children: "Login with Google Account",
+    callbackUrl: "/dashboard",
   },
 };
 
@@ -123,10 +123,10 @@ export const CustomText: Story = {
  */
 export const FullWidth: Story = {
   args: {
-    className: 'w-full',
-    callbackUrl: '/dashboard',
+    className: "w-full",
+    callbackUrl: "/dashboard",
   },
   parameters: {
-    layout: 'padded',
+    layout: "padded",
   },
 };

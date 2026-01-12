@@ -5,12 +5,12 @@
  * Pure presentational component with accessibility features.
  */
 
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { signOut } from 'next-auth/react';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { useState } from "react";
+import { signOut } from "next-auth/react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export interface SignOutButtonProps {
   /**
@@ -28,13 +28,19 @@ export interface SignOutButtonProps {
    * Button variant
    * @default 'outline'
    */
-  variant?: 'default' | 'outline' | 'secondary' | 'ghost' | 'link' | 'destructive';
+  variant?:
+    | "default"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "link"
+    | "destructive";
 
   /**
    * Button size
    * @default 'default'
    */
-  size?: 'default' | 'sm' | 'lg' | 'icon';
+  size?: "default" | "sm" | "lg" | "icon";
 
   /**
    * Custom button text
@@ -56,11 +62,11 @@ export interface SignOutButtonProps {
  * ```
  */
 export function SignOutButton({
-  callbackUrl = '/',
+  callbackUrl = "/",
   className,
-  variant = 'outline',
-  size = 'default',
-  children = 'Sign out',
+  variant = "outline",
+  size = "default",
+  children = "Sign out",
 }: SignOutButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -71,7 +77,7 @@ export function SignOutButton({
       await signOut({ callbackUrl });
     } catch (error) {
       // Error handling is managed by NextAuth
-      console.error('Sign out error:', error);
+      console.error("Sign out error:", error);
     } finally {
       setIsLoading(false);
     }
@@ -85,7 +91,7 @@ export function SignOutButton({
       size={size}
       className={cn(className)}
       data-testid="sign-out-button"
-      aria-label={isLoading ? 'Signing out...' : 'Sign out'}
+      aria-label={isLoading ? "Signing out..." : "Sign out"}
       aria-busy={isLoading}
     >
       {isLoading ? (
