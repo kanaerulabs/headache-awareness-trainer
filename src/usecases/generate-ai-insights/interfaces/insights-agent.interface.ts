@@ -68,6 +68,7 @@ export interface InsightsOutput {
   metadata?: {
     tokensUsed?: number;
     processingTime?: number;
+    model?: string;
   };
 }
 

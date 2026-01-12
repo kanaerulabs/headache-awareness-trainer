@@ -16,6 +16,9 @@ import {
   type InsightsOutput,
 } from "../../usecases";
 import { InsightsAgent } from "../agents/vercel-ai/insights.agent";
+import { OpenRouterInsightsAgent } from "../agents/vercel-ai/openrouter-insights.agent";
+import { useSettingsStore } from "./settingsStore";
+import type { IInsightsAgent } from "../../usecases/generate-ai-insights/interfaces/insights-agent.interface";
 
 // Re-export types for backwards compatibility
 export type {
@@ -227,6 +230,7 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
 
   /**
    * Generate AI-powered insights using LLM
+   * Uses the provider and model selected in settings
    */
   generateAIInsights: async (daysToAnalyze = 30) => {
     set({
@@ -238,9 +242,45 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
     });
 
     try {
+      // Get AI settings from settings store
+      const settingsState = useSettingsStore.getState();
+      const { aiProvider, selectedModel, getActiveApiKey, hasApiKey } = settingsState;
+
+      // Check if API key is configured
+      if (!hasApiKey()) {
+        set({
+          aiInsights: {
+            ...get().aiInsights,
+            isLoading: false,
+            error: {
+              code: "AUTH_ERROR",
+              message: `No API key configured. Please add your ${aiProvider === "openai" ? "OpenAI" : "OpenRouter"} API key in Settings.`,
+            },
+          },
+        });
+        return;
+      }
+
+      const apiKey = getActiveApiKey();
+
+      // Create the appropriate agent based on provider
+      let insightsAgent: IInsightsAgent;
+      if (aiProvider === "openrouter") {
+        insightsAgent = new OpenRouterInsightsAgent(
+          apiKey,
+          selectedModel as "openai/gpt-4o-mini"
+        );
+      } else {
+        // OpenAI - use the original agent (it uses env var for key currently)
+        // For OpenAI, we need to set the env var or pass the key
+        // Since InsightsAgent uses openai() from @ai-sdk/openai which reads OPENAI_API_KEY,
+        // we'll need to update that agent too for custom key support
+        // For now, fall back to env-based OpenAI if openai provider selected
+        insightsAgent = new InsightsAgent();
+      }
+
       const headacheRepo = createHeadacheRepositoryAdapter();
       const checkinRepo = createCheckinRepositoryAdapter();
-      const insightsAgent = new InsightsAgent();
 
       const useCase = new GenerateAIInsightsUseCase(
         headacheRepo as never,

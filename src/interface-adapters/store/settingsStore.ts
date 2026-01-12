@@ -47,6 +47,32 @@ export type IntensityScale = 5 | 10;
 export type ExportFormat = "json" | "csv";
 
 /**
+ * AI Provider Selection
+ */
+export type AIProvider = "openai" | "openrouter";
+
+/**
+ * Available models per provider
+ */
+export const AI_MODELS = {
+  openai: {
+    "gpt-4o-mini": { name: "GPT-4o Mini", description: "Fast and affordable" },
+    "gpt-4o": { name: "GPT-4o", description: "Best quality" },
+  },
+  openrouter: {
+    "openai/gpt-4o-mini": { name: "GPT-4o Mini", description: "Fast, affordable" },
+    "openai/gpt-4o": { name: "GPT-4o", description: "Best OpenAI model" },
+    "anthropic/claude-3.5-sonnet": { name: "Claude 3.5 Sonnet", description: "Best quality" },
+    "anthropic/claude-3-haiku": { name: "Claude 3 Haiku", description: "Fast and affordable" },
+    "google/gemini-2.0-flash-001": { name: "Gemini 2.0 Flash", description: "Very fast" },
+    "meta-llama/llama-3.1-8b-instruct": { name: "Llama 3.1 8B", description: "Free tier" },
+  },
+} as const;
+
+export type OpenAIModel = keyof typeof AI_MODELS.openai;
+export type OpenRouterModel = keyof typeof AI_MODELS.openrouter;
+
+/**
  * Export Data Structure
  */
 export interface ExportData {
@@ -95,7 +121,10 @@ export interface SettingsState {
   theme: Theme;
 
   // AI Settings
+  aiProvider: AIProvider;
   openaiApiKey: string;
+  openrouterApiKey: string;
+  selectedModel: string; // Model ID varies by provider
 
   // Reminder Actions
   setRemindersEnabled: (enabled: boolean) => void;
@@ -118,8 +147,13 @@ export interface SettingsState {
   applyTheme: () => void;
 
   // AI Settings Actions
+  setAiProvider: (provider: AIProvider) => void;
   setOpenaiApiKey: (key: string) => void;
-  hasOpenaiApiKey: () => boolean;
+  setOpenrouterApiKey: (key: string) => void;
+  setSelectedModel: (modelId: string) => void;
+  hasApiKey: () => boolean;
+  getActiveApiKey: () => string;
+  hasOpenaiApiKey: () => boolean; // Deprecated: use hasApiKey()
 
   // Data Management Actions
   exportData: (format: ExportFormat) => Promise<string>;
@@ -271,7 +305,10 @@ export const useSettingsStore = create<SettingsState>()(
       customHeadacheTypes: [],
       intensityScale: defaultIntensityScale,
       theme: defaultTheme,
+      aiProvider: "openrouter" as AIProvider,
       openaiApiKey: "",
+      openrouterApiKey: "",
+      selectedModel: "openai/gpt-4o-mini",
 
       /**
        * Set reminders enabled/disabled
@@ -409,6 +446,20 @@ export const useSettingsStore = create<SettingsState>()(
       },
 
       /**
+       * Set AI provider
+       */
+      setAiProvider: (provider: AIProvider) => {
+        const defaultModels: Record<AIProvider, string> = {
+          openai: "gpt-4o-mini",
+          openrouter: "openai/gpt-4o-mini",
+        };
+        set({
+          aiProvider: provider,
+          selectedModel: defaultModels[provider],
+        });
+      },
+
+      /**
        * Set OpenAI API key
        */
       setOpenaiApiKey: (key: string) => {
@@ -416,10 +467,46 @@ export const useSettingsStore = create<SettingsState>()(
       },
 
       /**
-       * Check if OpenAI API key is set
+       * Set OpenRouter API key
+       */
+      setOpenrouterApiKey: (key: string) => {
+        set({ openrouterApiKey: key.trim() });
+      },
+
+      /**
+       * Set selected model
+       */
+      setSelectedModel: (modelId: string) => {
+        set({ selectedModel: modelId });
+      },
+
+      /**
+       * Check if API key is set for current provider
+       */
+      hasApiKey: () => {
+        const { aiProvider, openaiApiKey, openrouterApiKey } = get();
+        if (aiProvider === "openai") {
+          return openaiApiKey.length > 0;
+        }
+        return openrouterApiKey.length > 0;
+      },
+
+      /**
+       * Get the active API key based on current provider
+       */
+      getActiveApiKey: () => {
+        const { aiProvider, openaiApiKey, openrouterApiKey } = get();
+        if (aiProvider === "openai") {
+          return openaiApiKey;
+        }
+        return openrouterApiKey;
+      },
+
+      /**
+       * Check if OpenAI API key is set (deprecated: use hasApiKey())
        */
       hasOpenaiApiKey: () => {
-        return get().openaiApiKey.length > 0;
+        return get().hasApiKey();
       },
 
       /**
