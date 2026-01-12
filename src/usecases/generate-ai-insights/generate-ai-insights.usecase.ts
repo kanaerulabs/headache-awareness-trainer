@@ -103,14 +103,14 @@ export class GenerateAIInsightsUseCase {
       };
     }
 
-    // Transform data for the agent
+    // Transform data for the agent - convert domain types to string DTOs
     const headacheData = headacheEntries.map((entry) => {
       const props = entry.toPlainObject();
       return {
         id: props.id,
         timestamp: props.timestamp,
-        intensity: props.intensity,
-        location: props.location ? [props.location] : undefined,
+        intensity: props.intensity as number,
+        location: props.location ? [String(props.location)] : undefined,
         triggers: props.contextTags,
         notes: props.note,
       };
@@ -121,9 +121,9 @@ export class GenerateAIInsightsUseCase {
       return {
         id: props.id,
         timestamp: props.timestamp,
-        sleepQuality: props.sleepQuality,
-        mood: props.mood,
-        bodyTension: props.bodyTension,
+        sleepQuality: String(props.sleepQuality),
+        mood: String(props.mood),
+        bodyTension: props.bodyTension.map(String),
       };
     });
 

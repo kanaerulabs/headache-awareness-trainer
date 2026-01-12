@@ -28,6 +28,9 @@ export class AgentError extends Error {
 
 /**
  * Input DTO for the insights agent
+ *
+ * Uses generic string types to avoid coupling to domain-specific types.
+ * The use case is responsible for mapping domain types to these DTOs.
  */
 export interface InsightsInput {
   data: {
@@ -42,7 +45,7 @@ export interface InsightsInput {
     checkinData: Array<{
       id: string;
       timestamp: Date;
-      sleepQuality: 'poor' | 'fair' | 'good';
+      sleepQuality: string;
       mood: string;
       bodyTension: string[];
     }>;

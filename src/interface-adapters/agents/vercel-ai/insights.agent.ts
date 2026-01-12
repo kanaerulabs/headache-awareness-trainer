@@ -42,7 +42,6 @@ export class InsightsAgent implements IInsightsAgent {
         model: this.model,
         schema: OutputSchema,
         prompt: this.buildPrompt(input),
-        maxTokens: input.options?.maxTokens ?? 1000,
         temperature: input.options?.temperature ?? 0.7,
       });
 

@@ -12,6 +12,7 @@ import {
 } from "@/components/molecules/TrendCharts";
 import { TimeOfDayAnalysis } from "@/components/molecules/TimeOfDayAnalysis";
 import { InsightCard } from "@/components/molecules/InsightCard";
+import { AIInsightsCard } from "@/components/molecules/AIInsightsCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
@@ -68,6 +69,8 @@ export default function InsightsPage() {
     getTimeOfDayAnalysis,
     personalInsights,
     generalInsights,
+    aiInsights,
+    generateAIInsights,
   } = useInsightsStore();
 
   // Store initialization functions
@@ -301,6 +304,20 @@ export default function InsightsPage() {
             selectedDate={selectedDate}
             onDateSelect={handleDateSelect}
             onMonthChange={handleMonthChange}
+          />
+        </section>
+
+        {/* AI Insights Section */}
+        <section
+          aria-labelledby="ai-insights-heading"
+          data-testid="ai-insights-section"
+        >
+          <h2 id="ai-insights-heading" className="sr-only">
+            AI-Powered Insights
+          </h2>
+          <AIInsightsCard
+            aiInsights={aiInsights}
+            onGenerate={() => generateAIInsights(timeFilter === "all" ? 365 : timeFilter)}
           />
         </section>
 
