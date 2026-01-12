@@ -24,10 +24,10 @@ export interface AboutHelpProps {
 }
 
 const HELP_LINK_KEYS = [
-  { key: "gettingStarted", url: "/help/getting-started" },
-  { key: "patterns", url: "/help/patterns" },
-  { key: "privacyHelp", url: "/help/privacy" },
-  { key: "faq", url: "/help/faq" },
+  { key: "gettingStarted", url: "/learn" },
+  { key: "patterns", url: "/learn/body-signals" },
+  { key: "privacyHelp", url: "/learn/tracking-basics" },
+  { key: "faq", url: "/learn" },
 ] as const;
 
 const ABOUT_INFO_KEYS = ["purpose", "dataStorage", "privacy"] as const;

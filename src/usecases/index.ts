@@ -47,3 +47,18 @@ export {
   type CalendarDayData,
   type Insight,
 } from "./analyze-insights.usecase";
+
+// AI Insights Use Cases
+export {
+  GenerateAIInsightsUseCase,
+  type GenerateAIInsightsInput,
+  type GenerateAIInsightsOutput,
+} from "./generate-ai-insights/generate-ai-insights.usecase";
+
+// AI Insights Agent Interface
+export {
+  type IInsightsAgent,
+  type InsightsInput,
+  type InsightsOutput,
+  AgentError,
+} from "./generate-ai-insights/interfaces/insights-agent.interface";
