@@ -1,11 +1,13 @@
 "use client";
 
-import { Sparkles, RefreshCw, AlertCircle, Lightbulb, Target } from "lucide-react";
+import Link from "next/link";
+import { Sparkles, RefreshCw, AlertCircle, Lightbulb, Target, Settings } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { AIInsightsState } from "@/interface-adapters/store/insightsStore";
+import { useSettingsStore } from "@/interface-adapters/store/settingsStore";
 
 interface AIInsightsCardProps {
   aiInsights: AIInsightsState;
@@ -25,6 +27,7 @@ export function AIInsightsCard({
   className,
 }: AIInsightsCardProps) {
   const { data, isLoading, error, lastGenerated } = aiInsights;
+  const hasApiKey = useSettingsStore((state) => state.hasOpenaiApiKey)();
 
   return (
     <Card className={cn("relative overflow-hidden", className)}>
@@ -44,7 +47,7 @@ export function AIInsightsCard({
             variant="outline"
             size="sm"
             onClick={onGenerate}
-            disabled={isLoading}
+            disabled={isLoading || !hasApiKey}
             className="gap-2"
           >
             <RefreshCw className={cn("h-4 w-4", isLoading && "animate-spin")} />
@@ -57,6 +60,28 @@ export function AIInsightsCard({
       </CardHeader>
 
       <CardContent className="space-y-4">
+        {/* Missing API Key Warning */}
+        {!hasApiKey && (
+          <div className="flex items-start gap-3 p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg">
+            <Settings className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="font-medium text-amber-800 dark:text-amber-200">
+                API key required
+              </p>
+              <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
+                Add your OpenAI API key in settings to enable AI-powered insights.
+              </p>
+              <Link
+                href="/settings#ai-settings"
+                className="inline-flex items-center gap-1 text-sm font-medium text-amber-700 dark:text-amber-300 hover:text-amber-900 dark:hover:text-amber-100 mt-2 underline underline-offset-2"
+              >
+                Go to Settings
+                <Settings className="h-3 w-3" />
+              </Link>
+            </div>
+          </div>
+        )}
+
         {/* Error State */}
         {error && (
           <div className="flex items-start gap-3 p-4 bg-destructive/10 text-destructive rounded-lg">

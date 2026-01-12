@@ -34,3 +34,5 @@ export type { AboutHelpProps } from "./AboutHelp";
 export { LanguageSwitcher } from "./LanguageSwitcher";
 
 export { InstallAppButton } from "./InstallAppButton";
+
+export { AISettings } from "./AISettings";

@@ -94,6 +94,9 @@ export interface SettingsState {
   intensityScale: IntensityScale;
   theme: Theme;
 
+  // AI Settings
+  openaiApiKey: string;
+
   // Reminder Actions
   setRemindersEnabled: (enabled: boolean) => void;
   setReminderTimes: (times: string[]) => void;
@@ -113,6 +116,10 @@ export interface SettingsState {
   setIntensityScale: (scale: IntensityScale) => void;
   setTheme: (theme: Theme) => void;
   applyTheme: () => void;
+
+  // AI Settings Actions
+  setOpenaiApiKey: (key: string) => void;
+  hasOpenaiApiKey: () => boolean;
 
   // Data Management Actions
   exportData: (format: ExportFormat) => Promise<string>;
@@ -264,6 +271,7 @@ export const useSettingsStore = create<SettingsState>()(
       customHeadacheTypes: [],
       intensityScale: defaultIntensityScale,
       theme: defaultTheme,
+      openaiApiKey: "",
 
       /**
        * Set reminders enabled/disabled
@@ -401,6 +409,20 @@ export const useSettingsStore = create<SettingsState>()(
       },
 
       /**
+       * Set OpenAI API key
+       */
+      setOpenaiApiKey: (key: string) => {
+        set({ openaiApiKey: key.trim() });
+      },
+
+      /**
+       * Check if OpenAI API key is set
+       */
+      hasOpenaiApiKey: () => {
+        return get().openaiApiKey.length > 0;
+      },
+
+      /**
        * Export all data in specified format
        */
       exportData: async (format: ExportFormat): Promise<string> => {
@@ -527,6 +549,7 @@ export const useSettingsStore = create<SettingsState>()(
 
       /**
        * Reset settings to defaults
+       * Note: Does NOT reset API key - user would need to re-enter it
        */
       resetToDefaults: () => {
         set({
@@ -537,6 +560,7 @@ export const useSettingsStore = create<SettingsState>()(
           customHeadacheTypes: [],
           intensityScale: defaultIntensityScale,
           theme: defaultTheme,
+          // Note: openaiApiKey is intentionally NOT reset
         });
         applyThemeToDocument(defaultTheme);
       },
