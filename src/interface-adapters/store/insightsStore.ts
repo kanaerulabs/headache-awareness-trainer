@@ -7,12 +7,15 @@ import {
   GetTimeOfDayAnalysisUseCase,
   GetCalendarDataUseCase,
   CheckInsightUnlocksUseCase,
+  GenerateAIInsightsUseCase,
   type CorrelationResult,
   type WeeklyTrendData,
   type TimeOfDayData,
   type CalendarDayData,
   type Insight,
+  type InsightsOutput,
 } from "../../usecases";
+import { InsightsAgent } from "../agents/vercel-ai/insights.agent";
 
 // Re-export types for backwards compatibility
 export type {
@@ -21,7 +24,18 @@ export type {
   TimeOfDayData,
   CalendarDayData,
   Insight,
+  InsightsOutput,
 };
+
+/**
+ * AI Insights State
+ */
+export interface AIInsightsState {
+  data: InsightsOutput | null;
+  isLoading: boolean;
+  error: { code: string; message: string } | null;
+  lastGenerated: Date | null;
+}
 
 /**
  * Insights Store State
@@ -47,6 +61,10 @@ export interface InsightsState {
   personalInsights: Insight[];
   generalInsights: Insight[];
   checkInsightUnlocks: () => void;
+
+  // AI Insights
+  aiInsights: AIInsightsState;
+  generateAIInsights: (daysToAnalyze?: number) => Promise<void>;
 
   // Data Refresh
   refreshInsights: () => Promise<void>;
@@ -117,6 +135,12 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
   personalInsights: initialInsights.personalInsights,
   generalInsights: initialInsights.generalInsights,
   isLoading: false,
+  aiInsights: {
+    data: null,
+    isLoading: false,
+    error: null,
+    lastGenerated: null,
+  },
 
   /**
    * Get calendar data for a date range
@@ -199,6 +223,64 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
       personalInsights: insights.personalInsights,
       generalInsights: insights.generalInsights,
     });
+  },
+
+  /**
+   * Generate AI-powered insights using LLM
+   */
+  generateAIInsights: async (daysToAnalyze = 30) => {
+    set({
+      aiInsights: {
+        ...get().aiInsights,
+        isLoading: true,
+        error: null,
+      },
+    });
+
+    try {
+      const headacheRepo = createHeadacheRepositoryAdapter();
+      const checkinRepo = createCheckinRepositoryAdapter();
+      const insightsAgent = new InsightsAgent();
+
+      const useCase = new GenerateAIInsightsUseCase(
+        headacheRepo as never,
+        checkinRepo as never,
+        insightsAgent
+      );
+
+      const result = await useCase.execute({ daysToAnalyze });
+
+      if (result.success && result.insights) {
+        set({
+          aiInsights: {
+            data: result.insights,
+            isLoading: false,
+            error: null,
+            lastGenerated: new Date(),
+          },
+        });
+      } else {
+        set({
+          aiInsights: {
+            ...get().aiInsights,
+            isLoading: false,
+            error: result.error ?? { code: "UNKNOWN", message: "Unknown error" },
+          },
+        });
+      }
+    } catch (error) {
+      console.error("Failed to generate AI insights:", error);
+      set({
+        aiInsights: {
+          ...get().aiInsights,
+          isLoading: false,
+          error: {
+            code: "UNKNOWN",
+            message: error instanceof Error ? error.message : "Unknown error",
+          },
+        },
+      });
+    }
   },
 
   /**
