@@ -1,37 +1,91 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sparkles, Eye, EyeOff, ExternalLink, Check } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useSettingsStore } from "@/interface-adapters/store/settingsStore";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  useSettingsStore,
+  AI_MODELS,
+  type AIProvider,
+} from "@/interface-adapters/store/settingsStore";
 
 /**
  * AI Settings Component
  *
- * Allows users to configure their OpenAI API key for AI-powered insights.
+ * Allows users to configure their AI provider, API key, and model selection.
+ * Supports both OpenAI and OpenRouter providers.
  */
 export function AISettings() {
-  const { openaiApiKey, setOpenaiApiKey, hasOpenaiApiKey } = useSettingsStore();
+  const {
+    aiProvider,
+    openaiApiKey,
+    openrouterApiKey,
+    selectedModel,
+    setAiProvider,
+    setOpenaiApiKey,
+    setOpenrouterApiKey,
+    setSelectedModel,
+    hasApiKey,
+  } = useSettingsStore();
+
   const [showKey, setShowKey] = useState(false);
-  const [inputValue, setInputValue] = useState(openaiApiKey);
+  const [inputValue, setInputValue] = useState("");
   const [saved, setSaved] = useState(false);
 
+  // Update input value when provider changes
+  useEffect(() => {
+    setInputValue(aiProvider === "openai" ? openaiApiKey : openrouterApiKey);
+  }, [aiProvider, openaiApiKey, openrouterApiKey]);
+
   const handleSave = () => {
-    setOpenaiApiKey(inputValue);
+    if (aiProvider === "openai") {
+      setOpenaiApiKey(inputValue);
+    } else {
+      setOpenrouterApiKey(inputValue);
+    }
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   };
 
   const handleClear = () => {
     setInputValue("");
-    setOpenaiApiKey("");
+    if (aiProvider === "openai") {
+      setOpenaiApiKey("");
+    } else {
+      setOpenrouterApiKey("");
+    }
   };
 
+  const currentApiKey = aiProvider === "openai" ? openaiApiKey : openrouterApiKey;
+  const models = AI_MODELS[aiProvider];
+
   const isValidKeyFormat = (key: string) => {
+    if (aiProvider === "openai") {
+      return key.startsWith("sk-") && key.length > 20;
+    }
+    // OpenRouter keys also start with sk-
     return key.startsWith("sk-") && key.length > 20;
+  };
+
+  const getKeyHelpUrl = () => {
+    if (aiProvider === "openai") {
+      return "https://platform.openai.com/api-keys";
+    }
+    return "https://openrouter.ai/keys";
+  };
+
+  const getProviderName = () => {
+    return aiProvider === "openai" ? "OpenAI" : "OpenRouter";
   };
 
   return (
@@ -45,37 +99,97 @@ export function AISettings() {
           </Badge>
         </div>
         <p className="text-sm text-muted-foreground mt-1">
-          Enable AI-powered pattern analysis by adding your OpenAI API key
+          Enable AI-powered pattern analysis with your preferred provider
         </p>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-6">
+        {/* Provider Selection */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium">AI Provider</label>
+          <Select
+            value={aiProvider}
+            onValueChange={(value: AIProvider) => setAiProvider(value)}
+          >
+            <SelectTrigger data-testid="ai-provider-select">
+              <SelectValue placeholder="Select provider" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="openrouter">
+                <div className="flex flex-col">
+                  <span>OpenRouter</span>
+                  <span className="text-xs text-muted-foreground">
+                    Multiple models, hard spending limits
+                  </span>
+                </div>
+              </SelectItem>
+              <SelectItem value="openai">
+                <div className="flex flex-col">
+                  <span>OpenAI</span>
+                  <span className="text-xs text-muted-foreground">
+                    Direct API access
+                  </span>
+                </div>
+              </SelectItem>
+            </SelectContent>
+          </Select>
+          {aiProvider === "openrouter" && (
+            <p className="text-xs text-green-600 dark:text-green-400">
+              Recommended: Set hard spending limits in your OpenRouter dashboard
+            </p>
+          )}
+        </div>
+
+        {/* Model Selection */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Model</label>
+          <Select value={selectedModel} onValueChange={setSelectedModel}>
+            <SelectTrigger data-testid="ai-model-select">
+              <SelectValue placeholder="Select model" />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.entries(models).map(([id, info]) => (
+                <SelectItem key={id} value={id}>
+                  <div className="flex flex-col">
+                    <span>{info.name}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {info.description}
+                    </span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
         {/* Status Indicator */}
         <div className="flex items-center gap-2">
           <div
             className={`w-2 h-2 rounded-full ${
-              hasOpenaiApiKey() ? "bg-green-500" : "bg-gray-300"
+              hasApiKey() ? "bg-green-500" : "bg-gray-300"
             }`}
           />
           <span className="text-sm text-muted-foreground">
-            {hasOpenaiApiKey() ? "API key configured" : "No API key set"}
+            {hasApiKey()
+              ? `${getProviderName()} API key configured`
+              : `No ${getProviderName()} API key set`}
           </span>
         </div>
 
         {/* API Key Input */}
         <div className="space-y-2">
-          <label htmlFor="openai-api-key" className="text-sm font-medium">
-            OpenAI API Key
+          <label htmlFor="api-key" className="text-sm font-medium">
+            {getProviderName()} API Key
           </label>
           <div className="flex gap-2">
             <div className="relative flex-1">
               <Input
-                id="openai-api-key"
+                id="api-key"
                 type={showKey ? "text" : "password"}
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder="sk-..."
                 className="pr-10 font-mono text-sm"
-                data-testid="openai-api-key-input"
+                data-testid="api-key-input"
               />
               <button
                 type="button"
@@ -92,7 +206,7 @@ export function AISettings() {
             </div>
             <Button
               onClick={handleSave}
-              disabled={!inputValue || inputValue === openaiApiKey}
+              disabled={!inputValue || inputValue === currentApiKey}
               className="gap-2"
               data-testid="save-api-key-button"
             >
@@ -114,7 +228,7 @@ export function AISettings() {
         </div>
 
         {/* Clear Button */}
-        {hasOpenaiApiKey() && (
+        {hasApiKey() && (
           <Button
             variant="outline"
             size="sm"
@@ -128,12 +242,12 @@ export function AISettings() {
         {/* Help Link */}
         <div className="pt-2 border-t">
           <a
-            href="https://platform.openai.com/api-keys"
+            href={getKeyHelpUrl()}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 text-sm text-purple-600 dark:text-purple-400 hover:underline"
           >
-            Get an API key from OpenAI
+            Get an API key from {getProviderName()}
             <ExternalLink className="h-3 w-3" />
           </a>
           <p className="text-xs text-muted-foreground mt-1">

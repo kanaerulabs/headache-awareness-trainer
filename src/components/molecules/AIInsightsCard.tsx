@@ -27,7 +27,8 @@ export function AIInsightsCard({
   className,
 }: AIInsightsCardProps) {
   const { data, isLoading, error, lastGenerated } = aiInsights;
-  const hasApiKey = useSettingsStore((state) => state.hasOpenaiApiKey)();
+  const hasApiKey = useSettingsStore((state) => state.hasApiKey)();
+  const aiProvider = useSettingsStore((state) => state.aiProvider);
 
   return (
     <Card className={cn("relative overflow-hidden", className)}>
@@ -69,7 +70,7 @@ export function AIInsightsCard({
                 API key required
               </p>
               <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
-                Add your OpenAI API key in settings to enable AI-powered insights.
+                Add your {aiProvider === "openai" ? "OpenAI" : "OpenRouter"} API key in settings to enable AI-powered insights.
               </p>
               <Link
                 href="/settings#ai-settings"
