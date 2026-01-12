@@ -33,3 +33,14 @@ export {
   type StreakData,
   type DailyActivity,
 } from "./streak/streak.entity";
+
+// Auth Domain
+export {
+  User,
+  UserValidationError,
+  type UserProps,
+  Session,
+  SessionValidationError,
+  type SessionProps,
+  type IAuthRepository,
+} from "./auth";
