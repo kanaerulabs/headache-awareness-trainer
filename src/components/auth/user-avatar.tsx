@@ -5,12 +5,12 @@
  * Pure presentational component with accessibility features.
  */
 
-'use client';
+"use client";
 
-import { User } from '@/domains/auth/entities/user.entity';
-import { cn } from '@/lib/utils';
-import Image from 'next/image';
-import { useState } from 'react';
+import { User } from "@/domains/auth/entities/user.entity";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
+import { useState } from "react";
 
 export interface UserAvatarProps {
   /**
@@ -22,7 +22,7 @@ export interface UserAvatarProps {
    * Avatar size
    * @default 'md'
    */
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
 
   /**
    * Additional CSS classes to apply to the avatar
@@ -40,9 +40,9 @@ export interface UserAvatarProps {
  * Size mapping for avatar dimensions
  */
 const sizeClasses = {
-  sm: 'h-8 w-8 text-xs',
-  md: 'h-10 w-10 text-sm',
-  lg: 'h-12 w-12 text-base',
+  sm: "h-8 w-8 text-xs",
+  md: "h-10 w-10 text-sm",
+  lg: "h-12 w-12 text-base",
 };
 
 /**
@@ -59,7 +59,7 @@ const sizeClasses = {
  */
 export function UserAvatar({
   user,
-  size = 'md',
+  size = "md",
   className,
   showBorder = false,
 }: UserAvatarProps) {
@@ -74,10 +74,10 @@ export function UserAvatar({
   return (
     <div
       className={cn(
-        'relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted',
+        "relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted",
         sizeClasses[size],
-        showBorder && 'ring-2 ring-border ring-offset-2 ring-offset-background',
-        className
+        showBorder && "ring-2 ring-border ring-offset-2 ring-offset-background",
+        className,
       )}
       data-testid="user-avatar"
       aria-label={`${user.getDisplayName()}'s avatar`}
@@ -89,9 +89,7 @@ export function UserAvatar({
           fill
           className="object-cover"
           onError={() => setImageError(true)}
-          sizes={
-            size === 'sm' ? '32px' : size === 'md' ? '40px' : '48px'
-          }
+          sizes={size === "sm" ? "32px" : size === "md" ? "40px" : "48px"}
           priority={false}
         />
       ) : (

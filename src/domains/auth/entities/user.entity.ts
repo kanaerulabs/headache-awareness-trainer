@@ -105,10 +105,7 @@ export class User {
       throw new ValidationError("Name is required", "name");
     }
     if (props.name.length > 100) {
-      throw new ValidationError(
-        "Name cannot exceed 100 characters",
-        "name",
-      );
+      throw new ValidationError("Name cannot exceed 100 characters", "name");
     }
 
     // Email verified date validation (if provided)

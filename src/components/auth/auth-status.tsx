@@ -5,13 +5,13 @@
  * Composable component using auth store hooks.
  */
 
-'use client';
+"use client";
 
-import { useUser, useIsAuthenticated } from '@/stores/auth';
-import { UserAvatar } from './user-avatar';
-import { SignInButton } from './sign-in-button';
-import { SignOutButton } from './sign-out-button';
-import { cn } from '@/lib/utils';
+import { useUser, useIsAuthenticated } from "@/stores/auth";
+import { UserAvatar } from "./user-avatar";
+import { SignInButton } from "./sign-in-button";
+import { SignOutButton } from "./sign-out-button";
+import { cn } from "@/lib/utils";
 
 export interface AuthStatusProps {
   /**
@@ -23,7 +23,7 @@ export interface AuthStatusProps {
    * Whether to show the full status or compact view
    * @default 'full'
    */
-  variant?: 'full' | 'compact';
+  variant?: "full" | "compact";
 
   /**
    * Whether to show sign-out button when authenticated
@@ -57,7 +57,7 @@ export interface AuthStatusProps {
  */
 export function AuthStatus({
   className,
-  variant = 'full',
+  variant = "full",
   showSignOut = true,
   callbackUrl,
 }: AuthStatusProps) {
@@ -69,27 +69,30 @@ export function AuthStatus({
     return (
       <div
         className={cn(
-          'flex items-center gap-3',
-          variant === 'compact' ? 'justify-center' : 'justify-between',
-          className
+          "flex items-center gap-3",
+          variant === "compact" ? "justify-center" : "justify-between",
+          className,
         )}
         data-testid="auth-status"
       >
-        {variant === 'full' && (
+        {variant === "full" && (
           <div className="text-sm text-muted-foreground">
             <p>Not signed in</p>
           </div>
         )}
-        <SignInButton callbackUrl={callbackUrl} size={variant === 'compact' ? 'sm' : 'default'} />
+        <SignInButton
+          callbackUrl={callbackUrl}
+          size={variant === "compact" ? "sm" : "default"}
+        />
       </div>
     );
   }
 
   // Authenticated - show user info
-  if (variant === 'compact') {
+  if (variant === "compact") {
     return (
       <div
-        className={cn('flex items-center gap-2', className)}
+        className={cn("flex items-center gap-2", className)}
         data-testid="auth-status"
       >
         <UserAvatar user={user} size="sm" />
@@ -103,7 +106,7 @@ export function AuthStatus({
   // Full variant
   return (
     <div
-      className={cn('flex items-center justify-between gap-4', className)}
+      className={cn("flex items-center justify-between gap-4", className)}
       data-testid="auth-status"
     >
       <div className="flex items-center gap-3">

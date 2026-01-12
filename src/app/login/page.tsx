@@ -6,10 +6,12 @@ import { LoginForm } from "@/components/organisms/LoginForm";
  */
 export const metadata: Metadata = {
   title: "Sign In | Headache Awareness Trainer",
-  description: "Sign in to Headache Awareness Trainer with your Google account to track and manage your headaches.",
+  description:
+    "Sign in to Headache Awareness Trainer with your Google account to track and manage your headaches.",
   openGraph: {
     title: "Sign In | Headache Awareness Trainer",
-    description: "Sign in to Headache Awareness Trainer with your Google account",
+    description:
+      "Sign in to Headache Awareness Trainer with your Google account",
     type: "website",
   },
 };

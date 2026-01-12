@@ -1,31 +1,23 @@
 /**
  * Next.js Middleware for route protection
- * 
+ *
  * This middleware runs before page requests and protects routes that require authentication.
  * It uses NextAuth.js session management to check if the user is authenticated.
  */
 
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-import { auth } from '@/lib/auth';
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { auth } from "@/lib/auth";
 
 /**
  * Protected routes that require authentication
  */
-const protectedRoutes = [
-  '/',
-  '/dashboard',
-  '/profile',
-  '/settings',
-];
+const protectedRoutes = ["/", "/dashboard", "/profile", "/settings"];
 
 /**
  * Public routes that don't require authentication
  */
-const publicRoutes = [
-  '/login',
-  '/api/auth',
-];
+const publicRoutes = ["/login", "/api/auth"];
 
 /**
  * Middleware function to protect routes
@@ -39,8 +31,8 @@ export default async function middleware(request: NextRequest) {
   }
 
   // Check if route requires authentication
-  const isProtectedRoute = protectedRoutes.some((route) => 
-    pathname === route || pathname.startsWith(`${route}/`)
+  const isProtectedRoute = protectedRoutes.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`),
   );
 
   if (!isProtectedRoute) {
@@ -52,8 +44,8 @@ export default async function middleware(request: NextRequest) {
 
   if (!session) {
     // Redirect to login if not authenticated
-    const loginUrl = new URL('/login', request.url);
-    loginUrl.searchParams.set('callbackUrl', pathname);
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(loginUrl);
   }
 
@@ -73,6 +65,6 @@ export const config = {
      * - favicon.ico (favicon)
      * - public files (images, fonts, etc.)
      */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

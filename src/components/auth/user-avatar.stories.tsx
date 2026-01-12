@@ -4,56 +4,56 @@
  * Demonstrates different states and variants of the UserAvatar component.
  */
 
-import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { UserAvatar } from './user-avatar';
-import { User } from '@/domains/auth/entities/user.entity';
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import { UserAvatar } from "./user-avatar";
+import { User } from "@/domains/auth/entities/user.entity";
 
 // Mock users for stories
 const userWithImage = User.create({
-  id: '1',
-  email: 'john.doe@example.com',
-  name: 'John Doe',
-  image: 'https://i.pravatar.cc/150?img=12',
+  id: "1",
+  email: "john.doe@example.com",
+  name: "John Doe",
+  image: "https://i.pravatar.cc/150?img=12",
 });
 
 const userWithoutImage = User.create({
-  id: '2',
-  email: 'jane.smith@example.com',
-  name: 'Jane Smith',
+  id: "2",
+  email: "jane.smith@example.com",
+  name: "Jane Smith",
 });
 
 const userSingleName = User.create({
-  id: '3',
-  email: 'alice@example.com',
-  name: 'Alice',
+  id: "3",
+  email: "alice@example.com",
+  name: "Alice",
 });
 
 const userLongName = User.create({
-  id: '4',
-  email: 'bob.johnson.williams@example.com',
-  name: 'Bob Johnson Williams',
+  id: "4",
+  email: "bob.johnson.williams@example.com",
+  name: "Bob Johnson Williams",
 });
 
 const meta: Meta<typeof UserAvatar> = {
-  title: 'Auth/UserAvatar',
+  title: "Auth/UserAvatar",
   component: UserAvatar,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
   argTypes: {
     size: {
-      control: 'select',
-      options: ['sm', 'md', 'lg'],
-      description: 'Avatar size',
+      control: "select",
+      options: ["sm", "md", "lg"],
+      description: "Avatar size",
     },
     showBorder: {
-      control: 'boolean',
-      description: 'Show border around avatar',
+      control: "boolean",
+      description: "Show border around avatar",
     },
     className: {
-      control: 'text',
-      description: 'Additional CSS classes',
+      control: "text",
+      description: "Additional CSS classes",
     },
   },
 };
@@ -67,7 +67,7 @@ type Story = StoryObj<typeof UserAvatar>;
 export const WithImage: Story = {
   args: {
     user: userWithImage,
-    size: 'md',
+    size: "md",
   },
 };
 
@@ -77,7 +77,7 @@ export const WithImage: Story = {
 export const WithInitials: Story = {
   args: {
     user: userWithoutImage,
-    size: 'md',
+    size: "md",
   },
 };
 
@@ -87,7 +87,7 @@ export const WithInitials: Story = {
 export const SingleName: Story = {
   args: {
     user: userSingleName,
-    size: 'md',
+    size: "md",
   },
 };
 
@@ -97,7 +97,7 @@ export const SingleName: Story = {
 export const LongName: Story = {
   args: {
     user: userLongName,
-    size: 'md',
+    size: "md",
   },
 };
 
@@ -107,7 +107,7 @@ export const LongName: Story = {
 export const Small: Story = {
   args: {
     user: userWithImage,
-    size: 'sm',
+    size: "sm",
   },
 };
 
@@ -117,7 +117,7 @@ export const Small: Story = {
 export const Medium: Story = {
   args: {
     user: userWithImage,
-    size: 'md',
+    size: "md",
   },
 };
 
@@ -127,7 +127,7 @@ export const Medium: Story = {
 export const Large: Story = {
   args: {
     user: userWithImage,
-    size: 'lg',
+    size: "lg",
   },
 };
 
@@ -137,7 +137,7 @@ export const Large: Story = {
 export const WithBorder: Story = {
   args: {
     user: userWithImage,
-    size: 'md',
+    size: "md",
     showBorder: true,
   },
 };
@@ -148,7 +148,7 @@ export const WithBorder: Story = {
 export const InitialsWithBorder: Story = {
   args: {
     user: userWithoutImage,
-    size: 'md',
+    size: "md",
     showBorder: true,
   },
 };
