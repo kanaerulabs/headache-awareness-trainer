@@ -266,10 +266,7 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
       // Create the appropriate agent based on provider
       let insightsAgent: IInsightsAgent;
       if (aiProvider === "openrouter") {
-        insightsAgent = new OpenRouterInsightsAgent(
-          apiKey,
-          selectedModel as "openai/gpt-4o-mini"
-        );
+        insightsAgent = new OpenRouterInsightsAgent(apiKey, selectedModel);
       } else {
         // OpenAI - use the original agent (it uses env var for key currently)
         // For OpenAI, we need to set the env var or pass the key
