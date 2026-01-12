@@ -33,3 +33,17 @@ export {
   type WeeklySummary,
   type TrendDirection,
 } from "./get-dashboard-data.usecase";
+
+// Insights/Analysis Use Cases
+export {
+  CalculateCorrelationsUseCase,
+  GetWeeklyTrendsUseCase,
+  GetTimeOfDayAnalysisUseCase,
+  GetCalendarDataUseCase,
+  CheckInsightUnlocksUseCase,
+  type CorrelationResult,
+  type WeeklyTrendData,
+  type TimeOfDayData,
+  type CalendarDayData,
+  type Insight,
+} from "./analyze-insights.usecase";
