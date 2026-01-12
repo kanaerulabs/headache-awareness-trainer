@@ -449,7 +449,16 @@
     "creditsTagline": "頭痛パターンの理解をサポート",
     "copyright": "© 2025 All rights reserved",
     "version": "バージョン",
-    "help": "ヘルプとサポート"
+    "help": "ヘルプとサポート",
+    "installApp": "アプリをインストール",
+    "installAppDesc": "すばやくアクセスしてオフラインで使用",
+    "appInstalled": "アプリはすでにインストール済みです",
+    "howToInstall": "インストール方法",
+    "installNow": "今すぐインストール",
+    "iosInstructions": "iOSでインストールするには：",
+    "iosStep1": "Safariの下部にある共有ボタンをタップ",
+    "iosStep2": "下にスクロールして「ホーム画面に追加」をタップ",
+    "iosStep3": "「追加」をタップして確認"
   },
   "onboarding": {
     "welcome": "頭痛意識トレーナーへようこそ",
