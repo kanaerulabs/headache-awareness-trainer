@@ -16,47 +16,11 @@ import {
 } from "../../../usecases/generate-ai-insights/interfaces/insights-agent.interface";
 
 /**
- * Available OpenRouter models for insights
- * Models selected for good structured output support and cost-effectiveness
+ * OpenRouter model ID type
+ * OpenRouter supports 300+ models with format "provider/model-name"
+ * See https://openrouter.ai/models for full list
  */
-export const OPENROUTER_MODELS = {
-  // Claude models
-  "anthropic/claude-3.5-sonnet": {
-    name: "Claude 3.5 Sonnet",
-    description: "Best quality, higher cost",
-    costPer1kTokens: 0.003,
-  },
-  "anthropic/claude-3-haiku": {
-    name: "Claude 3 Haiku",
-    description: "Fast and affordable",
-    costPer1kTokens: 0.00025,
-  },
-  // OpenAI models
-  "openai/gpt-4o-mini": {
-    name: "GPT-4o Mini",
-    description: "Fast, affordable, good quality",
-    costPer1kTokens: 0.00015,
-  },
-  "openai/gpt-4o": {
-    name: "GPT-4o",
-    description: "Best OpenAI model",
-    costPer1kTokens: 0.005,
-  },
-  // Google models
-  "google/gemini-2.0-flash-001": {
-    name: "Gemini 2.0 Flash",
-    description: "Very fast, good for simple tasks",
-    costPer1kTokens: 0.0001,
-  },
-  // Meta models (free tier available)
-  "meta-llama/llama-3.1-8b-instruct": {
-    name: "Llama 3.1 8B",
-    description: "Free tier available, good for testing",
-    costPer1kTokens: 0,
-  },
-} as const;
-
-export type OpenRouterModelId = keyof typeof OPENROUTER_MODELS;
+export type OpenRouterModelId = string;
 
 /**
  * Zod schema for structured AI output validation
@@ -78,7 +42,7 @@ export class OpenRouterInsightsAgent implements IInsightsAgent {
   private readonly openrouter;
   private readonly modelId: OpenRouterModelId;
 
-  constructor(apiKey: string, modelId: OpenRouterModelId = "openai/gpt-4o-mini") {
+  constructor(apiKey: string, modelId: OpenRouterModelId = "deepseek/deepseek-chat") {
     this.openrouter = createOpenRouter({
       apiKey,
     });

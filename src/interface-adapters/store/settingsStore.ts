@@ -60,12 +60,20 @@ export const AI_MODELS = {
     "gpt-4o": { name: "GPT-4o", description: "Best quality" },
   },
   openrouter: {
-    "openai/gpt-4o-mini": { name: "GPT-4o Mini", description: "Fast, affordable" },
-    "openai/gpt-4o": { name: "GPT-4o", description: "Best OpenAI model" },
-    "anthropic/claude-3.5-sonnet": { name: "Claude 3.5 Sonnet", description: "Best quality" },
-    "anthropic/claude-3-haiku": { name: "Claude 3 Haiku", description: "Fast and affordable" },
-    "google/gemini-2.0-flash-001": { name: "Gemini 2.0 Flash", description: "Very fast" },
-    "meta-llama/llama-3.1-8b-instruct": { name: "Llama 3.1 8B", description: "Free tier" },
+    // Latest Anthropic models
+    "anthropic/claude-sonnet-4": { name: "Claude Sonnet 4", description: "Latest Claude, best balance" },
+    "anthropic/claude-opus-4": { name: "Claude Opus 4", description: "Most capable Claude" },
+    "anthropic/claude-3.5-sonnet": { name: "Claude 3.5 Sonnet", description: "Great quality, proven" },
+    // Latest OpenAI models
+    "openai/gpt-4.1": { name: "GPT-4.1", description: "Latest GPT model" },
+    "openai/gpt-4.1-mini": { name: "GPT-4.1 Mini", description: "Fast and affordable" },
+    "openai/o3-mini": { name: "o3-mini", description: "Reasoning model" },
+    // Latest Google models
+    "google/gemini-2.5-flash-preview": { name: "Gemini 2.5 Flash", description: "Very fast, latest" },
+    "google/gemini-2.5-pro-preview": { name: "Gemini 2.5 Pro", description: "Best Google model" },
+    // DeepSeek models (affordable/free)
+    "deepseek/deepseek-chat": { name: "DeepSeek V3", description: "Affordable, high quality" },
+    "deepseek/deepseek-r1:free": { name: "DeepSeek R1", description: "Free tier!" },
   },
 } as const;
 
@@ -308,7 +316,7 @@ export const useSettingsStore = create<SettingsState>()(
       aiProvider: "openrouter" as AIProvider,
       openaiApiKey: "",
       openrouterApiKey: "",
-      selectedModel: "openai/gpt-4o-mini",
+      selectedModel: "deepseek/deepseek-chat", // DeepSeek V3 - affordable default
 
       /**
        * Set reminders enabled/disabled
@@ -451,7 +459,7 @@ export const useSettingsStore = create<SettingsState>()(
       setAiProvider: (provider: AIProvider) => {
         const defaultModels: Record<AIProvider, string> = {
           openai: "gpt-4o-mini",
-          openrouter: "openai/gpt-4o-mini",
+          openrouter: "deepseek/deepseek-chat", // DeepSeek V3 - affordable default
         };
         set({
           aiProvider: provider,
