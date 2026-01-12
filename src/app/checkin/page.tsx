@@ -2,14 +2,14 @@
 
 import * as React from "react";
 import { useState, useEffect } from "react";
+import { useCheckIn } from "@/interface-adapters/hooks/useCheckIn";
 import {
-  useCheckInStore,
   CheckInMood,
   SleepQuality,
   BodyTensionArea,
   PhysicalFactor,
-  CheckInEntry,
-} from "@/interface-adapters/store/checkinStore";
+  CheckInProps,
+} from "@/domains/checkin/checkin.entity";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -75,8 +75,13 @@ function getGreetingKey(): string {
 }
 
 export default function CheckinPage() {
-  const { initializeDB, addCheckIn, addQuickDismiss, getCheckInsForDate, isDBReady } =
-    useCheckInStore();
+  // Use Clean Architecture hook for check-ins
+  const {
+    isReady,
+    createCheckIn,
+    quickDismiss,
+    recentCheckIns: hookRecentCheckIns,
+  } = useCheckIn();
   const t = useTranslations("checkin");
 
   // Form state
@@ -89,31 +94,27 @@ export default function CheckinPage() {
   // UI state
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [recentCheckIns, setRecentCheckIns] = useState<CheckInEntry[]>([]);
+
+  // Filter to today's check-ins
+  const [todayCheckIns, setTodayCheckIns] = useState<CheckInProps[]>([]);
   const [checkInCount, setCheckInCount] = useState(0);
 
-  // Initialize DB on mount
+  // Update today's check-ins when recent entries change
   useEffect(() => {
-    initializeDB();
-  }, [initializeDB]);
+    if (!isReady) return;
 
-  // Load recent check-ins for today (only when DB is ready)
-  useEffect(() => {
-    if (!isDBReady) return;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-    const loadRecentCheckIns = async () => {
-      try {
-        const today = new Date();
-        const checkIns = await getCheckInsForDate(today);
-        setRecentCheckIns(checkIns.slice(0, 3));
-        setCheckInCount(checkIns.length);
-      } catch (error) {
-        console.error("Failed to load recent check-ins:", error);
-      }
-    };
+    const todaysEntries = hookRecentCheckIns.filter((checkIn) => {
+      const entryDate = new Date(checkIn.timestamp);
+      entryDate.setHours(0, 0, 0, 0);
+      return entryDate.getTime() === today.getTime();
+    });
 
-    loadRecentCheckIns();
-  }, [getCheckInsForDate, showSuccess, isDBReady]);
+    setTodayCheckIns(todaysEntries.slice(0, 3));
+    setCheckInCount(todaysEntries.length);
+  }, [hookRecentCheckIns, isReady]);
 
   // Toggle body tension area
   const toggleTension = (area: BodyTensionArea) => {
@@ -133,14 +134,14 @@ export default function CheckinPage() {
 
   // Handle quick dismiss
   const handleQuickDismiss = async () => {
-    if (!isDBReady) {
+    if (!isReady) {
       alert("Please wait, initializing...");
       return;
     }
     setIsSubmitting(true);
 
     try {
-      await addQuickDismiss();
+      await quickDismiss();
       setShowSuccess(true);
 
       // Hide success message after 3 seconds
@@ -165,7 +166,7 @@ export default function CheckinPage() {
       return;
     }
 
-    if (!isDBReady) {
+    if (!isReady) {
       alert("Please wait, initializing...");
       return;
     }
@@ -173,13 +174,12 @@ export default function CheckinPage() {
     setIsSubmitting(true);
 
     try {
-      await addCheckIn({
+      await createCheckIn({
         mood,
         sleepQuality,
         bodyTension,
         physicalFactors,
         note: note.trim() || undefined,
-        isQuickDismiss: false,
       });
 
       // Reset form
@@ -409,7 +409,7 @@ export default function CheckinPage() {
         </Card>
 
         {/* Recent Check-ins */}
-        {recentCheckIns.length > 0 && (
+        {todayCheckIns.length > 0 && (
           <Card className="p-6" data-testid="recent-checkins">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
               {t("todayCheckins")}
@@ -418,7 +418,7 @@ export default function CheckinPage() {
               {t("loggedTimes", { count: checkInCount })}
             </p>
             <div className="space-y-3">
-              {recentCheckIns.map((checkIn) => {
+              {todayCheckIns.map((checkIn) => {
                 const moodData = moodOptions.find(
                   (m) => m.value === checkIn.mood,
                 );
