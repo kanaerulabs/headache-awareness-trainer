@@ -11,6 +11,57 @@
     "viewAll": "View all",
     "more": "more"
   },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Your headache awareness journey",
+    "loadingDashboard": "Loading dashboard...",
+    "intensityLabels": {
+      "1": "Very mild",
+      "2": "Mild",
+      "3": "Moderate",
+      "4": "Severe",
+      "5": "Very severe"
+    },
+    "moodLabels": {
+      "calm": "Feeling calm",
+      "ok": "Feeling okay",
+      "stressed": "Feeling stressed",
+      "anxious": "Feeling anxious",
+      "avoidant": "Feeling avoidant"
+    },
+    "quickCheckinAllGood": "Quick check-in: All good!",
+    "headache": "headache",
+    "checkin": "Check-in"
+  },
+  "streak": {
+    "startToday": "Start your streak today!",
+    "noStreakYet": "No streak yet",
+    "buildingConsistency": "Building consistency",
+    "oneWeekMilestone": "One week milestone! 🎉",
+    "twoWeekMilestone": "Two week milestone! 🔥",
+    "oneMonthMilestone": "One month milestone! 🏆",
+    "daysStreak": "{count} day streak",
+    "day": "day",
+    "days": "days",
+    "keepGoing": "Keep going!"
+  },
+  "quickActions": {
+    "logHeadache": "Log Headache",
+    "quickCheckin": "Quick Check-in",
+    "logHeadacheAriaLabel": "Log a headache episode",
+    "quickCheckinAriaLabel": "Record a wellness check-in"
+  },
+  "weeklySummary": {
+    "title": "This Week",
+    "noEntriesYet": "No entries yet this week",
+    "mondayThroughToday": "Monday through today",
+    "headache": "Headache",
+    "headaches": "Headaches",
+    "checkin": "Check-in",
+    "checkins": "Check-ins",
+    "headachesThisWeek": "{count} {count, plural, =1 {headache} other {headaches}} this week",
+    "checkinsThisWeek": "{count} {count, plural, =1 {check-in} other {check-ins}} this week"
+  },
   "nav": {
     "home": "Home",
     "checkin": "Check-in",

@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 
 export const locales = ['en', 'ja'] as const;
 export type Locale = (typeof locales)[number];
-export const defaultLocale: Locale = 'en';
+export const defaultLocale: Locale = 'ja'; // Default to Japanese for primary target audience
 
 export default getRequestConfig(async () => {
   const cookieStore = await cookies();

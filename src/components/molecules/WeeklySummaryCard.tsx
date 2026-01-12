@@ -4,6 +4,7 @@ import * as React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Brain, ClipboardCheck } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export interface WeeklySummaryCardProps {
   /**
@@ -40,11 +41,13 @@ export const WeeklySummaryCard: React.FC<WeeklySummaryCardProps> = ({
   checkinCount,
   className,
 }) => {
+  const t = useTranslations("weeklySummary");
+
   return (
     <Card className={cn("w-full", className)} data-testid="weekly-summary-card">
       <CardHeader className="pb-3">
         <CardTitle className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-          This Week
+          {t("title")}
         </CardTitle>
       </CardHeader>
       <CardContent className="pb-4">
@@ -64,7 +67,7 @@ export const WeeklySummaryCard: React.FC<WeeklySummaryCardProps> = ({
               {headacheCount}
             </span>
             <span className="text-xs text-red-600 dark:text-red-400 mt-1 font-medium">
-              {headacheCount === 1 ? "Headache" : "Headaches"}
+              {headacheCount === 1 ? t("headache") : t("headaches")}
             </span>
           </div>
 
@@ -83,7 +86,7 @@ export const WeeklySummaryCard: React.FC<WeeklySummaryCardProps> = ({
               {checkinCount}
             </span>
             <span className="text-xs text-teal-600 dark:text-teal-400 mt-1 font-medium">
-              {checkinCount === 1 ? "Check-in" : "Check-ins"}
+              {checkinCount === 1 ? t("checkin") : t("checkins")}
             </span>
           </div>
         </div>
@@ -91,8 +94,8 @@ export const WeeklySummaryCard: React.FC<WeeklySummaryCardProps> = ({
         {/* Summary text */}
         <p className="text-center text-xs text-gray-500 dark:text-gray-400 mt-3">
           {headacheCount === 0 && checkinCount === 0
-            ? "No entries yet this week"
-            : `Monday through today`}
+            ? t("noEntriesYet")
+            : t("mondayThroughToday")}
         </p>
       </CardContent>
     </Card>

@@ -4,6 +4,7 @@ import * as React from "react";
 import { Brain, ClipboardList } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 export interface QuickActionButtonsProps {
   /**
@@ -49,6 +50,8 @@ export const QuickActionButtons: React.FC<QuickActionButtonsProps> = ({
   disabled = false,
   className,
 }) => {
+  const t = useTranslations("quickActions");
+
   return (
     <div
       className={cn(
@@ -72,11 +75,11 @@ export const QuickActionButtons: React.FC<QuickActionButtonsProps> = ({
           "transition-all duration-200",
           "active:scale-95",
         )}
-        aria-label="Log a headache episode"
+        aria-label={t("logHeadacheAriaLabel")}
         data-testid="log-headache-button"
       >
         <Brain className="h-7 w-7 sm:h-8 sm:w-8" aria-hidden="true" />
-        <span>Log Headache</span>
+        <span>{t("logHeadache")}</span>
       </Button>
 
       {/* Quick Check-in - Secondary Action */}
@@ -96,11 +99,11 @@ export const QuickActionButtons: React.FC<QuickActionButtonsProps> = ({
           "transition-all duration-200",
           "active:scale-95",
         )}
-        aria-label="Record a wellness check-in"
+        aria-label={t("quickCheckinAriaLabel")}
         data-testid="check-in-button"
       >
         <ClipboardList className="h-7 w-7 sm:h-8 sm:w-8" aria-hidden="true" />
-        <span>Quick Check-in</span>
+        <span>{t("quickCheckin")}</span>
       </Button>
     </div>
   );
