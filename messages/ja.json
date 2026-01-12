@@ -464,16 +464,61 @@
       "evidenceBased": "科学的根拠に基づいた意識向上テクニック",
       "private": "プライベートで安全 - すべてのデータは端末に保存"
     },
-    "headacheType": "どのような頭痛を経験しますか？",
-    "frequency": "どのくらいの頻度で頭痛がありますか？",
-    "frequencyOptions": {
-      "rarely": "まれに（年に数回）",
-      "monthly": "月に1-3回",
-      "weekly": "週に1回以上",
-      "daily": "ほぼ毎日"
+    "headacheTypeTitle": "どのような頭痛を経験しますか？",
+    "headacheTypeDesc": "パーソナライズされた洞察を提供するのに役立ちます",
+    "headacheTypes": {
+      "tension": {
+        "label": "緊張型頭痛",
+        "description": "頭の周りの圧迫感や締め付け感、ストレスが原因のことが多い"
+      },
+      "migraine": {
+        "label": "片頭痛",
+        "description": "ズキズキする痛み、光や音に敏感になることが多い"
+      },
+      "mixed": {
+        "label": "混合型/両方",
+        "description": "緊張型頭痛と片頭痛の両方を経験する"
+      },
+      "unsure": {
+        "label": "わからない",
+        "description": "どのタイプの頭痛かわからない"
+      }
     },
-    "enableReminders": "毎日のチェックインリマインダーを受け取りますか？",
-    "reminderBenefit": "定期的なチェックインはパターンの発見に役立ちます",
+    "frequencyTitle": "どのくらいの頻度で頭痛がありますか？",
+    "frequencyDesc": "アプリをあなたのニーズに合わせるのに役立ちます",
+    "frequencyOptions": {
+      "daily": {
+        "label": "毎日",
+        "description": "毎日またはほぼ毎日頭痛がある"
+      },
+      "fewTimesWeek": {
+        "label": "週に数回",
+        "description": "週に2〜4回頭痛がある"
+      },
+      "weekly": {
+        "label": "週1回",
+        "description": "週に1回程度頭痛がある"
+      },
+      "occasional": {
+        "label": "たまに",
+        "description": "週1回未満の頭痛"
+      }
+    },
+    "reminderTitle": "リマインダーを受け取りますか？",
+    "reminderDesc": "穏やかな通知で記録習慣を身につけましょう",
+    "reminderOptions": {
+      "yesGently": {
+        "label": "はい、優しく通知してください",
+        "description": "定期的な頭痛記録をサポートする通知を受け取る"
+      },
+      "maybeLater": {
+        "label": "後で",
+        "description": "今は自分で記録しますが、後で有効にできます"
+      }
+    },
+    "quickSetup": "30秒もかかりません・設定はいつでも変更できます",
+    "back": "戻る",
+    "continue": "続ける",
     "allSet": "準備完了！",
     "startTracking": "トラッキングを開始"
   },

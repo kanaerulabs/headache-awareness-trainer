@@ -9,39 +9,20 @@ import {
   useOnboardingStore,
   type Frequency,
 } from "@/interface-adapters/store/onboardingStore";
+import { useTranslations } from "next-intl";
 
-interface FrequencyOption {
-  value: Frequency;
-  label: string;
-  description: string;
-}
-
-const frequencyOptions: FrequencyOption[] = [
-  {
-    value: "daily",
-    label: "Daily",
-    description: "I experience headaches every day or almost every day",
-  },
-  {
-    value: "few-times-week",
-    label: "Few Times a Week",
-    description: "I get headaches 2-4 times per week",
-  },
-  {
-    value: "weekly",
-    label: "Weekly",
-    description: "I experience headaches about once a week",
-  },
-  {
-    value: "occasional",
-    label: "Occasional",
-    description: "I get headaches less than once a week",
-  },
+// Map store values to translation keys
+const FREQUENCY_OPTIONS: { value: Frequency; translationKey: string }[] = [
+  { value: "daily", translationKey: "daily" },
+  { value: "few-times-week", translationKey: "fewTimesWeek" },
+  { value: "weekly", translationKey: "weekly" },
+  { value: "occasional", translationKey: "occasional" },
 ];
 
 export function FrequencyStep() {
   const { frequency, setFrequency, nextStep, previousStep } =
     useOnboardingStore();
+  const t = useTranslations("onboarding");
 
   const handleSelect = (value: Frequency) => {
     setFrequency(value);
@@ -55,11 +36,11 @@ export function FrequencyStep() {
 
   return (
     <WizardStep
-      title="How often do you experience headaches?"
-      description="This helps us tailor the app to your needs"
+      title={t("frequencyTitle")}
+      description={t("frequencyDesc")}
     >
       <div className="space-y-3" data-testid="frequency-options">
-        {frequencyOptions.map((option) => (
+        {FREQUENCY_OPTIONS.map((option) => (
           <button
             key={option.value}
             onClick={() => handleSelect(option.value)}
@@ -76,9 +57,9 @@ export function FrequencyStep() {
           >
             <div className="flex items-start justify-between gap-3">
               <div className="flex-1 space-y-1">
-                <div className="font-medium">{option.label}</div>
+                <div className="font-medium">{t(`frequencyOptions.${option.translationKey}.label`)}</div>
                 <div className="text-sm text-muted-foreground">
-                  {option.description}
+                  {t(`frequencyOptions.${option.translationKey}.description`)}
                 </div>
               </div>
               {frequency === option.value && (
@@ -102,7 +83,7 @@ export function FrequencyStep() {
           data-testid="back-button"
           type="button"
         >
-          Back
+          {t("back")}
         </Button>
         <Button
           onClick={handleContinue}
@@ -111,7 +92,7 @@ export function FrequencyStep() {
           data-testid="continue-button"
           type="button"
         >
-          Continue
+          {t("continue")}
         </Button>
       </div>
     </WizardStep>

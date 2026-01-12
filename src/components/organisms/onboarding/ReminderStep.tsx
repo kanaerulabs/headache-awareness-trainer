@@ -9,27 +9,12 @@ import {
   useOnboardingStore,
   type ReminderPreference,
 } from "@/interface-adapters/store/onboardingStore";
+import { useTranslations } from "next-intl";
 
-interface ReminderOption {
-  value: ReminderPreference;
-  icon: typeof Bell;
-  label: string;
-  description: string;
-}
-
-const reminderOptions: ReminderOption[] = [
-  {
-    value: "yes-gently",
-    icon: Bell,
-    label: "Yes, gently remind me",
-    description: "Get helpful nudges to track your headaches regularly",
-  },
-  {
-    value: "maybe-later",
-    icon: BellOff,
-    label: "Maybe later",
-    description: "I'll track on my own for now, but I can enable this later",
-  },
+// Map store values to translation keys and icons
+const REMINDER_OPTIONS: { value: ReminderPreference; translationKey: string; icon: typeof Bell }[] = [
+  { value: "yes-gently", translationKey: "yesGently", icon: Bell },
+  { value: "maybe-later", translationKey: "maybeLater", icon: BellOff },
 ];
 
 export function ReminderStep() {
@@ -39,6 +24,7 @@ export function ReminderStep() {
     previousStep,
     completeOnboarding,
   } = useOnboardingStore();
+  const t = useTranslations("onboarding");
 
   const handleSelect = (value: ReminderPreference) => {
     setReminderPreference(value);
@@ -52,11 +38,11 @@ export function ReminderStep() {
 
   return (
     <WizardStep
-      title="Would you like reminders?"
-      description="Gentle notifications can help build a tracking habit"
+      title={t("reminderTitle")}
+      description={t("reminderDesc")}
     >
       <div className="space-y-3" data-testid="reminder-options">
-        {reminderOptions.map((option) => {
+        {REMINDER_OPTIONS.map((option) => {
           const Icon = option.icon;
           return (
             <button
@@ -85,9 +71,9 @@ export function ReminderStep() {
                   <Icon className="h-5 w-5" />
                 </div>
                 <div className="flex-1 space-y-1">
-                  <div className="font-medium">{option.label}</div>
+                  <div className="font-medium">{t(`reminderOptions.${option.translationKey}.label`)}</div>
                   <div className="text-sm text-muted-foreground">
-                    {option.description}
+                    {t(`reminderOptions.${option.translationKey}.description`)}
                   </div>
                 </div>
                 {reminderPreference === option.value && (
@@ -112,7 +98,7 @@ export function ReminderStep() {
           data-testid="back-button"
           type="button"
         >
-          Back
+          {t("back")}
         </Button>
         <Button
           onClick={handleGetStarted}
@@ -121,7 +107,7 @@ export function ReminderStep() {
           data-testid="get-started-button"
           type="button"
         >
-          Get Started
+          {t("startTracking")}
         </Button>
       </div>
     </WizardStep>

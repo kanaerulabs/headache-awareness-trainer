@@ -5,14 +5,16 @@ import { Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { WizardStep } from "@/components/organisms/WizardStep";
 import { useOnboardingStore } from "@/interface-adapters/store/onboardingStore";
+import { useTranslations } from "next-intl";
 
 export function WelcomeStep() {
   const { nextStep, skipOnboarding } = useOnboardingStore();
+  const t = useTranslations("onboarding");
 
   return (
     <WizardStep
-      title="Welcome to Headache Awareness Trainer"
-      description="Learn to recognize and manage your headaches effectively"
+      title={t("welcome")}
+      description={t("welcomeDesc")}
     >
       <div
         className="flex flex-col items-center space-y-6"
@@ -29,25 +31,25 @@ export function WelcomeStep() {
 
           <div className="space-y-3 max-w-md">
             <h3 className="text-lg font-medium">
-              Take control of your headaches
+              {t("takeControl")}
             </h3>
 
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li className="flex items-start gap-2">
                 <span className="mt-0.5">✓</span>
-                <span>Track patterns and triggers with ease</span>
+                <span>{t("features.trackPatterns")}</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="mt-0.5">✓</span>
-                <span>Personalized insights based on your data</span>
+                <span>{t("features.personalizedInsights")}</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="mt-0.5">✓</span>
-                <span>Evidence-based awareness techniques</span>
+                <span>{t("features.evidenceBased")}</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="mt-0.5">✓</span>
-                <span>Private and secure - all data stays on your device</span>
+                <span>{t("features.private")}</span>
               </li>
             </ul>
           </div>
@@ -61,7 +63,7 @@ export function WelcomeStep() {
             className="w-full"
             data-testid="get-started-button"
           >
-            Get Started
+            {t("getStarted")}
           </Button>
 
           <Button
@@ -71,12 +73,12 @@ export function WelcomeStep() {
             className="w-full"
             data-testid="skip-button"
           >
-            Skip for now
+            {t("skip")}
           </Button>
         </div>
 
         <p className="text-xs text-muted-foreground text-center max-w-md">
-          Takes less than 30 seconds • You can change these settings anytime
+          {t("quickSetup")}
         </p>
       </div>
     </WizardStep>
