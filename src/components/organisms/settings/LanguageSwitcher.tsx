@@ -17,7 +17,11 @@ function setLocaleCookie(locale: string) {
 
 function getLocaleCookie(): string {
   const match = document.cookie.match(/locale=([^;]+)/);
-  return match ? match[1] : "en";
+  if (match) return match[1];
+
+  // If no cookie, detect from browser language
+  const browserLang = navigator.language?.split("-")[0]?.toLowerCase();
+  return browserLang === "ja" ? "ja" : "en";
 }
 
 export function LanguageSwitcher() {
