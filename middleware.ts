@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 const locales = ['en', 'ja'];
-const defaultLocale = 'en';
+const defaultLocale = 'ja'; // Default to Japanese for primary target audience
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;

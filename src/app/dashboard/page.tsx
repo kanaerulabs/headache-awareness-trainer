@@ -14,6 +14,10 @@ import {
   RecentEntriesList,
   type RecentEntry,
 } from "@/components/molecules/RecentEntriesList";
+import { useTranslations } from "next-intl";
+
+type IntensityKey = 1 | 2 | 3 | 4 | 5;
+type MoodKey = "calm" | "ok" | "stressed" | "anxious" | "avoidant";
 
 /**
  * Dashboard / Home Screen
@@ -42,6 +46,7 @@ import {
  */
 export default function DashboardPage() {
   const router = useRouter();
+  const t = useTranslations("dashboard");
 
   // Dashboard store state
   const {
@@ -108,18 +113,11 @@ export default function DashboardPage() {
     (combinedEntry) => {
       if (combinedEntry.type === "headache") {
         const entry = combinedEntry.entry;
-        // Generate summary from headache entry
-        const intensityLabels = {
-          1: "Very mild",
-          2: "Mild",
-          3: "Moderate",
-          4: "Severe",
-          5: "Very severe",
-        } as const;
-
-        const intensityText = intensityLabels[entry.intensity] || "Unknown";
+        // Generate summary from headache entry using translations
+        const intensityKey = entry.intensity as IntensityKey;
+        const intensityText = t(`intensityLabels.${intensityKey}`);
         const typeText = entry.headacheType ? ` ${entry.headacheType}` : "";
-        const summary = `${intensityText}${typeText} headache`;
+        const summary = `${intensityText}${typeText} ${t("headache")}`;
 
         return {
           id: entry.id,
@@ -130,18 +128,10 @@ export default function DashboardPage() {
       } else {
         // Check-in entry
         const entry = combinedEntry.entry;
-        // Generate summary from check-in entry
-        const moodLabels = {
-          calm: "Feeling calm",
-          ok: "Feeling okay",
-          stressed: "Feeling stressed",
-          anxious: "Feeling anxious",
-          avoidant: "Feeling avoidant",
-        } as const;
-
+        // Generate summary from check-in entry using translations
         const summary = entry.isQuickDismiss
-          ? "Quick check-in: All good!"
-          : moodLabels[entry.mood] || "Check-in";
+          ? t("quickCheckinAllGood")
+          : t(`moodLabels.${entry.mood as MoodKey}`);
 
         return {
           id: entry.id,
@@ -165,7 +155,7 @@ export default function DashboardPage() {
         <div className="max-w-4xl mx-auto space-y-4 sm:space-y-6">
           {/* Loading announcement for screen readers */}
           <div role="status" aria-live="polite" className="sr-only">
-            Loading dashboard...
+            {t("loadingDashboard")}
           </div>
           {/* Loading skeleton */}
           <div className="animate-pulse space-y-4">
@@ -190,10 +180,10 @@ export default function DashboardPage() {
         {/* Page Title */}
         <header className="mb-6">
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100">
-            Dashboard
+            {t("title")}
           </h1>
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-            Your headache awareness journey
+            {t("subtitle")}
           </p>
         </header>
 

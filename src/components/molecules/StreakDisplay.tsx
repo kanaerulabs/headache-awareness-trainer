@@ -4,6 +4,7 @@ import * as React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Flame } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export interface StreakDisplayProps {
   /**
@@ -40,6 +41,8 @@ export const StreakDisplay: React.FC<StreakDisplayProps> = ({
   streak,
   className,
 }) => {
+  const t = useTranslations("streak");
+
   // Determine styling based on streak milestones
   const getStreakStyle = () => {
     if (streak === 0) {
@@ -51,7 +54,7 @@ export const StreakDisplay: React.FC<StreakDisplayProps> = ({
         iconColor: "text-gray-400 dark:text-gray-600",
         numberColor: "text-gray-500 dark:text-gray-400",
         textColor: "text-gray-600 dark:text-gray-500",
-        label: "No streak yet",
+        labelKey: "noStreakYet" as const,
       };
     } else if (streak < 7) {
       return {
@@ -62,7 +65,7 @@ export const StreakDisplay: React.FC<StreakDisplayProps> = ({
         iconColor: "text-blue-500 dark:text-blue-400",
         numberColor: "text-blue-700 dark:text-blue-300",
         textColor: "text-blue-600 dark:text-blue-400",
-        label: "Building consistency",
+        labelKey: "buildingConsistency" as const,
       };
     } else if (streak < 14) {
       return {
@@ -73,7 +76,7 @@ export const StreakDisplay: React.FC<StreakDisplayProps> = ({
         iconColor: "text-green-600 dark:text-green-400",
         numberColor: "text-green-700 dark:text-green-300",
         textColor: "text-green-600 dark:text-green-400",
-        label: "One week milestone! 🎉",
+        labelKey: "oneWeekMilestone" as const,
       };
     } else if (streak < 30) {
       return {
@@ -84,7 +87,7 @@ export const StreakDisplay: React.FC<StreakDisplayProps> = ({
         iconColor: "text-orange-600 dark:text-orange-400",
         numberColor: "text-orange-700 dark:text-orange-300",
         textColor: "text-orange-600 dark:text-orange-400",
-        label: "Two week milestone! 🔥",
+        labelKey: "twoWeekMilestone" as const,
       };
     } else {
       return {
@@ -96,7 +99,7 @@ export const StreakDisplay: React.FC<StreakDisplayProps> = ({
         numberColor:
           "text-transparent bg-gradient-to-r from-red-600 to-amber-600 bg-clip-text dark:from-red-400 dark:to-amber-400",
         textColor: "text-red-600 dark:text-red-400",
-        label: "One month milestone! 🏆",
+        labelKey: "oneMonthMilestone" as const,
       };
     }
   };
@@ -143,11 +146,11 @@ export const StreakDisplay: React.FC<StreakDisplayProps> = ({
                 {streak}
               </span>
               <span className={cn("text-lg", style.textColor)}>
-                {streak === 1 ? "day" : "days"}
+                {streak === 1 ? t("day") : t("days")}
               </span>
             </div>
             <p className={cn("text-sm font-medium mt-1", style.textColor)}>
-              {style.label}
+              {t(style.labelKey)}
             </p>
           </div>
         </div>
