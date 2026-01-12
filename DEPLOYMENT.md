@@ -1,368 +1,182 @@
-# Deployment Guide
+# Google OAuth Deployment Guide - Vercel
 
-## Overview
+This guide covers deploying the headache-awareness-trainer PWA with Google OAuth authentication to Vercel.
 
-This project uses GitHub Actions for continuous integration and automatic deployment to Vercel. Every push to the main branch triggers a production deployment, while pull requests get preview deployments.
+## Pre-Deployment Checklist
 
-## CI/CD Pipeline
+✅ **Completed:**
+- NextAuth.js v5 installed and configured
+- Google OAuth credentials created
+- Domain layer implemented (User entity, Session VO, IAuthRepository)
+- State management with Zustand
+- Authentication UI components (SignInButton, SignOutButton, UserAvatar, AuthStatus)
+- Login page with OAuth flow
+- Middleware for route protection
+- SessionProvider wrapper
+- E2E tests (77 scenarios, 72 passing)
+- Lint checks passed
+- Production build successful
 
-### Workflows
+## Environment Variables for Vercel
 
-#### 1. CI Workflow (`.github/workflows/ci.yml`)
+Add these environment variables in your Vercel project settings:
 
-Runs on:
-- Every pull request to main/master
-- Every push to main/master
+### Required Variables
 
-**Checks:**
-- ESLint code quality
-- TypeScript type checking
-- Unit tests (Jest)
-- Production build verification
-
-**Jobs:**
-1. `lint-and-typecheck` - Ensures code quality and type safety
-2. `test` - Runs unit test suite
-3. `build` - Creates production build and uploads artifacts
-
-#### 2. Deploy Preview (`.github/workflows/deploy-preview.yml`)
-
-Runs on:
-- Pull request opened/synchronized/reopened
-
-**Process:**
-1. Installs dependencies with pnpm
-2. Builds the application
-3. Deploys to Vercel preview environment
-4. Comments on PR with preview URL
-
-**Features:**
-- Automatic preview URL generation
-- Comment with testing checklist
-- Independent preview per PR
-
-#### 3. Deploy Production (`.github/workflows/deploy-production.yml`)
-
-Runs on:
-- Push to main/master branch
-
-**Process:**
-1. Installs dependencies with pnpm
-2. Builds the application
-3. Deploys to Vercel production with `--prod` flag
-4. Posts deployment summary
-
-## Vercel Configuration
-
-### Setup Instructions
-
-#### 1. Create Vercel Project
-
-1. Visit https://vercel.com
-2. Sign in with GitHub
-3. Click "Add New Project"
-4. Import `kanaerulabs/jinit-labs-headache-awareness-trainer`
-5. Configure project:
-   - Framework Preset: Next.js
-   - Root Directory: ./
-   - Build Command: `pnpm run build`
-   - Install Command: `pnpm install`
-   - Output Directory: .next
-
-#### 2. Get Vercel Tokens
-
-**Vercel Token:**
 ```bash
-# Visit: https://vercel.com/account/tokens
-# Create new token with appropriate permissions
+# NextAuth.js Configuration
+NEXTAUTH_URL=https://your-production-domain.vercel.app
+NEXTAUTH_SECRET=4plcDybgEqDVNKCaI6P3NsM3WE5vCeX9lu4gt7AYahU=
+
+# Google OAuth Credentials (from Google Cloud Console)
+GOOGLE_CLIENT_ID=371363897719-7odl825v8hc83v13l5k13gnjlcs4ouuc.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=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
 ```
 
-**Project IDs:**
-```bash
-# Install Vercel CLI
-npm i -g vercel
+### Critical Steps
 
-# Link project (run in project directory)
-vercel link
+1. **Update NEXTAUTH_URL:**
+   - Replace `https://your-production-domain.vercel.app` with your actual Vercel deployment URL
+   - This should match your Google OAuth redirect URI
 
-# Get project ID and org ID
-cat .vercel/project.json
-```
+2. **Update Google Cloud Console Authorized Redirect URIs:**
+   - Go to: https://console.cloud.google.com/apis/credentials
+   - Select your OAuth 2.0 Client ID
+   - Add authorized redirect URI: `https://your-production-domain.vercel.app/api/auth/callback/google`
+   - Click "Save"
 
-#### 3. Add GitHub Secrets
+3. **Deploy to Vercel:**
 
-Go to repository settings → Secrets and variables → Actions → New repository secret
+   **Option 1: Using Vercel CLI**
+   ```bash
+   # Install Vercel CLI if not already installed
+   npm i -g vercel
 
-Add these secrets:
+   # Deploy
+   vercel --prod
+   ```
 
-| Secret Name | Description | Where to Find |
-|-------------|-------------|---------------|
-| `VERCEL_TOKEN` | Vercel API token | https://vercel.com/account/tokens |
-| `VERCEL_ORG_ID` | Organization ID | `.vercel/project.json` (orgId) |
-| `VERCEL_PROJECT_ID` | Project ID | `.vercel/project.json` (projectId) |
+   **Option 2: Using Git Integration**
+   - Push to main branch (already done)
+   - Vercel will auto-deploy if GitHub integration is set up
+   - Go to: https://vercel.com/dashboard
+   - Add environment variables in project settings
 
-### Vercel Configuration File
+## Deployment Architecture
 
-The `vercel.json` file includes:
+### Protected Routes
+The following routes require authentication:
+- `/` (Home page)
+- `/dashboard`
+- `/profile`
+- `/settings`
 
-**PWA Optimizations:**
-- Service Worker caching headers
-- Manifest file caching
-- Proper MIME types
+### Public Routes
+- `/login` (OAuth login page)
+- `/onboarding` (First-time user setup)
+- `/api/auth/*` (NextAuth.js API routes)
 
-**Build Settings:**
-- Uses pnpm for package management
-- Next.js framework detection
-- Clean URLs enabled
+### Middleware Flow
+1. User accesses protected route
+2. Middleware checks session via NextAuth
+3. If authenticated → Allow access
+4. If not authenticated → Redirect to `/login?callbackUrl=<original-url>`
+5. After successful OAuth → Redirect back to original URL
 
-## Environment Variables
+## Post-Deployment Verification
 
-### Current (MVP)
+### 1. Test OAuth Flow
+1. Visit: `https://your-production-domain.vercel.app/login`
+2. Click "Continue with Google"
+3. Complete OAuth consent
+4. Verify redirect to home page
+5. Confirm AuthStatus component shows your profile
 
-No environment variables required for MVP deployment.
+### 2. Test Route Protection
+1. Log out
+2. Try accessing: `https://your-production-domain.vercel.app/`
+3. Should redirect to `/login?callbackUrl=%2F`
+4. Log in again
+5. Should redirect back to home page
 
-### Future
+### 3. Test Session Persistence
+1. Refresh page while authenticated
+2. Should remain logged in
+3. Close and reopen browser
+4. Should remain logged in (session cookie)
 
-When adding features, set these in Vercel dashboard:
+## Security Considerations
 
-| Variable | Purpose | Environment |
-|----------|---------|-------------|
-| `NEXT_PUBLIC_ANALYTICS_ID` | Analytics tracking (opt-in) | Production, Preview |
-| `NEXT_PUBLIC_SYNC_ENDPOINT` | Cloud sync API endpoint | Production |
-| `DATABASE_URL` | PostgreSQL connection (if added) | Production only |
+### Environment Variables
+- ✅ `.env.local` is gitignored (credentials not in repo)
+- ✅ All secrets must be set in Vercel dashboard
+- ✅ Use Vercel's encrypted environment variables
 
-**To add environment variables:**
-1. Go to Vercel project settings
-2. Navigate to "Environment Variables"
-3. Add variable for appropriate environments
-4. Redeploy to apply changes
+### HTTPS Requirement
+- ⚠️ Google OAuth requires HTTPS in production
+- ✅ Vercel provides HTTPS automatically
 
-## Deployment Process
-
-### Automatic Deployments
-
-**Production:**
-```bash
-# Merge PR or push directly to main
-git checkout main
-git merge feature-branch
-git push origin main
-
-# GitHub Actions automatically:
-# 1. Runs CI checks
-# 2. Builds application
-# 3. Deploys to Vercel production
-# 4. Posts deployment summary
-```
-
-**Preview:**
-```bash
-# Create pull request
-git checkout -b feature/new-feature
-git push origin feature/new-feature
-
-# Open PR on GitHub
-
-# GitHub Actions automatically:
-# 1. Runs CI checks
-# 2. Deploys preview to Vercel
-# 3. Comments PR with preview URL
-```
-
-### Manual Deployment
-
-**Using Vercel CLI:**
-```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Deploy to preview
-vercel
-
-# Deploy to production
-vercel --prod
-```
-
-## PWA Considerations
-
-### Service Worker
-
-- Generated automatically by next-pwa
-- Location: `public/sw.js`
-- Cache-Control headers configured in vercel.json
-- Disabled in development mode
-
-### Testing PWA Features
-
-**After deployment:**
-
-1. **Installation:**
-   - Visit production URL on mobile
-   - Tap browser menu → "Add to Home Screen"
-   - Verify app icon appears
-
-2. **Offline Mode:**
-   - Open app
-   - Enable airplane mode
-   - Verify app still loads and functions
-
-3. **Caching:**
-   - Check Network tab in DevTools
-   - Verify assets served from Service Worker
-   - Test cache strategies for different resource types
-
-4. **Lighthouse:**
-   - Run Lighthouse audit in Chrome DevTools
-   - Target scores: 90+ for PWA category
-   - Address any warnings
-
-## Monitoring
-
-### Build Status
-
-Check workflow status:
-- https://github.com/kanaerulabs/jinit-labs-headache-awareness-trainer/actions
-
-### Deployment Status
-
-Check Vercel dashboard:
-- https://vercel.com/dashboard
-- View deployment logs
-- Check function logs (if using API routes)
-
-### Performance
-
-Use Vercel Analytics (optional):
-1. Enable in Vercel project settings
-2. View real user metrics
-3. Monitor Web Vitals
+### Session Management
+- ✅ NextAuth.js uses httpOnly cookies (XSS protection)
+- ✅ CSRF tokens built into NextAuth.js
+- ✅ Secure session storage (no localStorage)
 
 ## Troubleshooting
 
-### Build Failures
+### "Redirect URI mismatch" error
+- Verify `NEXTAUTH_URL` matches your Vercel deployment URL
+- Check Google Cloud Console authorized redirect URIs
+- Ensure URI includes `/api/auth/callback/google`
 
-**Issue: pnpm install fails**
-```bash
-# Solution: Clear cache and reinstall
-pnpm store prune
-pnpm install --frozen-lockfile
+### Session not persisting
+- Verify `NEXTAUTH_SECRET` is set in Vercel
+- Check browser cookies are enabled
+- Ensure domain matches (no www vs non-www mismatch)
+
+### Build failures
+- Run `pnpm build` locally first
+- Check Vercel build logs for specific errors
+- Verify all dependencies are in `package.json`
+
+## Git Commits Deployed
+
+The following commits implement Google OAuth:
+
+```
+e49a7f1 fix(auth): add SessionProvider wrapper to enable NextAuth hooks
+8445508 style: fix linting issues in OAuth implementation
+7272c0c test(e2e): add comprehensive E2E tests for OAuth authentication
+65d4b68 feat(auth): add NextAuth.js v5 configuration and API routes
+c1495d4 feat(auth): add middleware for route protection and integrate AuthStatus
+29ea8bd feat(auth): add authentication UI components and login page
+b93d827 feat(auth): add Zustand state management for authentication
+0a8062d test(auth): add unit tests for auth domain layer
+5d4eb73 feat(auth): implement Google OAuth authentication domain layer
 ```
 
-**Issue: Type errors during build**
-```bash
-# Solution: Run type check locally
-pnpm run type-check
+## Clean Architecture Implementation
 
-# Fix errors, then commit
-```
+### Domain Layer (`src/domains/auth/`)
+- `entities/user.entity.ts` - User entity with business logic
+- `value-objects/session.vo.ts` - Immutable session value object
+- `repositories/auth.repository.interface.ts` - Repository contract
 
-**Issue: Build succeeds locally but fails in CI**
-```bash
-# Check Node.js version matches
-node --version  # Should match LTS
+### State Management (`src/stores/auth/`)
+- `auth.store.ts` - Zustand store for auth state
+- `use-auth-store.ts` - 11 custom hooks for optimized access
 
-# Ensure all dependencies are in package.json
-pnpm install
-git add package.json pnpm-lock.yaml
-```
-
-### Deployment Failures
-
-**Issue: Missing Vercel secrets**
-```
-Error: Missing required secret: VERCEL_TOKEN
-```
-
-**Solution:**
-- Verify secrets are added in GitHub repository settings
-- Check secret names match exactly (case-sensitive)
-- Regenerate Vercel token if expired
-
-**Issue: Deployment succeeds but site not updating**
-
-**Solution:**
-- Clear browser cache
-- Check Vercel deployment logs for errors
-- Verify correct environment (production vs preview)
-- Force refresh: Cmd+Shift+R (Mac) or Ctrl+Shift+R (Windows)
-
-### PWA Issues
-
-**Issue: Service Worker not updating**
-
-**Solution:**
-```bash
-# In browser DevTools:
-# Application → Service Workers → Unregister
-# Then hard refresh
-```
-
-**Issue: Add to Home Screen not appearing**
-
-**Solution:**
-- Verify manifest.json is accessible
-- Check manifest in DevTools (Application → Manifest)
-- Ensure HTTPS is enabled (required for PWA)
-- Test on supported browser (Chrome, Safari, Edge)
-
-## Rollback Procedure
-
-### Using Vercel Dashboard
-
-1. Go to project deployments
-2. Find previous working deployment
-3. Click "..." → "Promote to Production"
-4. Confirm promotion
-
-### Using Git
-
-```bash
-# Revert to previous commit
-git revert HEAD
-git push origin main
-
-# Or create hotfix branch
-git checkout -b hotfix/revert-broken-feature
-git revert <commit-hash>
-git push origin hotfix/revert-broken-feature
-
-# Create PR and merge
-```
-
-## Best Practices
-
-### Before Merging to Main
-
-1. Ensure CI checks pass
-2. Review preview deployment
-3. Test PWA features on mobile
-4. Verify no console errors
-5. Check Lighthouse scores
-
-### Performance Optimization
-
-- Use Next.js Image component for images
-- Lazy load components when appropriate
-- Minimize bundle size (check build output)
-- Monitor Service Worker cache size
-
-### Security
-
-- Never commit secrets to repository
-- Use environment variables for sensitive data
-- Keep dependencies updated: `pnpm update`
-- Review Dependabot alerts
+### Presentation Layer
+- `src/components/auth/` - Reusable auth components
+- `src/app/login/` - Login page
+- `src/middleware.ts` - Route protection
+- `src/lib/auth.ts` - NextAuth configuration
 
 ## Support
 
-For deployment issues:
-1. Check GitHub Actions logs
-2. Check Vercel deployment logs
-3. Review this documentation
-4. Contact development team
+For issues or questions, contact the development team or open an issue on GitHub.
 
 ---
 
-**Last Updated:** 2026-01-09
-**Maintained By:** jinit-labs development team
-**Platform:** Vercel + GitHub Actions
+**Deployment Date:** 2026-01-12
+**NextAuth.js Version:** 5.0.0-beta.30
+**Next.js Version:** 15.5.9
