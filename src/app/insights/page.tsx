@@ -13,6 +13,7 @@ import {
 import { TimeOfDayAnalysis } from "@/components/molecules/TimeOfDayAnalysis";
 import { InsightCard } from "@/components/molecules/InsightCard";
 import { AIInsightsCard } from "@/components/molecules/AIInsightsCard";
+import { InsightsChatCard } from "@/components/molecules/InsightsChatCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
@@ -71,6 +72,9 @@ export default function InsightsPage() {
     generalInsights,
     aiInsights,
     generateAIInsights,
+    checkAndGenerateWeeklyInsight,
+    chat,
+    sendChatMessage,
   } = useInsightsStore();
 
   // Store initialization functions
@@ -102,6 +106,10 @@ export default function InsightsPage() {
 
         // Load initial data
         await loadData();
+
+        // Check if we should auto-generate weekly insight
+        // This runs silently in the background
+        await checkAndGenerateWeeklyInsight();
       } catch (error) {
         console.error("Failed to initialize insights page:", error);
       }
@@ -318,6 +326,22 @@ export default function InsightsPage() {
           <AIInsightsCard
             aiInsights={aiInsights}
             onGenerate={() => generateAIInsights(timeFilter === "all" ? 365 : timeFilter)}
+          />
+        </section>
+
+        {/* Chat Section */}
+        <section
+          aria-labelledby="chat-heading"
+          data-testid="chat-section"
+        >
+          <h2 id="chat-heading" className="sr-only">
+            Ask About Your Data
+          </h2>
+          <InsightsChatCard
+            messages={chat.messages}
+            isLoading={chat.isLoading}
+            error={chat.error}
+            onSendMessage={sendChatMessage}
           />
         </section>
 

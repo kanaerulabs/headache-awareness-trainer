@@ -111,6 +111,20 @@ export interface ExportData {
 }
 
 /**
+ * AI Rate Limiting
+ */
+export interface AIRateLimitState {
+  insightRequestCount: number;
+  insightRequestWindowStart: number; // timestamp
+  lastWeeklyInsightDate: string | null; // ISO date string (YYYY-MM-DD)
+}
+
+export const AI_RATE_LIMITS = {
+  maxInsightsPerHour: 5, // Max 5 AI insight requests per hour
+  windowMs: 60 * 60 * 1000, // 1 hour in milliseconds
+} as const;
+
+/**
  * Settings Store State
  */
 export interface SettingsState {
@@ -134,6 +148,9 @@ export interface SettingsState {
   openaiApiKey: string;
   openrouterApiKey: string;
   selectedModel: string; // Model ID varies by provider
+
+  // AI Rate Limiting
+  aiRateLimit: AIRateLimitState;
 
   // Reminder Actions
   setRemindersEnabled: (enabled: boolean) => void;
@@ -163,6 +180,14 @@ export interface SettingsState {
   hasApiKey: () => boolean;
   getActiveApiKey: () => string;
   hasOpenaiApiKey: () => boolean; // Deprecated: use hasApiKey()
+
+  // AI Rate Limiting Actions
+  canRequestInsight: () => boolean;
+  recordInsightRequest: () => void;
+  getRemainingInsights: () => number;
+  getTimeUntilReset: () => number; // milliseconds until rate limit resets
+  setLastWeeklyInsightDate: (date: string) => void;
+  shouldGenerateWeeklyInsight: () => boolean;
 
   // Data Management Actions
   exportData: (format: ExportFormat) => Promise<string>;
@@ -318,6 +343,11 @@ export const useSettingsStore = create<SettingsState>()(
       openaiApiKey: "",
       openrouterApiKey: "",
       selectedModel: "deepseek/deepseek-chat", // DeepSeek V3 - affordable default
+      aiRateLimit: {
+        insightRequestCount: 0,
+        insightRequestWindowStart: Date.now(),
+        lastWeeklyInsightDate: null,
+      },
 
       /**
        * Set reminders enabled/disabled
@@ -516,6 +546,116 @@ export const useSettingsStore = create<SettingsState>()(
        */
       hasOpenaiApiKey: () => {
         return get().hasApiKey();
+      },
+
+      /**
+       * Check if user can request an AI insight (rate limiting)
+       */
+      canRequestInsight: () => {
+        const { aiRateLimit } = get();
+        const now = Date.now();
+
+        // Check if we're in a new window
+        if (now - aiRateLimit.insightRequestWindowStart >= AI_RATE_LIMITS.windowMs) {
+          // Reset the window
+          set({
+            aiRateLimit: {
+              ...aiRateLimit,
+              insightRequestCount: 0,
+              insightRequestWindowStart: now,
+            },
+          });
+          return true;
+        }
+
+        // Check if we've exceeded the limit
+        return aiRateLimit.insightRequestCount < AI_RATE_LIMITS.maxInsightsPerHour;
+      },
+
+      /**
+       * Record an AI insight request (call after successful request)
+       */
+      recordInsightRequest: () => {
+        const { aiRateLimit } = get();
+        const now = Date.now();
+
+        // Check if we need to reset the window
+        if (now - aiRateLimit.insightRequestWindowStart >= AI_RATE_LIMITS.windowMs) {
+          set({
+            aiRateLimit: {
+              ...aiRateLimit,
+              insightRequestCount: 1,
+              insightRequestWindowStart: now,
+            },
+          });
+        } else {
+          set({
+            aiRateLimit: {
+              ...aiRateLimit,
+              insightRequestCount: aiRateLimit.insightRequestCount + 1,
+            },
+          });
+        }
+      },
+
+      /**
+       * Get remaining insight requests in current window
+       */
+      getRemainingInsights: () => {
+        const { aiRateLimit } = get();
+        const now = Date.now();
+
+        // Check if we're in a new window
+        if (now - aiRateLimit.insightRequestWindowStart >= AI_RATE_LIMITS.windowMs) {
+          return AI_RATE_LIMITS.maxInsightsPerHour;
+        }
+
+        return Math.max(0, AI_RATE_LIMITS.maxInsightsPerHour - aiRateLimit.insightRequestCount);
+      },
+
+      /**
+       * Get milliseconds until rate limit resets
+       */
+      getTimeUntilReset: () => {
+        const { aiRateLimit } = get();
+        const now = Date.now();
+        const elapsed = now - aiRateLimit.insightRequestWindowStart;
+
+        if (elapsed >= AI_RATE_LIMITS.windowMs) {
+          return 0;
+        }
+
+        return AI_RATE_LIMITS.windowMs - elapsed;
+      },
+
+      /**
+       * Set the last weekly insight generation date
+       */
+      setLastWeeklyInsightDate: (date: string) => {
+        set((state) => ({
+          aiRateLimit: {
+            ...state.aiRateLimit,
+            lastWeeklyInsightDate: date,
+          },
+        }));
+      },
+
+      /**
+       * Check if we should generate a weekly insight
+       * Returns true if it's been 7+ days since last weekly insight
+       */
+      shouldGenerateWeeklyInsight: () => {
+        const { aiRateLimit } = get();
+
+        if (!aiRateLimit.lastWeeklyInsightDate) {
+          return true; // Never generated before
+        }
+
+        const lastDate = new Date(aiRateLimit.lastWeeklyInsightDate);
+        const now = new Date();
+        const diffDays = Math.floor((now.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
+
+        return diffDays >= 7;
       },
 
       /**

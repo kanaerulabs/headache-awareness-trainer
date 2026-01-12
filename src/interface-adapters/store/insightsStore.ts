@@ -17,8 +17,10 @@ import {
 } from "../../usecases";
 import { InsightsAgent } from "../agents/vercel-ai/insights.agent";
 import { OpenRouterInsightsAgent } from "../agents/vercel-ai/openrouter-insights.agent";
+import { OpenRouterChatAgent } from "../agents/vercel-ai/openrouter-chat.agent";
 import { useSettingsStore } from "./settingsStore";
 import type { IInsightsAgent } from "../../usecases/generate-ai-insights/interfaces/insights-agent.interface";
+import type { ChatMessage } from "../../usecases/chat-insights/interfaces/chat-agent.interface";
 
 // Re-export types for backwards compatibility
 export type {
@@ -39,6 +41,18 @@ export interface AIInsightsState {
   error: { code: string; message: string } | null;
   lastGenerated: Date | null;
 }
+
+/**
+ * Chat State
+ */
+export interface ChatState {
+  messages: ChatMessage[];
+  isLoading: boolean;
+  error: { code: string; message: string } | null;
+}
+
+// Re-export ChatMessage type
+export type { ChatMessage };
 
 /**
  * Insights Store State
@@ -68,6 +82,12 @@ export interface InsightsState {
   // AI Insights
   aiInsights: AIInsightsState;
   generateAIInsights: (daysToAnalyze?: number) => Promise<void>;
+  checkAndGenerateWeeklyInsight: () => Promise<boolean>; // Returns true if generated
+
+  // Chat
+  chat: ChatState;
+  sendChatMessage: (message: string) => Promise<void>;
+  clearChat: () => void;
 
   // Data Refresh
   refreshInsights: () => Promise<void>;
@@ -143,6 +163,11 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
     isLoading: false,
     error: null,
     lastGenerated: null,
+  },
+  chat: {
+    messages: [],
+    isLoading: false,
+    error: null,
   },
 
   /**
@@ -244,7 +269,25 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
     try {
       // Get AI settings from settings store
       const settingsState = useSettingsStore.getState();
-      const { aiProvider, selectedModel, getActiveApiKey, hasApiKey } = settingsState;
+      const { aiProvider, selectedModel, getActiveApiKey, hasApiKey, canRequestInsight, recordInsightRequest, getRemainingInsights, getTimeUntilReset } = settingsState;
+
+      // Check rate limiting first
+      if (!canRequestInsight()) {
+        const remaining = getRemainingInsights();
+        const resetMs = getTimeUntilReset();
+        const resetMinutes = Math.ceil(resetMs / 60000);
+        set({
+          aiInsights: {
+            ...get().aiInsights,
+            isLoading: false,
+            error: {
+              code: "RATE_LIMITED",
+              message: `Rate limit reached (${remaining}/5 insights remaining). Try again in ${resetMinutes} minutes.`,
+            },
+          },
+        });
+        return;
+      }
 
       // Check if API key is configured
       if (!hasApiKey()) {
@@ -288,6 +331,8 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
       const result = await useCase.execute({ daysToAnalyze });
 
       if (result.success && result.insights) {
+        // Record the successful request for rate limiting
+        recordInsightRequest();
         set({
           aiInsights: {
             data: result.insights,
@@ -339,4 +384,235 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
       set({ isLoading: false });
     }
   },
+
+  /**
+   * Send a single question and get AI response (single-question mode, no follow-ups)
+   * Clears previous chat history to enforce single-question only
+   */
+  sendChatMessage: async (message: string) => {
+    // Single-question mode: clear previous messages and show only current Q&A
+    const userMessage: ChatMessage = {
+      id: `user-${Date.now()}`,
+      role: "user",
+      content: message,
+      timestamp: new Date(),
+    };
+
+    // Replace previous messages with just the current question
+    set({
+      chat: {
+        messages: [userMessage],
+        isLoading: true,
+        error: null,
+      },
+    });
+
+    try {
+      // Get AI settings
+      const settingsState = useSettingsStore.getState();
+      const { aiProvider, selectedModel, getActiveApiKey, hasApiKey, canRequestInsight, recordInsightRequest, getRemainingInsights, getTimeUntilReset } = settingsState;
+
+      // Check rate limiting first
+      if (!canRequestInsight()) {
+        const remaining = getRemainingInsights();
+        const resetMs = getTimeUntilReset();
+        const resetMinutes = Math.ceil(resetMs / 60000);
+        set({
+          chat: {
+            ...get().chat,
+            isLoading: false,
+            error: {
+              code: "RATE_LIMITED",
+              message: `Rate limit reached (${remaining}/5 requests remaining). Try again in ${resetMinutes} minutes.`,
+            },
+          },
+        });
+        return;
+      }
+
+      if (!hasApiKey()) {
+        set({
+          chat: {
+            ...get().chat,
+            isLoading: false,
+            error: {
+              code: "AUTH_ERROR",
+              message: `No API key configured. Please add your ${aiProvider === "openai" ? "OpenAI" : "OpenRouter"} API key in Settings.`,
+            },
+          },
+        });
+        return;
+      }
+
+      const apiKey = getActiveApiKey();
+
+      // Create chat agent (only OpenRouter supported for now)
+      const chatAgent = new OpenRouterChatAgent(apiKey, selectedModel);
+
+      // Get health data for context
+      const headacheRepo = createHeadacheRepositoryAdapter();
+      const checkinRepo = createCheckinRepositoryAdapter();
+
+      const [headacheEntries, checkinEntries] = await Promise.all([
+        headacheRepo.findAll(),
+        checkinRepo.findAll(),
+      ]);
+
+      // Transform for chat agent
+      const headacheData = headacheEntries.map((entry) => {
+        const props = entry.toPlainObject();
+        return {
+          id: props.id,
+          timestamp: props.timestamp,
+          intensity: props.intensity as number,
+          location: props.location ? [String(props.location)] : undefined,
+          triggers: props.contextTags,
+          notes: props.note,
+        };
+      });
+
+      const checkinData = checkinEntries.map((entry) => {
+        const props = entry.toPlainObject();
+        return {
+          id: props.id,
+          timestamp: props.timestamp,
+          sleepQuality: String(props.sleepQuality),
+          mood: String(props.mood),
+          bodyTension: props.bodyTension.map(String),
+        };
+      });
+
+      // Build summary stats
+      const summary = headacheData.length > 0 ? {
+        totalHeadaches: headacheData.length,
+        averageIntensity: headacheData.reduce((sum, h) => sum + h.intensity, 0) / headacheData.length,
+        mostCommonTriggers: getMostCommonTriggers(headacheData),
+        dateRange: {
+          start: new Date(Math.min(...headacheData.map(h => h.timestamp.getTime()))),
+          end: new Date(Math.max(...headacheData.map(h => h.timestamp.getTime()))),
+        },
+      } : undefined;
+
+      // Single-question mode: no conversation history passed
+      const response = await chatAgent.execute({
+        message,
+        conversationHistory: [], // Always empty for single-question mode
+        healthData: {
+          headacheEntries: headacheData,
+          checkinData,
+          summary,
+        },
+      });
+
+      // Record the successful request for rate limiting
+      recordInsightRequest();
+
+      // Add assistant message
+      const assistantMessage: ChatMessage = {
+        id: `assistant-${Date.now()}`,
+        role: "assistant",
+        content: response.message,
+        timestamp: new Date(),
+      };
+
+      set({
+        chat: {
+          messages: [userMessage, assistantMessage],
+          isLoading: false,
+          error: null,
+        },
+      });
+    } catch (error) {
+      console.error("Failed to send chat message:", error);
+      set({
+        chat: {
+          ...get().chat,
+          isLoading: false,
+          error: {
+            code: "UNKNOWN",
+            message: error instanceof Error ? error.message : "Failed to get response",
+          },
+        },
+      });
+    }
+  },
+
+  /**
+   * Clear chat history
+   */
+  clearChat: () => {
+    set({
+      chat: {
+        messages: [],
+        isLoading: false,
+        error: null,
+      },
+    });
+  },
+
+  /**
+   * Check if weekly insight should be generated and generate if needed
+   * This should be called on app initialization (e.g., insights page load)
+   * Returns true if a new weekly insight was generated
+   */
+  checkAndGenerateWeeklyInsight: async (): Promise<boolean> => {
+    const settingsState = useSettingsStore.getState();
+    const { shouldGenerateWeeklyInsight, setLastWeeklyInsightDate, hasApiKey, canRequestInsight } = settingsState;
+
+    // Skip if no API key configured
+    if (!hasApiKey()) {
+      return false;
+    }
+
+    // Skip if rate limited
+    if (!canRequestInsight()) {
+      return false;
+    }
+
+    // Check if it's time for weekly insight
+    if (!shouldGenerateWeeklyInsight()) {
+      return false;
+    }
+
+    // Check if we have enough data (at least 3 entries in the past week)
+    const headacheRepo = createHeadacheRepositoryAdapter();
+    const entries = await headacheRepo.findAll();
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+    const recentEntries = entries.filter((e) => {
+      const props = e.toPlainObject();
+      return props.timestamp >= oneWeekAgo;
+    });
+
+    if (recentEntries.length < 3) {
+      // Not enough data for meaningful weekly insight
+      return false;
+    }
+
+    // Generate the weekly insight (analyze last 7 days)
+    await get().generateAIInsights(7);
+
+    // Update the last weekly insight date
+    const today = new Date().toISOString().split("T")[0];
+    setLastWeeklyInsightDate(today);
+
+    return true;
+  },
 }));
+
+/**
+ * Helper to get most common triggers from headache entries
+ */
+function getMostCommonTriggers(entries: Array<{ triggers?: string[] }>): string[] {
+  const triggerCounts: Record<string, number> = {};
+  for (const entry of entries) {
+    for (const trigger of entry.triggers ?? []) {
+      triggerCounts[trigger] = (triggerCounts[trigger] ?? 0) + 1;
+    }
+  }
+  return Object.entries(triggerCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([trigger]) => trigger);
+}
