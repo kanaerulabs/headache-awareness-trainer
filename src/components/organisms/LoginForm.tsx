@@ -42,16 +42,11 @@ export function LoginForm() {
       setError(null);
 
       // Trigger NextAuth Google OAuth flow
-      const result = await signIn("google", {
+      // Note: signIn with redirect:true never returns (redirects browser)
+      await signIn("google", {
         callbackUrl: "/",
         redirect: true,
       });
-
-      // If signIn returns (redirect: false), check for errors
-      if (result?.error) {
-        setError("Failed to sign in. Please try again.");
-        setIsLoading(false);
-      }
     } catch (err) {
       console.error("Sign in error:", err);
       setError("An unexpected error occurred. Please try again.");
