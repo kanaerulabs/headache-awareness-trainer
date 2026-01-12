@@ -8,6 +8,7 @@ import {
 } from "@/components/organisms/BottomNav";
 import { InstallPrompt } from "@/components/organisms/InstallPrompt";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { SessionProvider } from "@/components/providers/SessionProvider";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 
@@ -80,18 +81,20 @@ export default async function RootLayout({
         />
       </head>
       <body className={`${inter.className} pt-safe`}>
-        <NextIntlClientProvider messages={messages}>
-          <ThemeProvider>
-            <BottomNav />
-            <MainContentWrapper>
-              <main className="min-h-screen-safe">
-                {children}
-              </main>
-              <BottomNavSpacer />
-            </MainContentWrapper>
-            <InstallPrompt />
-          </ThemeProvider>
-        </NextIntlClientProvider>
+        <SessionProvider>
+          <NextIntlClientProvider messages={messages}>
+            <ThemeProvider>
+              <BottomNav />
+              <MainContentWrapper>
+                <main className="min-h-screen-safe">
+                  {children}
+                </main>
+                <BottomNavSpacer />
+              </MainContentWrapper>
+              <InstallPrompt />
+            </ThemeProvider>
+          </NextIntlClientProvider>
+        </SessionProvider>
       </body>
     </html>
   );
