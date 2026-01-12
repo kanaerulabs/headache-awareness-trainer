@@ -63,8 +63,8 @@ export default function QuickLoggingPage() {
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-6 pb-24 max-w-2xl">
+      {/* Main Content - extra padding for submit bar + bottom nav on mobile */}
+      <main className="container mx-auto px-4 py-6 pb-40 lg:pb-24 max-w-2xl">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -234,9 +234,9 @@ export default function QuickLoggingPage() {
         </form>
       </main>
 
-      {/* Fixed Bottom Submit Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 shadow-lg z-10">
-        <div className="container mx-auto px-4 py-4 max-w-2xl">
+      {/* Fixed Bottom Submit Bar - positioned above bottom nav on mobile */}
+      <div className="fixed bottom-16 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 shadow-lg z-40 lg:bottom-0 pb-safe">
+        <div className="container mx-auto px-4 py-3 max-w-2xl">
           <Button
             type="button"
             onClick={handleSubmit}
