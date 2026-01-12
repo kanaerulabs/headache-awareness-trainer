@@ -1,10 +1,9 @@
 "use client";
 
-import { Suspense, useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef, useState, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useOnboardingStore } from "@/interface-adapters/store/onboardingStore";
-import { useHeadacheLogging } from "@/interface-adapters/hooks/useHeadacheLogging";
-import { HeadacheEntryProps } from "@/domains/headache-entry/headache-entry.entity";
+import { useLoggingStore, HeadacheEntry } from "@/interface-adapters/store/loggingStore";
 import {
   Brain,
   Lightbulb,
@@ -45,13 +44,31 @@ function HomePageContent() {
   const searchParams = useSearchParams();
   const { isCompleted, headacheType } = useOnboardingStore();
 
-  // Use Clean Architecture hook for headache logging
-  const {
-    isReady,
-    isLoading: isInitialLoading,
-    recentEntries,
-    refreshRecentEntries
-  } = useHeadacheLogging();
+  // Use logging store (same as log page)
+  const loggingStore = useLoggingStore();
+  const [recentEntries, setRecentEntries] = useState<HeadacheEntry[]>([]);
+  const [isReady, setIsReady] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+
+  // Initialize DB and load entries
+  const refreshRecentEntries = useCallback(async () => {
+    if (!loggingStore.db) return;
+    const entries = await loggingStore.getRecentEntries(5);
+    setRecentEntries(entries);
+  }, [loggingStore]);
+
+  useEffect(() => {
+    const init = async () => {
+      if (!loggingStore.db) {
+        await loggingStore.initializeDB();
+      }
+      setIsReady(true);
+      const entries = await loggingStore.getRecentEntries(5);
+      setRecentEntries(entries);
+      setIsInitialLoading(false);
+    };
+    init();
+  }, [loggingStore]);
 
   const hasHandledLoggedRef = useRef(false);
   const t = useTranslations("home");
@@ -261,7 +278,7 @@ function ActionCard({
 }
 
 interface EntryCardProps {
-  entry: HeadacheEntryProps;
+  entry: HeadacheEntry;
   tIntensity: ReturnType<typeof useTranslations<"intensity">>;
   tTime: ReturnType<typeof useTranslations<"time">>;
 }
