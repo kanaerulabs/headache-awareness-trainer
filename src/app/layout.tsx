@@ -7,6 +7,7 @@ import {
   MainContentWrapper,
 } from "@/components/organisms/BottomNav";
 import { InstallPrompt } from "@/components/organisms/InstallPrompt";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 
@@ -50,17 +51,46 @@ export default async function RootLayout({
         <link rel="apple-touch-icon" href="/icon-192x192.svg" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var stored = localStorage.getItem('settings-storage');
+                  if (stored) {
+                    var settings = JSON.parse(stored);
+                    var theme = settings.state && settings.state.theme;
+                    if (theme === 'dark') {
+                      document.documentElement.classList.add('dark');
+                    } else if (theme === 'system') {
+                      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        document.documentElement.classList.add('dark');
+                      }
+                    }
+                  } else {
+                    // Default to system preference for first-time users
+                    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                      document.documentElement.classList.add('dark');
+                    }
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
       </head>
       <body className={`${inter.className} pt-safe`}>
         <NextIntlClientProvider messages={messages}>
-          <BottomNav />
-          <MainContentWrapper>
-            <main className="min-h-screen-safe">
-              {children}
-            </main>
-            <BottomNavSpacer />
-          </MainContentWrapper>
-          <InstallPrompt />
+          <ThemeProvider>
+            <BottomNav />
+            <MainContentWrapper>
+              <main className="min-h-screen-safe">
+                {children}
+              </main>
+              <BottomNavSpacer />
+            </MainContentWrapper>
+            <InstallPrompt />
+          </ThemeProvider>
         </NextIntlClientProvider>
       </body>
     </html>
