@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import {
@@ -9,9 +10,25 @@ import {
   BarChart3,
   BookOpen,
   Settings,
+  Download,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
+
+interface BeforeInstallPromptEvent extends Event {
+  readonly platforms: string[];
+  readonly userChoice: Promise<{
+    outcome: "accepted" | "dismissed";
+    platform: string;
+  }>;
+  prompt(): Promise<void>;
+}
+
+declare global {
+  interface WindowEventMap {
+    beforeinstallprompt: BeforeInstallPromptEvent;
+  }
+}
 
 interface NavItem {
   href: string;
@@ -55,6 +72,62 @@ const navItems: NavItem[] = [
 export function BottomNav() {
   const pathname = usePathname();
   const t = useTranslations("nav");
+  const [deferredPrompt, setDeferredPrompt] =
+    useState<BeforeInstallPromptEvent | null>(null);
+  const [isStandalone, setIsStandalone] = useState(true); // Default true to hide button initially
+  const [isIOS, setIsIOS] = useState(false);
+
+  useEffect(() => {
+    // Check if already installed as standalone
+    const isInStandaloneMode =
+      window.matchMedia("(display-mode: standalone)").matches ||
+      (window.navigator as Navigator & { standalone?: boolean }).standalone ===
+        true;
+
+    setIsStandalone(isInStandaloneMode);
+
+    // Check if iOS
+    const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    setIsIOS(isIOSDevice);
+
+    // Listen for the beforeinstallprompt event (Android/Chrome)
+    const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+
+    return () => {
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt,
+      );
+    };
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (isIOS) {
+      // For iOS, redirect to settings page where instructions are shown
+      window.location.href = "/settings";
+      return;
+    }
+
+    if (!deferredPrompt) return;
+
+    await deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+
+    if (outcome === "accepted") {
+      console.log("User accepted the install prompt");
+      setIsStandalone(true);
+    }
+
+    setDeferredPrompt(null);
+  };
+
+  // Show install button if not standalone and (iOS or has deferred prompt)
+  const showInstallButton = !isStandalone && (isIOS || deferredPrompt);
 
   return (
     <>
@@ -188,8 +261,20 @@ export function BottomNav() {
           })}
         </div>
 
-        {/* Settings at bottom */}
-        <div className="px-3 py-4 border-t border-gray-100 dark:border-gray-800">
+        {/* Install & Settings at bottom */}
+        <div className="px-3 py-4 border-t border-gray-100 dark:border-gray-800 space-y-1">
+          {showInstallButton && (
+            <button
+              onClick={handleInstallClick}
+              data-testid="sidebar-nav-install"
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 bg-gradient-to-r from-purple-500 to-blue-500 text-white hover:from-purple-600 hover:to-blue-600 shadow-md"
+            >
+              <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-white/20">
+                <Download className="h-5 w-5" />
+              </span>
+              <span className="font-medium">{t("install")}</span>
+            </button>
+          )}
           <Link
             href="/settings"
             data-testid="sidebar-nav-settings"
