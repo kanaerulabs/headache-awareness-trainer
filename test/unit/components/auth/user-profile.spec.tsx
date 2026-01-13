@@ -636,7 +636,10 @@ describe("UserProfile", () => {
 
     it("handles user without image", () => {
       // Arrange
-      const user = createMockUser({ image: undefined, emailVerified: new Date() });
+      const user = createMockUser({
+        image: undefined,
+        emailVerified: new Date(),
+      });
       const session = createMockSession(user);
       useAuthStore.getState().setSession(session);
 

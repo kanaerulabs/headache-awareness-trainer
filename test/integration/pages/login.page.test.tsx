@@ -384,7 +384,9 @@ describe("LoginPage Integration", () => {
       render(<LoginPage />);
 
       expect(
-        screen.getByText("Learn to listen to your body before the headache speaks"),
+        screen.getByText(
+          "Learn to listen to your body before the headache speaks",
+        ),
       ).toBeInTheDocument();
     });
 

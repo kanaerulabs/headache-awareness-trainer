@@ -121,7 +121,14 @@ export function UserProfile({
   return (
     <div
       className={cn(
-        "flex w-full items-center justify-between gap-4 rounded-lg border border-border bg-card p-4 shadow-sm",
+        // Base layout - stack vertically on mobile
+        "flex w-full flex-col gap-3 rounded-lg border border-border bg-card p-3",
+        // Tablet+ - horizontal layout with more padding
+        "sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:p-4",
+        // Desktop - even more padding
+        "md:p-5",
+        // Visual effects
+        "shadow-sm",
         className,
       )}
       data-testid="user-profile"
@@ -129,7 +136,7 @@ export function UserProfile({
       aria-label="User profile"
     >
       {/* User info section */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3 sm:gap-4">
         {/* Profile picture or initials */}
         <UserAvatar user={user} size="lg" showBorder />
 
@@ -173,9 +180,16 @@ export function UserProfile({
         </div>
       </div>
 
-      {/* Sign-out button */}
+      {/* Sign-out button - full width on mobile, auto on tablet+ */}
       {showSignOut && (
-        <SignOutButton callbackUrl={callbackUrl} variant="outline" size="sm" />
+        <div className="w-full sm:w-auto">
+          <SignOutButton
+            callbackUrl={callbackUrl}
+            variant="outline"
+            size="sm"
+            className="w-full sm:w-auto"
+          />
+        </div>
       )}
     </div>
   );

@@ -114,6 +114,7 @@ export function LoginForm() {
           <div
             className="rounded-md bg-destructive/10 border border-destructive/20 p-3 text-sm text-destructive"
             role="alert"
+            aria-live="assertive"
             data-testid="error-message"
           >
             {error}
