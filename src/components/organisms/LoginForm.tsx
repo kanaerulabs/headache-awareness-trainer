@@ -127,7 +127,8 @@ export function LoginForm() {
           size="lg"
           className="w-full"
           data-testid="google-signin-button"
-          aria-label="Sign in with Google"
+          aria-label={isLoading ? "Signing in..." : "Sign in with Google"}
+          aria-busy={isLoading}
         >
           {isLoading ? (
             <>

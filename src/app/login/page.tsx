@@ -25,6 +25,7 @@ export const metadata: Metadata = {
 export default function LoginPage() {
   return (
     <main
+      role="main"
       className="flex min-h-screen flex-col items-center justify-center p-6 bg-gradient-to-br from-primary/5 to-primary/10"
       data-testid="login-page"
     >
