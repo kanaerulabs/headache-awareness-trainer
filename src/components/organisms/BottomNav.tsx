@@ -79,11 +79,6 @@ export function BottomNav() {
   const [isStandalone, setIsStandalone] = useState(true); // Default true to hide button initially
   const [isIOS, setIsIOS] = useState(false);
 
-  // Don't show navigation if not authenticated
-  if (status !== "authenticated") {
-    return null;
-  }
-
   useEffect(() => {
     // Check if already installed as standalone
     const isInStandaloneMode =
@@ -135,6 +130,11 @@ export function BottomNav() {
 
   // Show install button if not standalone and (iOS or has deferred prompt)
   const showInstallButton = !isStandalone && (isIOS || deferredPrompt);
+
+  // Don't show navigation if not authenticated (after all hooks)
+  if (status !== "authenticated") {
+    return null;
+  }
 
   return (
     <>
