@@ -9,7 +9,7 @@
  */
 
 import { useEffect, useRef } from "react";
-import { useUserId } from "@/stores/auth";
+import { useSession } from "next-auth/react";
 import { setCurrentUserId } from "@/lib/indexeddb";
 import { useOnboardingStore } from "@/interface-adapters/store/onboardingStore";
 import { useLoggingStore } from "@/interface-adapters/store/loggingStore";
@@ -26,11 +26,16 @@ function rehydrateStore(store: { persist: { rehydrate: () => void | Promise<void
 }
 
 export function useUserDataInit() {
-  const userId = useUserId();
+  const { data: session, status } = useSession();
+  // Use email as user ID since NextAuth session may not have a consistent user.id
+  const userId = session?.user?.email || null;
   const previousUserId = useRef<string | null | undefined>(undefined);
   const isInitialized = useRef(false);
 
   useEffect(() => {
+    // Don't do anything while session is loading
+    if (status === "loading") return;
+
     // Update IndexedDB namespace first
     setCurrentUserId(userId);
 
@@ -56,7 +61,7 @@ export function useUserDataInit() {
 
     previousUserId.current = userId;
     isInitialized.current = true;
-  }, [userId]);
+  }, [userId, status]);
 
-  return { userId, isReady: isInitialized.current };
+  return { userId, isReady: isInitialized.current && status !== "loading" };
 }
