@@ -61,7 +61,7 @@ export interface InsightsState {
   // Calendar Data
   getCalendarData: (
     startDate: Date,
-    endDate: Date
+    endDate: Date,
   ) => Promise<CalendarDayData[]>;
 
   // Correlation Analysis
@@ -175,14 +175,14 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
    */
   getCalendarData: async (
     startDate: Date,
-    endDate: Date
+    endDate: Date,
   ): Promise<CalendarDayData[]> => {
     const headacheRepo = createHeadacheRepositoryAdapter();
     const checkinRepo = createCheckinRepositoryAdapter();
 
     const useCase = new GetCalendarDataUseCase(
       headacheRepo as never,
-      checkinRepo as never
+      checkinRepo as never,
     );
 
     return useCase.execute(startDate, endDate);
@@ -197,7 +197,7 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
 
     const useCase = new CalculateCorrelationsUseCase(
       headacheRepo as never,
-      checkinRepo as never
+      checkinRepo as never,
     );
 
     const correlations = await useCase.execute();
@@ -209,14 +209,14 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
    * Get weekly trends
    */
   getWeeklyTrends: async (
-    filter: 30 | 90 | "all"
+    filter: 30 | 90 | "all",
   ): Promise<WeeklyTrendData[]> => {
     const headacheRepo = createHeadacheRepositoryAdapter();
     const checkinRepo = createCheckinRepositoryAdapter();
 
     const useCase = new GetWeeklyTrendsUseCase(
       headacheRepo as never,
-      checkinRepo as never
+      checkinRepo as never,
     );
 
     return useCase.execute(filter);
@@ -269,7 +269,16 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
     try {
       // Get AI settings from settings store
       const settingsState = useSettingsStore.getState();
-      const { aiProvider, selectedModel, getActiveApiKey, hasApiKey, canRequestInsight, recordInsightRequest, getRemainingInsights, getTimeUntilReset } = settingsState;
+      const {
+        aiProvider,
+        selectedModel,
+        getActiveApiKey,
+        hasApiKey,
+        canRequestInsight,
+        recordInsightRequest,
+        getRemainingInsights,
+        getTimeUntilReset,
+      } = settingsState;
 
       // Check rate limiting first
       if (!canRequestInsight()) {
@@ -325,7 +334,7 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
       const useCase = new GenerateAIInsightsUseCase(
         headacheRepo as never,
         checkinRepo as never,
-        insightsAgent
+        insightsAgent,
       );
 
       const result = await useCase.execute({ daysToAnalyze });
@@ -346,7 +355,10 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
           aiInsights: {
             ...get().aiInsights,
             isLoading: false,
-            error: result.error ?? { code: "UNKNOWN", message: "Unknown error" },
+            error: result.error ?? {
+              code: "UNKNOWN",
+              message: "Unknown error",
+            },
           },
         });
       }
@@ -410,7 +422,16 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
     try {
       // Get AI settings
       const settingsState = useSettingsStore.getState();
-      const { aiProvider, selectedModel, getActiveApiKey, hasApiKey, canRequestInsight, recordInsightRequest, getRemainingInsights, getTimeUntilReset } = settingsState;
+      const {
+        aiProvider,
+        selectedModel,
+        getActiveApiKey,
+        hasApiKey,
+        canRequestInsight,
+        recordInsightRequest,
+        getRemainingInsights,
+        getTimeUntilReset,
+      } = settingsState;
 
       // Check rate limiting first
       if (!canRequestInsight()) {
@@ -483,15 +504,24 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
       });
 
       // Build summary stats
-      const summary = headacheData.length > 0 ? {
-        totalHeadaches: headacheData.length,
-        averageIntensity: headacheData.reduce((sum, h) => sum + h.intensity, 0) / headacheData.length,
-        mostCommonTriggers: getMostCommonTriggers(headacheData),
-        dateRange: {
-          start: new Date(Math.min(...headacheData.map(h => h.timestamp.getTime()))),
-          end: new Date(Math.max(...headacheData.map(h => h.timestamp.getTime()))),
-        },
-      } : undefined;
+      const summary =
+        headacheData.length > 0
+          ? {
+              totalHeadaches: headacheData.length,
+              averageIntensity:
+                headacheData.reduce((sum, h) => sum + h.intensity, 0) /
+                headacheData.length,
+              mostCommonTriggers: getMostCommonTriggers(headacheData),
+              dateRange: {
+                start: new Date(
+                  Math.min(...headacheData.map((h) => h.timestamp.getTime())),
+                ),
+                end: new Date(
+                  Math.max(...headacheData.map((h) => h.timestamp.getTime())),
+                ),
+              },
+            }
+          : undefined;
 
       // Single-question mode: no conversation history passed
       const response = await chatAgent.execute({
@@ -530,7 +560,8 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
           isLoading: false,
           error: {
             code: "UNKNOWN",
-            message: error instanceof Error ? error.message : "Failed to get response",
+            message:
+              error instanceof Error ? error.message : "Failed to get response",
           },
         },
       });
@@ -557,7 +588,12 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
    */
   checkAndGenerateWeeklyInsight: async (): Promise<boolean> => {
     const settingsState = useSettingsStore.getState();
-    const { shouldGenerateWeeklyInsight, setLastWeeklyInsightDate, hasApiKey, canRequestInsight } = settingsState;
+    const {
+      shouldGenerateWeeklyInsight,
+      setLastWeeklyInsightDate,
+      hasApiKey,
+      canRequestInsight,
+    } = settingsState;
 
     // Skip if no API key configured
     if (!hasApiKey()) {
@@ -604,7 +640,9 @@ export const useInsightsStore = create<InsightsState>((set, get) => ({
 /**
  * Helper to get most common triggers from headache entries
  */
-function getMostCommonTriggers(entries: Array<{ triggers?: string[] }>): string[] {
+function getMostCommonTriggers(
+  entries: Array<{ triggers?: string[] }>,
+): string[] {
   const triggerCounts: Record<string, number> = {};
   for (const entry of entries) {
     for (const trigger of entry.triggers ?? []) {

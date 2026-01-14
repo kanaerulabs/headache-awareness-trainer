@@ -8,27 +8,27 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { UserAvatar } from "./user-avatar";
 import { User } from "@/domains/auth/entities/user.entity";
 
-// Mock users for stories
-const userWithImage = User.create({
+// Mock users for stories (using load() to provide explicit IDs)
+const userWithImage = User.load({
   id: "1",
   email: "john.doe@example.com",
   name: "John Doe",
   image: "https://i.pravatar.cc/150?img=12",
 });
 
-const userWithoutImage = User.create({
+const userWithoutImage = User.load({
   id: "2",
   email: "jane.smith@example.com",
   name: "Jane Smith",
 });
 
-const userSingleName = User.create({
+const userSingleName = User.load({
   id: "3",
   email: "alice@example.com",
   name: "Alice",
 });
 
-const userLongName = User.create({
+const userLongName = User.load({
   id: "4",
   email: "bob.johnson.williams@example.com",
   name: "Bob Johnson Williams",

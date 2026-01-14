@@ -11,7 +11,12 @@ import {
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 
-const HEADACHE_TYPE_KEYS: HeadacheType[] = ["tension", "migraine", "mixed", "unsure"];
+const HEADACHE_TYPE_KEYS: HeadacheType[] = [
+  "tension",
+  "migraine",
+  "mixed",
+  "unsure",
+];
 
 export function HeadacheTypeStep() {
   const { headacheType, setHeadacheType, nextStep, previousStep } =
@@ -52,7 +57,9 @@ export function HeadacheTypeStep() {
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 space-y-1">
-                    <div className="font-medium">{t(`headacheTypes.${typeKey}.label`)}</div>
+                    <div className="font-medium">
+                      {t(`headacheTypes.${typeKey}.label`)}
+                    </div>
                     <div className="text-sm text-muted-foreground">
                       {t(`headacheTypes.${typeKey}.description`)}
                     </div>

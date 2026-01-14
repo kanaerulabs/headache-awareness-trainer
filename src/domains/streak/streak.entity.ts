@@ -78,9 +78,10 @@ export class StreakCalculator {
   /**
    * Calculate current and longest streaks
    */
-  private static calculateStreaks(
-    sortedActivities: DailyActivity[],
-  ): { currentStreak: number; longestStreak: number } {
+  private static calculateStreaks(sortedActivities: DailyActivity[]): {
+    currentStreak: number;
+    longestStreak: number;
+  } {
     const today = StreakCalculator.normalizeDate(new Date());
     let currentStreak = 0;
     let longestStreak = 0;

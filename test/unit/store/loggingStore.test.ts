@@ -99,7 +99,7 @@ describe("Logging Store", () => {
       });
 
       expect(result2.current.metadata.registrationDate).toEqual(
-        originalRegistrationDate
+        originalRegistrationDate,
       );
     });
   });
@@ -212,7 +212,7 @@ describe("Logging Store", () => {
         await expect(
           act(async () => {
             await result.current.addEntry({ note: "Missing intensity" });
-          })
+          }),
         ).rejects.toThrow("Intensity is required");
       });
 
@@ -357,7 +357,9 @@ describe("Logging Store", () => {
         // Add 5 entries
         await act(async () => {
           for (let i = 1; i <= 5; i++) {
-            await result.current.addEntry({ intensity: i as 1 | 2 | 3 | 4 | 5 });
+            await result.current.addEntry({
+              intensity: i as 1 | 2 | 3 | 4 | 5,
+            });
             await new Promise((resolve) => setTimeout(resolve, 5));
           }
         });
@@ -419,7 +421,9 @@ describe("Logging Store", () => {
 
         await act(async () => {
           for (let i = 1; i <= 4; i++) {
-            await result.current.addEntry({ intensity: i as 1 | 2 | 3 | 4 | 5 });
+            await result.current.addEntry({
+              intensity: i as 1 | 2 | 3 | 4 | 5,
+            });
             await new Promise((resolve) => setTimeout(resolve, 5));
           }
         });
@@ -589,8 +593,10 @@ describe("Logging Store", () => {
 
         await expect(
           act(async () => {
-            await result.current.updateEntry("non-existent-id", { intensity: 5 });
-          })
+            await result.current.updateEntry("non-existent-id", {
+              intensity: 5,
+            });
+          }),
         ).rejects.toThrow("Entry with id non-existent-id not found");
       });
     });
@@ -771,7 +777,7 @@ describe("Logging Store", () => {
       const { result } = renderHook(() => useLoggingStore());
 
       const parsed = result.current.parseNaturalLanguage(
-        "I have a severe headache"
+        "I have a severe headache",
       );
 
       expect(parsed.intensity).toBe(5);
@@ -807,7 +813,7 @@ describe("Logging Store", () => {
       const { result } = renderHook(() => useLoggingStore());
 
       const parsed = result.current.parseNaturalLanguage(
-        "Mild headache this morning"
+        "Mild headache this morning",
       );
 
       expect(parsed.intensity).toBe(2);
@@ -825,7 +831,7 @@ describe("Logging Store", () => {
       const { result } = renderHook(() => useLoggingStore());
 
       const parsed = result.current.parseNaturalLanguage(
-        "I think this is a migraine"
+        "I think this is a migraine",
       );
 
       expect(parsed.headacheType).toBe("migraine");
@@ -835,7 +841,7 @@ describe("Logging Store", () => {
       const { result } = renderHook(() => useLoggingStore());
 
       const parsed = result.current.parseNaturalLanguage(
-        "Tension headache from stress"
+        "Tension headache from stress",
       );
 
       expect(parsed.headacheType).toBe("tension");
@@ -861,7 +867,7 @@ describe("Logging Store", () => {
       const { result } = renderHook(() => useLoggingStore());
 
       const parsed = result.current.parseNaturalLanguage(
-        "Feeling stressed today"
+        "Feeling stressed today",
       );
 
       expect(parsed.mood).toBe("low");
@@ -888,7 +894,7 @@ describe("Logging Store", () => {
       const { result } = renderHook(() => useLoggingStore());
 
       const parsed = result.current.parseNaturalLanguage(
-        "Woke up with a headache"
+        "Woke up with a headache",
       );
 
       expect(parsed.contextTags).toContain("woke-up-with-it");
@@ -906,7 +912,7 @@ describe("Logging Store", () => {
       const { result } = renderHook(() => useLoggingStore());
 
       const parsed = result.current.parseNaturalLanguage(
-        "Sudden headache came on quickly"
+        "Sudden headache came on quickly",
       );
 
       expect(parsed.contextTags).toContain("sudden-onset");
@@ -916,7 +922,7 @@ describe("Logging Store", () => {
       const { result } = renderHook(() => useLoggingStore());
 
       const parsed = result.current.parseNaturalLanguage(
-        "Headache after work in the evening"
+        "Headache after work in the evening",
       );
 
       expect(parsed.contextTags).toContain("evening");
@@ -926,7 +932,7 @@ describe("Logging Store", () => {
       const { result } = renderHook(() => useLoggingStore());
 
       const parsed = result.current.parseNaturalLanguage(
-        "Woke up with a severe migraine this morning, feeling stressed and exhausted"
+        "Woke up with a severe migraine this morning, feeling stressed and exhausted",
       );
 
       expect(parsed.intensity).toBe(5);
@@ -1038,9 +1044,9 @@ describe("Logging Store", () => {
         useLoggingStore.setState({ db: null });
       });
 
-      await expect(
-        result.current.addEntry({ intensity: 3 })
-      ).rejects.toThrow("Database not initialized. Call initializeDB first.");
+      await expect(result.current.addEntry({ intensity: 3 })).rejects.toThrow(
+        "Database not initialized. Call initializeDB first.",
+      );
     });
 
     it("should return empty array when database not initialized for getRecentEntries", async () => {

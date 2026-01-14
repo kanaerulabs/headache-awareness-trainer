@@ -26,7 +26,7 @@ function getInsightMessage(
   streak: number,
   trend: TrendDirection,
   headacheCount: number,
-  t: ReturnType<typeof useTranslations<"dashboard">>
+  t: ReturnType<typeof useTranslations<"dashboard">>,
 ): string {
   if (streak >= 7) {
     return t("insights.greatStreak", { days: streak });
@@ -73,12 +73,7 @@ export default function DashboardPage() {
   const t = useTranslations("dashboard");
 
   // Use Clean Architecture hook for dashboard data
-  const {
-    isReady,
-    isLoading,
-    data,
-    refreshDashboard,
-  } = useDashboard();
+  const { isReady, isLoading, data, refreshDashboard } = useDashboard();
 
   // Extract data with defaults
   const currentStreak = data?.streak.currentStreak ?? 0;
@@ -88,7 +83,12 @@ export default function DashboardPage() {
   const recentEntries = data?.recentEntries ?? [];
 
   // Generate insight message based on streak and trend
-  const currentInsight = getInsightMessage(currentStreak, trend, thisWeekHeadaches, t);
+  const currentInsight = getInsightMessage(
+    currentStreak,
+    trend,
+    thisWeekHeadaches,
+    t,
+  );
 
   /**
    * Navigate to Log Headache page
@@ -117,42 +117,43 @@ export default function DashboardPage() {
    * Transform recent entries to RecentEntry[] format
    * The use case returns entries with _type property
    */
-  const transformedRecentEntries: RecentEntry[] = recentEntries.map(
-    (entry) => {
-      // Type guard to check if it's a headache entry
-      const isHeadache = "_type" in entry && entry._type === "headache" || "intensity" in entry;
+  const transformedRecentEntries: RecentEntry[] = recentEntries.map((entry) => {
+    // Type guard to check if it's a headache entry
+    const isHeadache =
+      ("_type" in entry && entry._type === "headache") || "intensity" in entry;
 
-      if (isHeadache) {
-        const headacheEntry = entry as HeadacheEntryProps & { _type?: string };
-        // Generate summary from headache entry using translations
-        const intensityKey = headacheEntry.intensity as IntensityKey;
-        const intensityText = t(`intensityLabels.${intensityKey}`);
-        const typeText = headacheEntry.headacheType ? ` ${headacheEntry.headacheType}` : "";
-        const summary = `${intensityText}${typeText} ${t("headache")}`;
+    if (isHeadache) {
+      const headacheEntry = entry as HeadacheEntryProps & { _type?: string };
+      // Generate summary from headache entry using translations
+      const intensityKey = headacheEntry.intensity as IntensityKey;
+      const intensityText = t(`intensityLabels.${intensityKey}`);
+      const typeText = headacheEntry.headacheType
+        ? ` ${headacheEntry.headacheType}`
+        : "";
+      const summary = `${intensityText}${typeText} ${t("headache")}`;
 
-        return {
-          id: headacheEntry.id,
-          type: "headache" as const,
-          timestamp: headacheEntry.timestamp,
-          summary,
-        };
-      } else {
-        // Check-in entry
-        const checkInEntry = entry as CheckInProps & { _type?: string };
-        // Generate summary from check-in entry using translations
-        const summary = checkInEntry.isQuickDismiss
-          ? t("quickCheckinAllGood")
-          : t(`moodLabels.${checkInEntry.mood as MoodKey}`);
+      return {
+        id: headacheEntry.id,
+        type: "headache" as const,
+        timestamp: headacheEntry.timestamp,
+        summary,
+      };
+    } else {
+      // Check-in entry
+      const checkInEntry = entry as CheckInProps & { _type?: string };
+      // Generate summary from check-in entry using translations
+      const summary = checkInEntry.isQuickDismiss
+        ? t("quickCheckinAllGood")
+        : t(`moodLabels.${checkInEntry.mood as MoodKey}`);
 
-        return {
-          id: checkInEntry.id,
-          type: "checkin" as const,
-          timestamp: checkInEntry.timestamp,
-          summary,
-        };
-      }
-    },
-  );
+      return {
+        id: checkInEntry.id,
+        type: "checkin" as const,
+        timestamp: checkInEntry.timestamp,
+        summary,
+      };
+    }
+  });
 
   // Loading state (skeleton) - show while initializing or loading data
   if (!isReady || isLoading) {

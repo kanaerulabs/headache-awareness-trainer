@@ -7,6 +7,7 @@
 
 "use client";
 
+import { useEffect } from "react";
 import { useUser, useIsAuthenticated, useAuthLoading } from "@/stores/auth";
 import { UserAvatar } from "./user-avatar";
 import { SignOutButton } from "./sign-out-button";
@@ -97,6 +98,12 @@ export function UserProfile({
   const isAuthenticated = useIsAuthenticated();
   const isLoading = useAuthLoading();
 
+  useEffect(() => {
+    if (!isLoading && (!isAuthenticated || !user) && onUnauthenticated) {
+      onUnauthenticated();
+    }
+  }, [isLoading, isAuthenticated, user, onUnauthenticated]);
+
   if (isLoading) {
     return (
       <div className={cn("w-full", className)}>
@@ -106,9 +113,6 @@ export function UserProfile({
   }
 
   if (!isAuthenticated || !user) {
-    if (onUnauthenticated) {
-      onUnauthenticated();
-    }
     return null;
   }
 

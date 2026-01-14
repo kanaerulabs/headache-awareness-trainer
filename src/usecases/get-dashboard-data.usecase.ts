@@ -65,7 +65,10 @@ export class GetDashboardDataUseCase {
     const todayLogged = StreakCalculator.isTodayLogged(activities);
 
     // Calculate weekly summary
-    const weeklySummary = this.calculateWeeklySummary(allHeadaches, allCheckIns);
+    const weeklySummary = this.calculateWeeklySummary(
+      allHeadaches,
+      allCheckIns,
+    );
 
     // Calculate trend
     const trend = this.calculateTrend(allHeadaches);

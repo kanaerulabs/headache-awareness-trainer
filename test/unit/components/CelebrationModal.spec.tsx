@@ -67,7 +67,9 @@ describe("CelebrationModal", () => {
     it("displays continue button", () => {
       render(<CelebrationModal {...defaultProps} />);
 
-      expect(screen.getByRole("button", { name: /continue/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /continue/i }),
+      ).toBeInTheDocument();
     });
   });
 
@@ -85,7 +87,9 @@ describe("CelebrationModal", () => {
     });
 
     it("does not render when both open is false and achievement is null", () => {
-      render(<CelebrationModal {...defaultProps} achievement={null} open={false} />);
+      render(
+        <CelebrationModal {...defaultProps} achievement={null} open={false} />,
+      );
 
       expect(screen.queryByTestId("celebration-modal")).not.toBeInTheDocument();
     });
@@ -129,7 +133,9 @@ describe("CelebrationModal", () => {
       render(<CelebrationModal {...defaultProps} achievement={achievement} />);
 
       expect(
-        screen.getByText(/Great start! Every journey begins with a single step./i),
+        screen.getByText(
+          /Great start! Every journey begins with a single step./i,
+        ),
       ).toBeInTheDocument();
     });
 
@@ -163,7 +169,9 @@ describe("CelebrationModal", () => {
       render(<CelebrationModal {...defaultProps} achievement={achievement} />);
 
       expect(
-        screen.getByText(/One month! This is a true commitment to your health./i),
+        screen.getByText(
+          /One month! This is a true commitment to your health./i,
+        ),
       ).toBeInTheDocument();
     });
 
@@ -197,7 +205,9 @@ describe("CelebrationModal", () => {
       render(<CelebrationModal {...defaultProps} achievement={achievement} />);
 
       expect(
-        screen.getByText(/Keep up the great work! You're making real progress./i),
+        screen.getByText(
+          /Keep up the great work! You're making real progress./i,
+        ),
       ).toBeInTheDocument();
     });
   });
@@ -339,7 +349,9 @@ describe("CelebrationModal", () => {
       render(<CelebrationModal {...defaultProps} achievement={achievement} />);
 
       expect(
-        screen.getByText("This is a Very Long Achievement Name That Might Wrap"),
+        screen.getByText(
+          "This is a Very Long Achievement Name That Might Wrap",
+        ),
       ).toBeInTheDocument();
     });
 
@@ -391,7 +403,9 @@ describe("CelebrationModal", () => {
 
   describe("state transitions", () => {
     it("transitions from closed to open", () => {
-      const { rerender } = render(<CelebrationModal {...defaultProps} open={false} />);
+      const { rerender } = render(
+        <CelebrationModal {...defaultProps} open={false} />,
+      );
 
       expect(screen.queryByTestId("celebration-modal")).not.toBeInTheDocument();
 
@@ -401,7 +415,9 @@ describe("CelebrationModal", () => {
     });
 
     it("transitions from open to closed", () => {
-      const { rerender } = render(<CelebrationModal {...defaultProps} open={true} />);
+      const { rerender } = render(
+        <CelebrationModal {...defaultProps} open={true} />,
+      );
 
       expect(screen.getByTestId("celebration-modal")).toBeInTheDocument();
 
@@ -424,14 +440,18 @@ describe("CelebrationModal", () => {
         unlockedAt: new Date(),
       };
 
-      rerender(<CelebrationModal {...defaultProps} achievement={newAchievement} />);
+      rerender(
+        <CelebrationModal {...defaultProps} achievement={newAchievement} />,
+      );
 
       expect(screen.getByText("Month Master")).toBeInTheDocument();
       expect(screen.queryByText("Week Warrior")).not.toBeInTheDocument();
     });
 
     it("handles rapid open/close cycles", () => {
-      const { rerender } = render(<CelebrationModal {...defaultProps} open={true} />);
+      const { rerender } = render(
+        <CelebrationModal {...defaultProps} open={true} />,
+      );
 
       for (let i = 0; i < 5; i++) {
         rerender(<CelebrationModal {...defaultProps} open={false} />);
@@ -452,14 +472,16 @@ describe("CelebrationModal", () => {
     it("centers content properly", () => {
       render(<CelebrationModal {...defaultProps} />);
 
-      const title = screen.getByText("Week Warrior").parentElement?.parentElement;
+      const title =
+        screen.getByText("Week Warrior").parentElement?.parentElement;
       expect(title).toHaveClass("text-center");
     });
 
     it("applies proper spacing between elements", () => {
       render(<CelebrationModal {...defaultProps} />);
 
-      const header = screen.getByText("Week Warrior").parentElement?.parentElement;
+      const header =
+        screen.getByText("Week Warrior").parentElement?.parentElement;
       expect(header).toHaveClass("space-y-4");
     });
 
@@ -473,7 +495,9 @@ describe("CelebrationModal", () => {
     it("centers footer content", () => {
       render(<CelebrationModal {...defaultProps} />);
 
-      const footer = screen.getByRole("button", { name: /continue/i }).parentElement;
+      const footer = screen.getByRole("button", {
+        name: /continue/i,
+      }).parentElement;
       expect(footer).toHaveClass("sm:justify-center");
     });
   });
@@ -481,8 +505,14 @@ describe("CelebrationModal", () => {
   describe("encouraging messages coverage", () => {
     const achievementMessages: Array<[string, RegExp]> = [
       ["first-entry", /Great start! Every journey begins with a single step./i],
-      ["first-checkin", /You're building awareness! Keep checking in regularly./i],
-      ["first-pattern", /Amazing! Understanding patterns is key to managing headaches./i],
+      [
+        "first-checkin",
+        /You're building awareness! Keep checking in regularly./i,
+      ],
+      [
+        "first-pattern",
+        /Amazing! Understanding patterns is key to managing headaches./i,
+      ],
       ["first-week", /One week down! You're building a valuable habit./i],
       ["streak-14-days", /Two weeks! Your dedication is impressive./i],
       ["streak-60-days", /Two months! You've built an incredible habit./i],
@@ -505,7 +535,9 @@ describe("CelebrationModal", () => {
           unlockedAt: new Date(),
         };
 
-        render(<CelebrationModal {...defaultProps} achievement={achievement} />);
+        render(
+          <CelebrationModal {...defaultProps} achievement={achievement} />,
+        );
 
         expect(screen.getByText(expectedMessage)).toBeInTheDocument();
       });

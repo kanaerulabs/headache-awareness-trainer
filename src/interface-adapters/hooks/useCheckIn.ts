@@ -71,7 +71,9 @@ export function useCheckIn(): UseCheckInResult {
 
         setIsReady(true);
       } catch (err) {
-        setError(err instanceof Error ? err : new Error("Failed to initialize"));
+        setError(
+          err instanceof Error ? err : new Error("Failed to initialize"),
+        );
       }
     };
 
@@ -96,7 +98,8 @@ export function useCheckIn(): UseCheckInResult {
 
         return result;
       } catch (err) {
-        const error = err instanceof Error ? err : new Error("Failed to create check-in");
+        const error =
+          err instanceof Error ? err : new Error("Failed to create check-in");
         setError(error);
         throw error;
       } finally {
@@ -123,7 +126,8 @@ export function useCheckIn(): UseCheckInResult {
 
       return result;
     } catch (err) {
-      const error = err instanceof Error ? err : new Error("Failed to quick dismiss");
+      const error =
+        err instanceof Error ? err : new Error("Failed to quick dismiss");
       setError(error);
       throw error;
     } finally {
@@ -164,7 +168,8 @@ export function useCheckIn(): UseCheckInResult {
         // Update recent entries cache
         setRecentCheckIns((prev) => prev.filter((e) => e.id !== id));
       } catch (err) {
-        const error = err instanceof Error ? err : new Error("Failed to delete");
+        const error =
+          err instanceof Error ? err : new Error("Failed to delete");
         setError(error);
         throw error;
       } finally {

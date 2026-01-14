@@ -66,7 +66,8 @@ export function AISettings() {
     }
   };
 
-  const currentApiKey = aiProvider === "openai" ? openaiApiKey : openrouterApiKey;
+  const currentApiKey =
+    aiProvider === "openai" ? openaiApiKey : openrouterApiKey;
   const models = AI_MODELS[aiProvider];
 
   const isValidKeyFormat = (key: string) => {

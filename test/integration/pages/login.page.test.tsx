@@ -118,7 +118,7 @@ describe("LoginPage Integration", () => {
       expect(metadata.openGraph?.description).toBe(
         "Sign in to Headache Awareness Trainer with your Google account",
       );
-      expect(metadata.openGraph?.type).toBe("website");
+      expect((metadata.openGraph as { type?: string })?.type).toBe("website");
     });
 
     it("should include keywords for SEO", () => {
@@ -416,7 +416,7 @@ describe("LoginPage Integration", () => {
 
       const form = container.querySelector('[data-testid="login-form"]');
       expect(form).toBeInTheDocument();
-      expect(main).toContainElement(form);
+      expect(main).toContainElement(form as HTMLElement);
     });
 
     it("should have card styling for login form", () => {
@@ -504,6 +504,9 @@ describe("LoginPage Integration", () => {
 
       // Should be disabled after first click
       expect(signInButton).toBeDisabled();
+
+      // Should only call signIn once despite multiple clicks
+      expect(mockSignIn).toHaveBeenCalledTimes(1);
     });
   });
 

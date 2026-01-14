@@ -55,9 +55,7 @@ describe("RecentEntriesList", () => {
 
       expect(screen.getByText("Mild headache after lunch")).toBeInTheDocument();
       expect(screen.getByText("Feeling calm and focused")).toBeInTheDocument();
-      expect(
-        screen.getByText("Moderate tension headache"),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Moderate tension headache")).toBeInTheDocument();
     });
 
     it("applies custom className when provided", () => {
@@ -142,15 +140,12 @@ describe("RecentEntriesList", () => {
 
   describe("entry limit", () => {
     it("displays maximum of 5 entries", () => {
-      const manyEntries: RecentEntry[] = Array.from(
-        { length: 10 },
-        (_, i) => ({
-          id: String(i + 1),
-          type: i % 2 === 0 ? "headache" : "checkin",
-          timestamp: new Date(),
-          summary: `Entry ${i + 1}`,
-        }),
-      );
+      const manyEntries: RecentEntry[] = Array.from({ length: 10 }, (_, i) => ({
+        id: String(i + 1),
+        type: i % 2 === 0 ? "headache" : "checkin",
+        timestamp: new Date(),
+        summary: `Entry ${i + 1}`,
+      }));
 
       render(<RecentEntriesList entries={manyEntries} />);
 
@@ -179,7 +174,9 @@ describe("RecentEntriesList", () => {
   describe("click interaction", () => {
     it("calls onEntryClick with entry id when clicked", () => {
       const onEntryClick = jest.fn();
-      render(<RecentEntriesList {...defaultProps} onEntryClick={onEntryClick} />);
+      render(
+        <RecentEntriesList {...defaultProps} onEntryClick={onEntryClick} />,
+      );
 
       const entry = screen.getByTestId("entry-1");
       fireEvent.click(entry);
@@ -190,7 +187,9 @@ describe("RecentEntriesList", () => {
 
     it("calls onEntryClick with correct id for each entry", () => {
       const onEntryClick = jest.fn();
-      render(<RecentEntriesList {...defaultProps} onEntryClick={onEntryClick} />);
+      render(
+        <RecentEntriesList {...defaultProps} onEntryClick={onEntryClick} />,
+      );
 
       fireEvent.click(screen.getByTestId("entry-2"));
       expect(onEntryClick).toHaveBeenCalledWith("2");
@@ -201,7 +200,9 @@ describe("RecentEntriesList", () => {
 
     it("shows chevron icon when onEntryClick is provided", () => {
       const onEntryClick = jest.fn();
-      render(<RecentEntriesList {...defaultProps} onEntryClick={onEntryClick} />);
+      render(
+        <RecentEntriesList {...defaultProps} onEntryClick={onEntryClick} />,
+      );
 
       const entry = screen.getByTestId("entry-1");
       const chevron = entry.querySelector('svg[class*="lucide-chevron-right"]');
@@ -228,7 +229,9 @@ describe("RecentEntriesList", () => {
 
     it("has cursor-pointer style when clickable", () => {
       const onEntryClick = jest.fn();
-      render(<RecentEntriesList {...defaultProps} onEntryClick={onEntryClick} />);
+      render(
+        <RecentEntriesList {...defaultProps} onEntryClick={onEntryClick} />,
+      );
 
       const entry = screen.getByTestId("entry-1");
       expect(entry).toHaveClass("cursor-pointer");
@@ -243,7 +246,9 @@ describe("RecentEntriesList", () => {
 
     it("has hover styles when clickable", () => {
       const onEntryClick = jest.fn();
-      render(<RecentEntriesList {...defaultProps} onEntryClick={onEntryClick} />);
+      render(
+        <RecentEntriesList {...defaultProps} onEntryClick={onEntryClick} />,
+      );
 
       const entry = screen.getByTestId("entry-1");
       expect(entry).toHaveClass("hover:bg-gray-50");
@@ -285,7 +290,9 @@ describe("RecentEntriesList", () => {
 
     it("entries are keyboard accessible when clickable", () => {
       const onEntryClick = jest.fn();
-      render(<RecentEntriesList {...defaultProps} onEntryClick={onEntryClick} />);
+      render(
+        <RecentEntriesList {...defaultProps} onEntryClick={onEntryClick} />,
+      );
 
       const entry = screen.getByTestId("entry-1");
       expect(entry.tagName).toBe("BUTTON");

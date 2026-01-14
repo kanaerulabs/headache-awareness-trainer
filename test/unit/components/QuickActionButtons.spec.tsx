@@ -197,8 +197,8 @@ describe("QuickActionButtons", () => {
       const headacheButton = screen.getByTestId("log-headache-button");
       const checkinButton = screen.getByTestId("check-in-button");
 
-      const headacheIcon = headacheButton.querySelector('svg[aria-hidden]');
-      const checkinIcon = checkinButton.querySelector('svg[aria-hidden]');
+      const headacheIcon = headacheButton.querySelector("svg[aria-hidden]");
+      const checkinIcon = checkinButton.querySelector("svg[aria-hidden]");
 
       expect(headacheIcon).toHaveAttribute("aria-hidden", "true");
       expect(checkinIcon).toHaveAttribute("aria-hidden", "true");

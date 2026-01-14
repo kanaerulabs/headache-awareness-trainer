@@ -150,12 +150,12 @@ export const NoteInput: React.FC<NoteInputProps> = ({
         aria-live="polite"
         aria-atomic="true"
       >
-        <span>
-          {t("characters", { count: value.length, max: maxLength })}
-        </span>
+        <span>{t("characters", { count: value.length, max: maxLength })}</span>
         {isNearLimit && (
           <span className="font-medium">
-            {isAtLimit ? t("limitReached") : t("remaining", { count: charactersLeft })}
+            {isAtLimit
+              ? t("limitReached")
+              : t("remaining", { count: charactersLeft })}
           </span>
         )}
       </div>

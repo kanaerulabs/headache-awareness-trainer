@@ -16,7 +16,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { useSettingsStore, AI_RATE_LIMITS } from "@/interface-adapters/store/settingsStore";
+import {
+  useSettingsStore,
+  AI_RATE_LIMITS,
+} from "@/interface-adapters/store/settingsStore";
 import type { ChatMessage } from "@/usecases/chat-insights/interfaces/chat-agent.interface";
 
 interface InsightsChatCardProps {
@@ -46,7 +49,9 @@ export function InsightsChatCard({
 
   const hasApiKey = useSettingsStore((state) => state.hasApiKey)();
   const aiProvider = useSettingsStore((state) => state.aiProvider);
-  const getRemainingInsights = useSettingsStore((state) => state.getRemainingInsights);
+  const getRemainingInsights = useSettingsStore(
+    (state) => state.getRemainingInsights,
+  );
   const remainingInsights = getRemainingInsights();
 
   // Auto-scroll to bottom when new messages arrive
@@ -84,7 +89,9 @@ export function InsightsChatCard({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <MessageCircle className="h-5 w-5 text-blue-500" />
-            <CardTitle className="text-xl sm:text-2xl">Ask a Question</CardTitle>
+            <CardTitle className="text-xl sm:text-2xl">
+              Ask a Question
+            </CardTitle>
             <Badge variant="secondary" className="text-xs">
               Beta
             </Badge>
@@ -92,12 +99,15 @@ export function InsightsChatCard({
           {hasApiKey && (
             <div className="flex items-center gap-1 text-xs text-muted-foreground">
               <Clock className="h-3 w-3" />
-              <span>{remainingInsights}/{AI_RATE_LIMITS.maxInsightsPerHour} left/hr</span>
+              <span>
+                {remainingInsights}/{AI_RATE_LIMITS.maxInsightsPerHour} left/hr
+              </span>
             </div>
           )}
         </div>
         <p className="text-sm text-muted-foreground">
-          Ask a single question about your headache data (e.g., &quot;What happened between Jan 1-7?&quot;)
+          Ask a single question about your headache data (e.g., &quot;What
+          happened between Jan 1-7?&quot;)
         </p>
       </CardHeader>
 
@@ -111,7 +121,8 @@ export function InsightsChatCard({
                 API key required
               </p>
               <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
-                Add your {aiProvider === "openai" ? "OpenAI" : "OpenRouter"} API key in settings to chat.
+                Add your {aiProvider === "openai" ? "OpenAI" : "OpenRouter"} API
+                key in settings to chat.
               </p>
               <Link
                 href="/settings#ai-settings"
@@ -140,7 +151,9 @@ export function InsightsChatCard({
           {messages.length === 0 && hasApiKey && (
             <div className="h-full flex flex-col items-center justify-center text-center text-muted-foreground">
               <Sparkles className="h-8 w-8 mb-2 opacity-50" />
-              <p className="text-sm">Ask me anything about your headache data!</p>
+              <p className="text-sm">
+                Ask me anything about your headache data!
+              </p>
               <p className="text-xs mt-1">Try one of the suggestions below</p>
             </div>
           )}
@@ -150,7 +163,7 @@ export function InsightsChatCard({
               key={message.id}
               className={cn(
                 "flex",
-                message.role === "user" ? "justify-end" : "justify-start"
+                message.role === "user" ? "justify-end" : "justify-start",
               )}
             >
               <div
@@ -158,7 +171,7 @@ export function InsightsChatCard({
                   "max-w-[85%] rounded-lg px-4 py-2",
                   message.role === "user"
                     ? "bg-primary text-primary-foreground"
-                    : "bg-muted"
+                    : "bg-muted",
                 )}
               >
                 <p className="text-sm whitespace-pre-wrap">{message.content}</p>
@@ -206,7 +219,9 @@ export function InsightsChatCard({
             ref={inputRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder={hasApiKey ? "Ask a question..." : "Add API key to chat"}
+            placeholder={
+              hasApiKey ? "Ask a question..." : "Add API key to chat"
+            }
             disabled={!hasApiKey || isLoading}
             className="flex-1"
             data-testid="chat-input"

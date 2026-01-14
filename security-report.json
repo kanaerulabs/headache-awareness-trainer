@@ -1,0 +1,178 @@
+{
+  "tool": "security",
+  "timestamp": "2026-01-14T01:50:00Z",
+  "project": "headache-awareness-trainer",
+  "company": "jinit-labs",
+  "filesAnalyzed": [
+    "src/app/api/auth/[...nextauth]/route.ts",
+    "src/lib/auth.ts",
+    "src/components/organisms/LoginForm.tsx",
+    "src/components/auth/user-profile.tsx",
+    "src/components/auth/user-avatar.tsx",
+    "src/stores/auth/auth.store.ts",
+    "src/domains/auth/entities/user.entity.ts",
+    "src/domains/auth/value-objects/session.vo.ts",
+    "src/middleware.ts",
+    "src/app/layout.tsx",
+    ".env.local",
+    "package.json"
+  ],
+  "summary": {
+    "critical": 2,
+    "high": 1,
+    "medium": 2,
+    "low": 3
+  },
+  "issues": [
+    {
+      "severity": "critical",
+      "type": "secret",
+      "cve": null,
+      "asi": null,
+      "title": "Hardcoded Secrets in .env.local Tracked in Git",
+      "message": "The .env.local file containing NEXTAUTH_SECRET and Google OAuth credentials is present in the repository and may be tracked. Additionally, NEXTAUTH_SECRET is exposed in DEPLOYMENT.md documentation.",
+      "file": ".env.local, DEPLOYMENT.md",
+      "line": null,
+      "suggestion": "1. Immediately rotate NEXTAUTH_SECRET and Google OAuth credentials\n2. Ensure .env.local is gitignored (currently appears to be)\n3. Remove NEXTAUTH_SECRET from DEPLOYMENT.md\n4. Use placeholder values in documentation\n5. Store production secrets in Vercel environment variables only\n6. Verify .env.local is not in git history: git log --all --full-history -- .env.local",
+      "cwe": "CWE-798"
+    },
+    {
+      "severity": "critical",
+      "type": "vulnerability",
+      "cve": null,
+      "asi": null,
+      "title": "Missing CSRF Protection in NextAuth Configuration",
+      "message": "NextAuth.js is configured without explicit CSRF token validation. While NextAuth v5 beta has built-in CSRF protection, it's not explicitly configured or verified in the codebase.",
+      "file": "src/lib/auth.ts",
+      "line": 4,
+      "suggestion": "1. Verify NextAuth v5 beta CSRF protection is active\n2. Add explicit useSecureCookies: true in production\n3. Consider adding custom CSRF middleware for API routes\n4. Test CSRF protection with security scanner",
+      "cwe": "CWE-352"
+    },
+    {
+      "severity": "high",
+      "type": "vulnerability",
+      "cve": null,
+      "asi": null,
+      "title": "OAuth State Parameter Not Explicitly Validated",
+      "message": "The OAuth flow uses 'prompt: consent' and 'response_type: code' but doesn't show explicit state parameter validation to prevent CSRF attacks during OAuth callback.",
+      "file": "src/lib/auth.ts",
+      "line": 9,
+      "suggestion": "1. Verify NextAuth handles state parameter internally (it should in v5)\n2. Add unit tests to verify state validation\n3. Consider adding custom state validation in jwt callback\n4. Document OAuth security controls",
+      "cwe": "CWE-352"
+    },
+    {
+      "severity": "medium",
+      "type": "vulnerability",
+      "cve": null,
+      "asi": null,
+      "title": "Session Cookie Security - SameSite 'lax' in Production",
+      "message": "Session cookie is configured with sameSite: 'lax' which provides less protection against CSRF than 'strict'. While 'lax' is appropriate for OAuth flows, it should be documented.",
+      "file": "src/lib/auth.ts",
+      "line": 46,
+      "suggestion": "1. Document why 'lax' is chosen (OAuth redirects)\n2. Consider 'strict' if OAuth flow allows\n3. Ensure secure flag is always true in production\n4. Add cookie security tests",
+      "cwe": "CWE-1275"
+    },
+    {
+      "severity": "medium",
+      "type": "anti-pattern",
+      "cve": null,
+      "asi": null,
+      "title": "Console.error Used for Authentication Errors",
+      "message": "Authentication errors are logged to console.error in multiple components (LoginForm.tsx:51, sign-out-button.tsx:80, sign-in-button.tsx:75) which could expose sensitive error details in production.",
+      "file": "src/components/organisms/LoginForm.tsx, src/components/auth/sign-out-button.tsx, src/components/auth/sign-in-button.tsx",
+      "line": 51,
+      "suggestion": "1. Replace console.error with proper logging service\n2. Sanitize error messages before logging\n3. Use different log levels for development vs production\n4. Implement structured logging for auth events\n5. Never log tokens, session IDs, or credentials",
+      "cwe": "CWE-532"
+    },
+    {
+      "severity": "low",
+      "type": "anti-pattern",
+      "cve": null,
+      "asi": null,
+      "title": "User Data Display Without Explicit XSS Protection",
+      "message": "User name, email, and image URL from Google OAuth are displayed in components without explicit sanitization. While React escapes by default, there's no validation that Google data is safe.",
+      "file": "src/components/auth/user-profile.tsx, src/components/auth/user-avatar.tsx",
+      "line": 149,
+      "suggestion": "1. Add input validation in User entity for name length and characters\n2. Validate image URLs before rendering (check domain whitelist)\n3. Add CSP headers to prevent XSS if injected\n4. Sanitize user.getDisplayName() output with DOMPurify if ever used in rich text\n5. Document reliance on React's automatic escaping",
+      "cwe": "CWE-79"
+    },
+    {
+      "severity": "low",
+      "type": "anti-pattern",
+      "cve": null,
+      "asi": null,
+      "title": "Missing Rate Limiting on Authentication Endpoints",
+      "message": "No rate limiting is visible on /api/auth endpoints which could allow brute force attacks on OAuth flows or session enumeration.",
+      "file": "src/app/api/auth/[...nextauth]/route.ts",
+      "line": null,
+      "suggestion": "1. Add rate limiting middleware for /api/auth routes\n2. Implement exponential backoff for failed attempts\n3. Use Vercel Edge Config or Upstash Rate Limit\n4. Monitor and alert on suspicious auth patterns\n5. Consider adding CAPTCHA after repeated failures",
+      "cwe": "CWE-307"
+    },
+    {
+      "severity": "low",
+      "type": "anti-pattern",
+      "cve": null,
+      "asi": null,
+      "title": "JWT Access Token Stored in Session Without Encryption",
+      "message": "Google OAuth access token is stored in JWT token (line 33 in auth.ts) and potentially exposed to client-side code. While JWT is signed, the token is base64-encoded (not encrypted).",
+      "file": "src/lib/auth.ts",
+      "line": 33,
+      "suggestion": "1. Avoid storing access_token in JWT if not needed\n2. If required, encrypt access_token before storing\n3. Use server-side only session strategy for sensitive tokens\n4. Implement token rotation\n5. Document why access_token is needed in session",
+      "cwe": "CWE-312"
+    }
+  ],
+  "positiveFindings": [
+    {
+      "title": "Strong Domain Layer Validation",
+      "description": "User and Session entities have comprehensive validation including email format, name length, and session expiry checks. This prevents invalid data from entering the system."
+    },
+    {
+      "title": "Secure Cookie Configuration",
+      "description": "Session cookies are configured with httpOnly: true, preventing client-side JavaScript access and mitigating XSS session theft."
+    },
+    {
+      "title": "Middleware-Based Route Protection",
+      "description": "middleware.ts properly protects routes with session checks and redirects unauthenticated users to login with callback URL."
+    },
+    {
+      "title": "OAuth Best Practices",
+      "description": "OAuth flow uses authorization code flow (response_type: 'code') instead of implicit flow, which is more secure."
+    },
+    {
+      "title": "No dangerouslySetInnerHTML on User Data",
+      "description": "The single use of dangerouslySetInnerHTML is for static theme initialization code, not user-generated content."
+    },
+    {
+      "title": ".env Files Properly Gitignored",
+      "description": "The .gitignore includes .env*.local and .env patterns, preventing accidental commit of environment files."
+    }
+  ],
+  "agentic_security_notes": [
+    {
+      "asi": "N/A",
+      "status": "Not Applicable",
+      "reason": "This is a standard web application without AI agents, LLM integrations, or MCP servers. OWASP Agentic Security Top 10 (2026) does not apply."
+    }
+  ],
+  "recommendations": {
+    "immediate": [
+      "Rotate NEXTAUTH_SECRET and Google OAuth credentials immediately",
+      "Remove secrets from DEPLOYMENT.md and replace with placeholders",
+      "Verify .env.local is not in git history"
+    ],
+    "short_term": [
+      "Implement rate limiting on /api/auth endpoints",
+      "Add structured logging service to replace console.error",
+      "Add CSP headers to prevent XSS",
+      "Write security tests for OAuth flow (state, CSRF, token validation)"
+    ],
+    "long_term": [
+      "Implement token encryption for OAuth access tokens",
+      "Add security monitoring and alerting",
+      "Regular dependency audits with npm audit or Snyk",
+      "Penetration testing for OAuth implementation"
+    ]
+  },
+  "overall_rating": "CONDITIONAL_PASS",
+  "rating_explanation": "The Google OAuth implementation follows most security best practices with good domain validation, secure cookies, and route protection. However, CRITICAL issues exist: secrets are exposed in repository files (.env.local, DEPLOYMENT.md) which must be rotated immediately. Once secrets are rotated and removed from documentation, this would be a PASS. The remaining issues (rate limiting, logging, token encryption) are important but not blockers."
+}

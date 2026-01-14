@@ -237,7 +237,9 @@ export const LocationPicker: React.FC<LocationPickerProps> = ({
                     type="button"
                     onClick={() => onLocationToggle(location)}
                     disabled={disabled}
-                    aria-label={t("removeLocation", { location: locationLabel })}
+                    aria-label={t("removeLocation", {
+                      location: locationLabel,
+                    })}
                     className="ml-1 hover:text-red-600 dark:hover:text-red-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 rounded"
                   >
                     ×

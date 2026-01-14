@@ -1,7 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { Sparkles, RefreshCw, AlertCircle, Lightbulb, Target, Settings } from "lucide-react";
+import {
+  Sparkles,
+  RefreshCw,
+  AlertCircle,
+  Lightbulb,
+  Target,
+  Settings,
+} from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -70,7 +77,8 @@ export function AIInsightsCard({
                 API key required
               </p>
               <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
-                Add your {aiProvider === "openai" ? "OpenAI" : "OpenRouter"} API key in settings to enable AI-powered insights.
+                Add your {aiProvider === "openai" ? "OpenAI" : "OpenRouter"} API
+                key in settings to enable AI-powered insights.
               </p>
               <Link
                 href="/settings#ai-settings"
@@ -115,8 +123,8 @@ export function AIInsightsCard({
           <div className="text-center py-8">
             <Sparkles className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
             <p className="text-muted-foreground">
-              Click &quot;Generate&quot; to get AI-powered insights about your headache
-              patterns
+              Click &quot;Generate&quot; to get AI-powered insights about your
+              headache patterns
             </p>
             <p className="text-sm text-muted-foreground mt-2">
               Works best with 7+ days of data

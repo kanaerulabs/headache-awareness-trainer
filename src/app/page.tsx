@@ -3,13 +3,11 @@
 import { Suspense, useEffect, useRef, useState, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useOnboardingStore } from "@/interface-adapters/store/onboardingStore";
-import { useLoggingStore, HeadacheEntry } from "@/interface-adapters/store/loggingStore";
 import {
-  Brain,
-  Lightbulb,
-  Clock,
-  Settings,
-} from "lucide-react";
+  useLoggingStore,
+  HeadacheEntry,
+} from "@/interface-adapters/store/loggingStore";
+import { Brain, Lightbulb, Clock, Settings } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { AuthStatus } from "@/components/auth";
@@ -24,7 +22,10 @@ export default function HomePage() {
 
 function HomePageSkeleton() {
   return (
-    <main className="flex min-h-screen flex-col p-6 pb-24" data-testid="home-page-loading">
+    <main
+      className="flex min-h-screen flex-col p-6 pb-24"
+      data-testid="home-page-loading"
+    >
       <div className="mx-auto w-full max-w-2xl space-y-8 animate-pulse">
         <div className="space-y-2">
           <div className="h-9 w-48 bg-muted rounded" />
@@ -136,7 +137,10 @@ function HomePageContent() {
         </div>
 
         {/* Header with Settings */}
-        <div className="flex items-start justify-between" data-testid="greeting-section">
+        <div
+          className="flex items-start justify-between"
+          data-testid="greeting-section"
+        >
           <div className="space-y-2">
             <h1 className="text-3xl font-bold tracking-tight">
               {t("welcomeBack")}
@@ -166,9 +170,7 @@ function HomePageContent() {
             </div>
             <div className="space-y-2">
               <h2 className="font-semibold">{t("tipOfDay")}</h2>
-              <p className="text-sm text-muted-foreground">
-                {t("dailyTip")}
-              </p>
+              <p className="text-sm text-muted-foreground">{t("dailyTip")}</p>
             </div>
           </div>
         </div>
@@ -176,10 +178,7 @@ function HomePageContent() {
         {/* Primary Actions - Only the 2 most important */}
         <div className="space-y-4">
           <h2 className="text-lg font-semibold">{t("whatToDo")}</h2>
-          <div
-            className="grid grid-cols-2 gap-3"
-            data-testid="quick-actions"
-          >
+          <div className="grid grid-cols-2 gap-3" data-testid="quick-actions">
             {/* Log Headache */}
             <ActionCard
               icon={<Brain className="h-5 w-5" />}
@@ -204,15 +203,25 @@ function HomePageContent() {
 
         {/* Recent Entries Section */}
         {!isReady || isInitialLoading ? (
-          <div className="rounded-lg border bg-card p-6 text-center" data-testid="loading-entries">
-            <p className="text-sm text-muted-foreground">{t("loadingEntries")}</p>
+          <div
+            className="rounded-lg border bg-card p-6 text-center"
+            data-testid="loading-entries"
+          >
+            <p className="text-sm text-muted-foreground">
+              {t("loadingEntries")}
+            </p>
           </div>
         ) : recentEntries.length > 0 ? (
           <div className="space-y-4" data-testid="recent-entries-section">
             <h2 className="text-lg font-semibold">{t("recentEntries")}</h2>
             <div className="space-y-3">
               {recentEntries.map((entry) => (
-                <EntryCard key={entry.id} entry={entry} tIntensity={tIntensity} tTime={tTime} />
+                <EntryCard
+                  key={entry.id}
+                  entry={entry}
+                  tIntensity={tIntensity}
+                  tTime={tTime}
+                />
               ))}
             </div>
             {recentEntries.length >= 5 && (
@@ -229,9 +238,7 @@ function HomePageContent() {
             className="rounded-lg border bg-card p-6 text-center"
             data-testid="empty-state"
           >
-            <p className="text-sm text-muted-foreground">
-              {t("noEntries")}
-            </p>
+            <p className="text-sm text-muted-foreground">{t("noEntries")}</p>
           </div>
         )}
       </div>
@@ -312,7 +319,9 @@ function EntryCard({ entry, tIntensity, tTime }: EntryCardProps) {
     return d.toLocaleDateString();
   };
 
-  const intensityLabel = tIntensity(String(entry.intensity) as "1" | "2" | "3" | "4" | "5");
+  const intensityLabel = tIntensity(
+    String(entry.intensity) as "1" | "2" | "3" | "4" | "5",
+  );
 
   return (
     <div

@@ -42,7 +42,10 @@ export class OpenRouterInsightsAgent implements IInsightsAgent {
   private readonly openrouter;
   private readonly modelId: OpenRouterModelId;
 
-  constructor(apiKey: string, modelId: OpenRouterModelId = "deepseek/deepseek-chat") {
+  constructor(
+    apiKey: string,
+    modelId: OpenRouterModelId = "deepseek/deepseek-chat",
+  ) {
     this.openrouter = createOpenRouter({
       apiKey,
     });
@@ -159,7 +162,11 @@ Be specific, actionable, and empathetic. Focus on building awareness of body sig
         errorMessage.includes("invalid api key") ||
         errorMessage.includes("no auth")
       ) {
-        return new AgentError("Authentication failed - check your OpenRouter API key", "AUTH_ERROR", error);
+        return new AgentError(
+          "Authentication failed - check your OpenRouter API key",
+          "AUTH_ERROR",
+          error,
+        );
       }
 
       if (
@@ -167,7 +174,11 @@ Be specific, actionable, and empathetic. Focus on building awareness of body sig
         errorMessage.includes("credits") ||
         errorMessage.includes("balance")
       ) {
-        return new AgentError("Insufficient credits - add funds to your OpenRouter account", "AUTH_ERROR", error);
+        return new AgentError(
+          "Insufficient credits - add funds to your OpenRouter account",
+          "AUTH_ERROR",
+          error,
+        );
       }
 
       if (

@@ -390,7 +390,9 @@ describe("DashboardPage Integration Tests", () => {
       render(<DashboardPage />);
 
       // Verify quick dismiss summary
-      expect(screen.getByText(/Quick check-in: All good!/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/Quick check-in: All good!/i),
+      ).toBeInTheDocument();
     });
   });
 
@@ -474,7 +476,9 @@ describe("DashboardPage Integration Tests", () => {
 
         render(<DashboardPage />);
 
-        expect(screen.getByText(new RegExp(expectedLabel, "i"))).toBeInTheDocument();
+        expect(
+          screen.getByText(new RegExp(expectedLabel, "i")),
+        ).toBeInTheDocument();
       },
     );
   });
@@ -486,42 +490,39 @@ describe("DashboardPage Integration Tests", () => {
       ["stressed", "Feeling stressed"],
       ["anxious", "Feeling anxious"],
       ["avoidant", "Feeling avoidant"],
-    ] as const)(
-      "should display mood %s as %s",
-      (mood, expectedLabel) => {
-        vi.mocked(useDashboardStore).mockReturnValue({
-          currentStreak: 5,
-          thisWeekHeadaches: 3,
-          thisWeekCheckins: 7,
-          trend: "improving" as const,
-          currentInsight: "Great job!",
-          recentEntries: [
-            {
-              type: "checkin" as const,
-              entry: {
-                id: "checkin-1",
-                timestamp: new Date("2025-01-10T08:00:00Z"),
-                timeOfDay: "morning" as const,
-                mood,
-                bodyTension: [],
-                sleepQuality: "good" as const,
-                physicalFactors: [],
-                isQuickDismiss: false,
-              },
+    ] as const)("should display mood %s as %s", (mood, expectedLabel) => {
+      vi.mocked(useDashboardStore).mockReturnValue({
+        currentStreak: 5,
+        thisWeekHeadaches: 3,
+        thisWeekCheckins: 7,
+        trend: "improving" as const,
+        currentInsight: "Great job!",
+        recentEntries: [
+          {
+            type: "checkin" as const,
+            entry: {
+              id: "checkin-1",
+              timestamp: new Date("2025-01-10T08:00:00Z"),
+              timeOfDay: "morning" as const,
+              mood,
+              bodyTension: [],
+              sleepQuality: "good" as const,
+              physicalFactors: [],
+              isQuickDismiss: false,
             },
-          ],
-          isLoading: false,
-          refreshDashboard: mockRefreshDashboard,
-          calculateTrend: vi.fn(),
-          generateInsight: vi.fn(),
-          getRecentEntries: vi.fn(),
-        });
+          },
+        ],
+        isLoading: false,
+        refreshDashboard: mockRefreshDashboard,
+        calculateTrend: vi.fn(),
+        generateInsight: vi.fn(),
+        getRecentEntries: vi.fn(),
+      });
 
-        render(<DashboardPage />);
+      render(<DashboardPage />);
 
-        expect(screen.getByText(expectedLabel)).toBeInTheDocument();
-      },
-    );
+      expect(screen.getByText(expectedLabel)).toBeInTheDocument();
+    });
   });
 
   describe("Empty States", () => {

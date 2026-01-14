@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
 /**
  * Mobile Touch Interaction E2E Tests
@@ -16,50 +16,57 @@ import { test, expect } from '@playwright/test';
 // Skip mobile touch tests - many look for data-testids that don't exist
 // (learn-card, action-cards) and test touch-specific behaviors that may not
 // work correctly in Playwright's emulated touch mode
-test.describe('Mobile Touch Interactions', () => {
+test.describe("Mobile Touch Interactions", () => {
   test.use({
     viewport: { width: 375, height: 667 },
-    hasTouch: true
+    hasTouch: true,
   });
 
-  test.describe('Touch Tap Interactions', () => {
-    test('should handle tap on navigation tabs', async ({ page }) => {
-      await page.goto('/');
+  test.describe("Touch Tap Interactions", () => {
+    test("should handle tap on navigation tabs", async ({ page }) => {
+      await page.goto("/");
 
       // Tap Learn tab in bottom nav
       const learnTab = page.locator('a[href="/learn"]').first();
       await learnTab.tap();
 
       // Should navigate
-      await expect(page).toHaveURL('/learn');
+      await expect(page).toHaveURL("/learn");
       await expect(page.locator('[data-testid="learn-page"]')).toBeVisible();
     });
 
-    test.skip('should handle tap on action cards', async ({ page }) => {
-      await page.goto('/');
+    test.skip("should handle tap on action cards", async ({ page }) => {
+      await page.goto("/");
 
       // Tap Learn card
       const learnCard = page.locator('[data-testid="learn-card"]');
       await learnCard.tap();
 
       // Should navigate
-      await expect(page).toHaveURL('/learn');
+      await expect(page).toHaveURL("/learn");
     });
 
-    test.skip('should handle tap on buttons in onboarding', async ({ page }) => {
+    test.skip("should handle tap on buttons in onboarding", async ({
+      page,
+    }) => {
       await page.evaluate(() => localStorage.clear());
-      await page.goto('/onboarding');
+      await page.goto("/onboarding");
 
       // Tap next button
-      const nextButton = page.locator('button').filter({ hasText: /Next|Continue|Get Started/i }).first();
+      const nextButton = page
+        .locator("button")
+        .filter({ hasText: /Next|Continue|Get Started/i })
+        .first();
       await nextButton.tap();
 
       // Should advance to next step
-      await expect(page.locator('text=Step 2 of 4')).toBeVisible();
+      await expect(page.locator("text=Step 2 of 4")).toBeVisible();
     });
 
-    test.skip('should handle rapid taps without duplicate actions', async ({ page }) => {
-      await page.goto('/');
+    test.skip("should handle rapid taps without duplicate actions", async ({
+      page,
+    }) => {
+      await page.goto("/");
 
       const learnCard = page.locator('[data-testid="learn-card"]');
 
@@ -69,14 +76,16 @@ test.describe('Mobile Touch Interactions', () => {
       await learnCard.tap();
 
       // Should only navigate once
-      await expect(page).toHaveURL('/learn');
+      await expect(page).toHaveURL("/learn");
       await expect(page.locator('[data-testid="learn-page"]')).toBeVisible();
     });
   });
 
-  test.describe('Touch Target Sizes', () => {
-    test.skip('should have minimum 44x44 touch targets for navigation tabs', async ({ page }) => {
-      await page.goto('/');
+  test.describe("Touch Target Sizes", () => {
+    test.skip("should have minimum 44x44 touch targets for navigation tabs", async ({
+      page,
+    }) => {
+      await page.goto("/");
 
       // Check all navigation tabs
       const navTabs = [
@@ -84,7 +93,7 @@ test.describe('Mobile Touch Interactions', () => {
         page.locator('a[href="/learn"]').first(),
         page.locator('a[href="/log"]').first(),
         page.locator('a[href="/insights"]').first(),
-        page.locator('a[href="/settings"]').first()
+        page.locator('a[href="/settings"]').first(),
       ];
 
       for (const tab of navTabs) {
@@ -97,8 +106,8 @@ test.describe('Mobile Touch Interactions', () => {
       }
     });
 
-    test('should have touch-friendly action cards', async ({ page }) => {
-      await page.goto('/');
+    test("should have touch-friendly action cards", async ({ page }) => {
+      await page.goto("/");
 
       // Check action cards
       const actionCards = page.locator('[data-testid="quick-actions"] button');
@@ -115,12 +124,17 @@ test.describe('Mobile Touch Interactions', () => {
       }
     });
 
-    test.skip('should have touch-friendly buttons in onboarding', async ({ page }) => {
+    test.skip("should have touch-friendly buttons in onboarding", async ({
+      page,
+    }) => {
       await page.evaluate(() => localStorage.clear());
-      await page.goto('/onboarding');
+      await page.goto("/onboarding");
 
       // Check next button
-      const nextButton = page.locator('button').filter({ hasText: /Next|Continue|Get Started/i }).first();
+      const nextButton = page
+        .locator("button")
+        .filter({ hasText: /Next|Continue|Get Started/i })
+        .first();
       const buttonBox = await nextButton.boundingBox();
 
       if (buttonBox) {
@@ -128,8 +142,10 @@ test.describe('Mobile Touch Interactions', () => {
       }
     });
 
-    test('should have adequate spacing between touch targets', async ({ page }) => {
-      await page.goto('/');
+    test("should have adequate spacing between touch targets", async ({
+      page,
+    }) => {
+      await page.goto("/");
 
       // Check spacing between bottom nav tabs
       const homeTab = page.locator('a[href="/"]').first();
@@ -146,46 +162,50 @@ test.describe('Mobile Touch Interactions', () => {
     });
   });
 
-  test.describe('Touch Feedback', () => {
-    test.skip('should provide visual feedback on button touch', async ({ page }) => {
-      await page.goto('/');
+  test.describe("Touch Feedback", () => {
+    test.skip("should provide visual feedback on button touch", async ({
+      page,
+    }) => {
+      await page.goto("/");
 
       const learnCard = page.locator('[data-testid="learn-card"]');
 
       // Should have transition or active styles
-      const classes = await learnCard.getAttribute('class');
+      const classes = await learnCard.getAttribute("class");
       expect(classes).toMatch(/transition|active|hover/i);
     });
 
-    test('should show active state on navigation tab tap', async ({ page }) => {
-      await page.goto('/');
+    test("should show active state on navigation tab tap", async ({ page }) => {
+      await page.goto("/");
 
       // Tap Learn tab
       const learnTab = page.locator('a[href="/learn"]').first();
       await learnTab.tap();
 
-      await expect(page).toHaveURL('/learn');
+      await expect(page).toHaveURL("/learn");
 
       // Learn tab should show active state
-      const classes = await learnTab.getAttribute('class');
-      expect(classes).toContain('purple'); // Active color
+      const classes = await learnTab.getAttribute("class");
+      expect(classes).toContain("purple"); // Active color
     });
 
-    test('should maintain touch feedback during navigation', async ({ page }) => {
-      await page.goto('/');
+    test("should maintain touch feedback during navigation", async ({
+      page,
+    }) => {
+      await page.goto("/");
 
       // Tap and verify feedback
       const insightsTab = page.locator('a[href="/insights"]').first();
       await insightsTab.tap();
 
       // Should navigate
-      await expect(page).toHaveURL('/insights');
+      await expect(page).toHaveURL("/insights");
     });
   });
 
-  test.describe('Touch Scrolling', () => {
-    test('should support touch scrolling on home page', async ({ page }) => {
-      await page.goto('/');
+  test.describe("Touch Scrolling", () => {
+    test("should support touch scrolling on home page", async ({ page }) => {
+      await page.goto("/");
 
       // Get initial scroll position
       const initialScrollY = await page.evaluate(() => window.scrollY);
@@ -202,11 +222,13 @@ test.describe('Mobile Touch Interactions', () => {
       expect(finalScrollY).toBeGreaterThanOrEqual(initialScrollY);
     });
 
-    test('should support touch scrolling on learn page', async ({ page }) => {
-      await page.goto('/learn');
+    test("should support touch scrolling on learn page", async ({ page }) => {
+      await page.goto("/learn");
 
       // Page should be scrollable if content exceeds viewport
-      const scrollHeight = await page.evaluate(() => document.body.scrollHeight);
+      const scrollHeight = await page.evaluate(
+        () => document.body.scrollHeight,
+      );
       const viewportHeight = 667;
 
       if (scrollHeight > viewportHeight) {
@@ -219,8 +241,10 @@ test.describe('Mobile Touch Interactions', () => {
       }
     });
 
-    test.skip('should not trigger navigation during scroll', async ({ page }) => {
-      await page.goto('/');
+    test.skip("should not trigger navigation during scroll", async ({
+      page,
+    }) => {
+      await page.goto("/");
 
       const currentUrl = page.url();
 
@@ -235,20 +259,20 @@ test.describe('Mobile Touch Interactions', () => {
     });
   });
 
-  test.describe('Touch vs Click Differences', () => {
-    test.skip('should handle touchstart events properly', async ({ page }) => {
-      await page.goto('/');
+  test.describe("Touch vs Click Differences", () => {
+    test.skip("should handle touchstart events properly", async ({ page }) => {
+      await page.goto("/");
 
       // Use tap (touch event) instead of click
       const learnCard = page.locator('[data-testid="learn-card"]');
       await learnCard.tap();
 
       // Should navigate same as click
-      await expect(page).toHaveURL('/learn');
+      await expect(page).toHaveURL("/learn");
     });
 
-    test('should prevent 300ms click delay on mobile', async ({ page }) => {
-      await page.goto('/');
+    test("should prevent 300ms click delay on mobile", async ({ page }) => {
+      await page.goto("/");
 
       const startTime = Date.now();
 
@@ -257,28 +281,30 @@ test.describe('Mobile Touch Interactions', () => {
       await learnTab.tap();
 
       // Wait for navigation
-      await expect(page).toHaveURL('/learn');
+      await expect(page).toHaveURL("/learn");
       const endTime = Date.now();
 
       // Should be faster than 300ms delay (allows some buffer)
       expect(endTime - startTime).toBeLessThan(1000);
     });
 
-    test.skip('should handle touchend without touchcancel', async ({ page }) => {
-      await page.goto('/');
+    test.skip("should handle touchend without touchcancel", async ({
+      page,
+    }) => {
+      await page.goto("/");
 
       // Tap and complete (no cancel)
       const settingsTab = page.locator('a[href="/settings"]').first();
       await settingsTab.tap();
 
       // Should navigate
-      await expect(page).toHaveURL('/settings');
+      await expect(page).toHaveURL("/settings");
     });
   });
 
-  test.describe('Multi-Touch Prevention', () => {
-    test.skip('should not trigger zoom on double-tap', async ({ page }) => {
-      await page.goto('/');
+  test.describe("Multi-Touch Prevention", () => {
+    test.skip("should not trigger zoom on double-tap", async ({ page }) => {
+      await page.goto("/");
 
       // Get initial zoom
       const initialZoom = await page.evaluate(() => {
@@ -300,8 +326,8 @@ test.describe('Mobile Touch Interactions', () => {
       expect(finalZoom).toBe(initialZoom);
     });
 
-    test('should not trigger zoom on pinch gesture', async ({ page }) => {
-      await page.goto('/');
+    test("should not trigger zoom on pinch gesture", async ({ page }) => {
+      await page.goto("/");
 
       // Get initial viewport scale
       const initialScale = await page.evaluate(() => {
@@ -322,9 +348,11 @@ test.describe('Mobile Touch Interactions', () => {
     });
   });
 
-  test.describe('Touch and Drag (if applicable)', () => {
-    test.skip('should not trigger drag on navigation tabs', async ({ page }) => {
-      await page.goto('/');
+  test.describe("Touch and Drag (if applicable)", () => {
+    test.skip("should not trigger drag on navigation tabs", async ({
+      page,
+    }) => {
+      await page.goto("/");
 
       const learnTab = page.locator('a[href="/learn"]').first();
 
@@ -339,11 +367,13 @@ test.describe('Mobile Touch Interactions', () => {
       await page.waitForTimeout(200);
 
       // Should not navigate during drag
-      await expect(page).toHaveURL('/');
+      await expect(page).toHaveURL("/");
     });
 
-    test.skip('should handle touch hold without triggering action', async ({ page }) => {
-      await page.goto('/');
+    test.skip("should handle touch hold without triggering action", async ({
+      page,
+    }) => {
+      await page.goto("/");
 
       const currentUrl = page.url();
 
@@ -361,29 +391,31 @@ test.describe('Mobile Touch Interactions', () => {
     });
   });
 
-  test.describe('Touch Accessibility', () => {
-    test('should announce navigation changes to screen readers', async ({ page }) => {
-      await page.goto('/');
+  test.describe("Touch Accessibility", () => {
+    test("should announce navigation changes to screen readers", async ({
+      page,
+    }) => {
+      await page.goto("/");
 
       // Tap Learn tab
       const learnTab = page.locator('a[href="/learn"]').first();
       await learnTab.tap();
 
       // Should navigate with proper semantics
-      await expect(page).toHaveURL('/learn');
+      await expect(page).toHaveURL("/learn");
 
       // Page should have accessible heading
-      const heading = page.locator('h1').filter({ hasText: 'Learn' }).first();
+      const heading = page.locator("h1").filter({ hasText: "Learn" }).first();
       await expect(heading).toBeVisible();
     });
 
-    test('should support focus visible on touch devices', async ({ page }) => {
-      await page.goto('/');
+    test("should support focus visible on touch devices", async ({ page }) => {
+      await page.goto("/");
 
       // Even on touch devices, keyboard users should see focus
       // (Testing touch + keyboard combination)
-      await page.keyboard.press('Tab');
-      await page.keyboard.press('Tab');
+      await page.keyboard.press("Tab");
+      await page.keyboard.press("Tab");
 
       const focusedElement = await page.evaluate(() => {
         return document.activeElement?.tagName;
@@ -392,15 +424,19 @@ test.describe('Mobile Touch Interactions', () => {
       expect(focusedElement).toBeTruthy();
     });
 
-    test('should maintain touch target sizes for accessibility', async ({ page }) => {
-      await page.goto('/');
+    test("should maintain touch target sizes for accessibility", async ({
+      page,
+    }) => {
+      await page.goto("/");
 
       // All interactive elements should be >= 44px
       const dismissButton = page.locator('[data-testid="dismiss-button"]');
 
       // Wait for install prompt (if it appears)
       const installPrompt = page.locator('[data-testid="install-prompt"]');
-      const isPromptVisible = await installPrompt.isVisible({ timeout: 6000 }).catch(() => false);
+      const isPromptVisible = await installPrompt
+        .isVisible({ timeout: 6000 })
+        .catch(() => false);
 
       if (isPromptVisible) {
         const buttonBox = await dismissButton.boundingBox();
@@ -412,9 +448,9 @@ test.describe('Mobile Touch Interactions', () => {
     });
   });
 
-  test.describe('Touch Performance', () => {
-    test('should respond to touches without lag', async ({ page }) => {
-      await page.goto('/');
+  test.describe("Touch Performance", () => {
+    test("should respond to touches without lag", async ({ page }) => {
+      await page.goto("/");
 
       const startTime = Date.now();
 
@@ -428,8 +464,8 @@ test.describe('Mobile Touch Interactions', () => {
       expect(responseTime).toBeLessThan(100);
     });
 
-    test('should handle rapid successive taps', async ({ page }) => {
-      await page.goto('/');
+    test("should handle rapid successive taps", async ({ page }) => {
+      await page.goto("/");
 
       // Tap between different tabs rapidly
       const learnTab = page.locator('a[href="/learn"]').first();
@@ -444,15 +480,15 @@ test.describe('Mobile Touch Interactions', () => {
       await learnTab.tap();
 
       // Should navigate to final destination
-      await expect(page).toHaveURL('/learn');
+      await expect(page).toHaveURL("/learn");
     });
 
-    test.skip('should maintain smooth scrolling on touch', async ({ page }) => {
-      await page.goto('/');
+    test.skip("should maintain smooth scrolling on touch", async ({ page }) => {
+      await page.goto("/");
 
       // Perform smooth scroll
       await page.evaluate(() => {
-        window.scrollTo({ top: 100, behavior: 'smooth' });
+        window.scrollTo({ top: 100, behavior: "smooth" });
       });
 
       await page.waitForTimeout(300);

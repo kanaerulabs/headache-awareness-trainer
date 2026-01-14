@@ -5,13 +5,13 @@
  * Uses the InsightsAgent adapter for LLM-powered pattern analysis.
  */
 
-import { HeadacheEntryRepository } from '../log-headache.usecase';
-import { CheckInRepository } from '../manage-checkin.usecase';
+import { HeadacheEntryRepository } from "../log-headache.usecase";
+import { CheckInRepository } from "../manage-checkin.usecase";
 import {
   IInsightsAgent,
   InsightsOutput,
   AgentError,
-} from './interfaces/insights-agent.interface';
+} from "./interfaces/insights-agent.interface";
 
 /**
  * Input port for generating AI insights
@@ -91,9 +91,9 @@ export class GenerateAIInsightsUseCase {
       return {
         success: false,
         error: {
-          code: 'INSUFFICIENT_DATA',
+          code: "INSUFFICIENT_DATA",
           message:
-            'No data available for analysis. Please log some headaches or check-ins first.',
+            "No data available for analysis. Please log some headaches or check-ins first.",
         },
         dataStats: {
           headacheCount: 0,
@@ -136,7 +136,7 @@ export class GenerateAIInsightsUseCase {
         },
         context:
           input.context ??
-          'Analyze this headache tracking data to identify patterns and provide actionable recommendations.',
+          "Analyze this headache tracking data to identify patterns and provide actionable recommendations.",
         options: input.options,
       });
 
@@ -169,9 +169,11 @@ export class GenerateAIInsightsUseCase {
       return {
         success: false,
         error: {
-          code: 'UNKNOWN',
+          code: "UNKNOWN",
           message:
-            error instanceof Error ? error.message : 'An unknown error occurred',
+            error instanceof Error
+              ? error.message
+              : "An unknown error occurred",
         },
         dataStats: {
           headacheCount,

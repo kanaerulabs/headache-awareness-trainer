@@ -77,7 +77,7 @@ export interface Insight {
  */
 const getDateOnly = (date: Date): Date => {
   return new Date(
-    Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())
+    Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()),
   );
 };
 
@@ -92,7 +92,7 @@ const getDateKey = (date: Date): string => {
  * Get time of day from timestamp (using UTC hours)
  */
 const getTimeOfDay = (
-  timestamp: Date
+  timestamp: Date,
 ): "morning" | "afternoon" | "evening" | "night" => {
   const hour = timestamp.getUTCHours();
   if (hour >= 5 && hour < 12) return "morning";
@@ -135,7 +135,7 @@ const getWeekEnd = (weekStart: Date): Date => {
 export class CalculateCorrelationsUseCase {
   constructor(
     private readonly headacheRepository: HeadacheEntryRepository,
-    private readonly checkinRepository: CheckInRepository
+    private readonly checkinRepository: CheckInRepository,
   ) {}
 
   async execute(): Promise<CorrelationResult[]> {
@@ -154,7 +154,7 @@ export class CalculateCorrelationsUseCase {
    */
   calculateFromData(
     headaches: HeadacheEntryProps[],
-    checkins: CheckInProps[]
+    checkins: CheckInProps[],
   ): CorrelationResult[] {
     if (headaches.length === 0 && checkins.length === 0) {
       return [];
@@ -169,7 +169,7 @@ export class CalculateCorrelationsUseCase {
     // Calculate sleep correlation
     const sleepCorrelation = this.calculateSleepCorrelation(
       headachesByDate,
-      checkinsByDate
+      checkinsByDate,
     );
     if (sleepCorrelation) {
       correlations.push(sleepCorrelation);
@@ -178,7 +178,7 @@ export class CalculateCorrelationsUseCase {
     // Calculate stress correlation
     const stressCorrelation = this.calculateStressCorrelation(
       headachesByDate,
-      checkinsByDate
+      checkinsByDate,
     );
     if (stressCorrelation) {
       correlations.push(stressCorrelation);
@@ -187,7 +187,7 @@ export class CalculateCorrelationsUseCase {
     // Calculate jaw tension correlation
     const jawCorrelation = this.calculateJawTensionCorrelation(
       headachesByDate,
-      checkinsByDate
+      checkinsByDate,
     );
     if (jawCorrelation) {
       correlations.push(jawCorrelation);
@@ -197,7 +197,7 @@ export class CalculateCorrelationsUseCase {
   }
 
   private groupByDate<T extends { timestamp: Date }>(
-    entries: T[]
+    entries: T[],
   ): Map<string, T[]> {
     const map = new Map<string, T[]>();
     entries.forEach((entry) => {
@@ -212,7 +212,7 @@ export class CalculateCorrelationsUseCase {
 
   private calculateSleepCorrelation(
     headachesByDate: Map<string, HeadacheEntryProps[]>,
-    checkinsByDate: Map<string, CheckInProps[]>
+    checkinsByDate: Map<string, CheckInProps[]>,
   ): CorrelationResult | null {
     let poorSleepDays = 0;
     let poorSleepHeadacheDays = 0;
@@ -242,7 +242,7 @@ export class CalculateCorrelationsUseCase {
       goodSleepDays > 0 ? goodSleepHeadacheDays / goodSleepDays : 0;
     const strength = Math.min(
       100,
-      Math.abs(poorSleepRate - goodSleepRate) * 100
+      Math.abs(poorSleepRate - goodSleepRate) * 100,
     );
 
     return {
@@ -255,7 +255,7 @@ export class CalculateCorrelationsUseCase {
 
   private calculateStressCorrelation(
     headachesByDate: Map<string, HeadacheEntryProps[]>,
-    checkinsByDate: Map<string, CheckInProps[]>
+    checkinsByDate: Map<string, CheckInProps[]>,
   ): CorrelationResult | null {
     let stressedDays = 0;
     let stressedHeadacheDays = 0;
@@ -264,7 +264,7 @@ export class CalculateCorrelationsUseCase {
 
     checkinsByDate.forEach((checkins, dateKey) => {
       const hasStress = checkins.some(
-        (c) => c.mood === "stressed" || c.mood === "anxious"
+        (c) => c.mood === "stressed" || c.mood === "anxious",
       );
       const hasHeadache = headachesByDate.has(dateKey);
 
@@ -296,7 +296,7 @@ export class CalculateCorrelationsUseCase {
 
   private calculateJawTensionCorrelation(
     headachesByDate: Map<string, HeadacheEntryProps[]>,
-    checkinsByDate: Map<string, CheckInProps[]>
+    checkinsByDate: Map<string, CheckInProps[]>,
   ): CorrelationResult | null {
     let jawTensionDays = 0;
     let jawTensionHeadacheDays = 0;
@@ -343,7 +343,7 @@ export class CalculateCorrelationsUseCase {
 export class GetWeeklyTrendsUseCase {
   constructor(
     private readonly headacheRepository: HeadacheEntryRepository,
-    private readonly checkinRepository: CheckInRepository
+    private readonly checkinRepository: CheckInRepository,
   ) {}
 
   async execute(filter: 30 | 90 | "all"): Promise<WeeklyTrendData[]> {
@@ -362,7 +362,7 @@ export class GetWeeklyTrendsUseCase {
   calculateFromData(
     headaches: HeadacheEntryProps[],
     checkins: CheckInProps[],
-    filter: 30 | 90 | "all"
+    filter: 30 | 90 | "all",
   ): WeeklyTrendData[] {
     const now = new Date();
     let startDate: Date;
@@ -454,7 +454,7 @@ export class GetWeeklyTrendsUseCase {
     }
 
     return allWeeks.sort(
-      (a, b) => a.weekStart.getTime() - b.weekStart.getTime()
+      (a, b) => a.weekStart.getTime() - b.weekStart.getTime(),
     );
   }
 }
@@ -528,7 +528,7 @@ export class GetTimeOfDayAnalysisUseCase {
 export class GetCalendarDataUseCase {
   constructor(
     private readonly headacheRepository: HeadacheEntryRepository,
-    private readonly checkinRepository: CheckInRepository
+    private readonly checkinRepository: CheckInRepository,
   ) {}
 
   async execute(startDate: Date, endDate: Date): Promise<CalendarDayData[]> {
@@ -552,7 +552,7 @@ export class GetCalendarDataUseCase {
     headaches: HeadacheEntryProps[],
     checkins: CheckInProps[],
     startDate: Date,
-    endDate: Date
+    endDate: Date,
   ): CalendarDayData[] {
     const start = getDateOnly(startDate);
     const end = getDateOnly(endDate);
@@ -603,7 +603,7 @@ export class GetCalendarDataUseCase {
     });
 
     return Array.from(dataByDate.values()).sort(
-      (a, b) => a.date.getTime() - b.date.getTime()
+      (a, b) => a.date.getTime() - b.date.getTime(),
     );
   }
 }

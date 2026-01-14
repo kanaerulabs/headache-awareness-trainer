@@ -86,9 +86,7 @@ export default async function RootLayout({
             <ThemeProvider>
               <BottomNav />
               <MainContentWrapper>
-                <main className="min-h-screen-safe">
-                  {children}
-                </main>
+                <main className="min-h-screen-safe">{children}</main>
                 <BottomNavSpacer />
               </MainContentWrapper>
               <InstallPrompt />

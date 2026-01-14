@@ -141,9 +141,7 @@ export const TrendCharts: React.FC<TrendChartsProps> = ({
         role="status"
       >
         <p className="text-center font-medium mb-2">{t("noTrendData")}</p>
-        <p className="text-sm text-center">
-          {t("keepLogging")}
-        </p>
+        <p className="text-sm text-center">{t("keepLogging")}</p>
       </div>
     );
   }

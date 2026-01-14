@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
-import { useSettingsStore, initializeTheme } from "@/interface-adapters/store/settingsStore";
+import {
+  useSettingsStore,
+  initializeTheme,
+} from "@/interface-adapters/store/settingsStore";
 
 /**
  * ThemeProvider Component

@@ -98,7 +98,11 @@ export function EducationHub() {
                   icon={content.icon}
                   estimatedMinutes={content.estimatedMinutes}
                   isLocked={!unlocked}
-                  unlockRequirement={content.unlockRequirementKey ? tc(content.unlockRequirementKey) : undefined}
+                  unlockRequirement={
+                    content.unlockRequirementKey
+                      ? tc(content.unlockRequirementKey)
+                      : undefined
+                  }
                   progress={progress?.progressPercent ?? 0}
                   isCompleted={progress?.completed ?? false}
                 />

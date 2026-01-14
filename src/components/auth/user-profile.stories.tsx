@@ -287,7 +287,9 @@ export const ResponsiveLayout: Story = {
             <Story />
           </div>
           <div className="w-[500px]">
-            <p className="mb-2 text-xs text-muted-foreground">Desktop (500px)</p>
+            <p className="mb-2 text-xs text-muted-foreground">
+              Desktop (500px)
+            </p>
             <Story />
           </div>
         </div>

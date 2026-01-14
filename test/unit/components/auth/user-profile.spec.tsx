@@ -731,19 +731,17 @@ describe("UserProfile", () => {
       expect(container.firstChild).toBeNull();
     });
 
-    it("handles onUnauthenticated callback being called multiple times", () => {
+    it("handles onUnauthenticated callback being called when unauthenticated", () => {
       // Arrange
       const onUnauthenticated = jest.fn();
       useAuthStore.getState().reset();
 
-      // Act - render multiple times
-      const { rerender } = render(
-        <UserProfile onUnauthenticated={onUnauthenticated} />,
-      );
-      rerender(<UserProfile onUnauthenticated={onUnauthenticated} />);
+      // Act - render when unauthenticated
+      render(<UserProfile onUnauthenticated={onUnauthenticated} />);
 
-      // Assert - callback called on each render when unauthenticated
-      expect(onUnauthenticated.mock.calls.length).toBeGreaterThanOrEqual(1);
+      // Assert - callback called via useEffect when unauthenticated
+      // Note: useEffect runs once per effect trigger, not on every render
+      expect(onUnauthenticated).toHaveBeenCalledTimes(1);
     });
 
     it("handles all props together", () => {

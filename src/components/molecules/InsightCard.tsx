@@ -116,9 +116,15 @@ export const InsightCard: React.FC<InsightCardProps> = ({
   };
 
   // Translate insight data keys
-  const insightTitle = insight.title.startsWith("insightData.") ? ti(insight.title) : insight.title;
-  const insightDescription = insight.description.startsWith("insightData.") ? ti(insight.description) : insight.description;
-  const insightUnlockCondition = insight.unlockCondition?.startsWith("insightData.")
+  const insightTitle = insight.title.startsWith("insightData.")
+    ? ti(insight.title)
+    : insight.title;
+  const insightDescription = insight.description.startsWith("insightData.")
+    ? ti(insight.description)
+    : insight.description;
+  const insightUnlockCondition = insight.unlockCondition?.startsWith(
+    "insightData.",
+  )
     ? ti(insight.unlockCondition)
     : insight.unlockCondition;
 
@@ -206,9 +212,7 @@ export const InsightCard: React.FC<InsightCardProps> = ({
               )}
               data-testid="insight-description"
             >
-              {isLocked
-                ? t("lockedInsightDesc")
-                : insightDescription}
+              {isLocked ? t("lockedInsightDesc") : insightDescription}
             </p>
 
             {/* Unlock condition badge */}

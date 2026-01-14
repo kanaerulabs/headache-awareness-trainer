@@ -12,7 +12,11 @@ import {
 import { useTranslations } from "next-intl";
 
 // Map store values to translation keys and icons
-const REMINDER_OPTIONS: { value: ReminderPreference; translationKey: string; icon: typeof Bell }[] = [
+const REMINDER_OPTIONS: {
+  value: ReminderPreference;
+  translationKey: string;
+  icon: typeof Bell;
+}[] = [
   { value: "yes-gently", translationKey: "yesGently", icon: Bell },
   { value: "maybe-later", translationKey: "maybeLater", icon: BellOff },
 ];
@@ -37,10 +41,7 @@ export function ReminderStep() {
   };
 
   return (
-    <WizardStep
-      title={t("reminderTitle")}
-      description={t("reminderDesc")}
-    >
+    <WizardStep title={t("reminderTitle")} description={t("reminderDesc")}>
       <div className="space-y-3" data-testid="reminder-options">
         {REMINDER_OPTIONS.map((option) => {
           const Icon = option.icon;
@@ -71,7 +72,9 @@ export function ReminderStep() {
                   <Icon className="h-5 w-5" />
                 </div>
                 <div className="flex-1 space-y-1">
-                  <div className="font-medium">{t(`reminderOptions.${option.translationKey}.label`)}</div>
+                  <div className="font-medium">
+                    {t(`reminderOptions.${option.translationKey}.label`)}
+                  </div>
                   <div className="text-sm text-muted-foreground">
                     {t(`reminderOptions.${option.translationKey}.description`)}
                   </div>

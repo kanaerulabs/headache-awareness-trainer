@@ -21,7 +21,6 @@ import {
   selectIsSessionExpiringSoon,
 } from "@/stores/auth/auth.store";
 import { Session } from "@/domains/auth/value-objects/session.vo";
-import { User } from "@/domains/auth/entities/user.entity";
 
 describe("Auth Store", () => {
   beforeEach(() => {
@@ -668,7 +667,6 @@ describe("Auth Store", () => {
       // Arrange
       const stateBefore = useAuthStore.getState();
       const sessionBefore = stateBefore.session;
-      const errorBefore = stateBefore.error;
 
       // Act - attempt direct mutation (should not affect store)
       // This is just to verify that direct mutation doesn't work

@@ -24,17 +24,37 @@ describe("AchievementGrid", () => {
 
   const mockAchievements = {
     // Streak achievements
-    "streak-3-days": createMockAchievement("streak-3-days", "3-Day Streak", true),
-    "streak-7-days": createMockAchievement("streak-7-days", "Week Warrior", true),
-    "streak-14-days": createMockAchievement("streak-14-days", "Two Weeks Strong"),
+    "streak-3-days": createMockAchievement(
+      "streak-3-days",
+      "3-Day Streak",
+      true,
+    ),
+    "streak-7-days": createMockAchievement(
+      "streak-7-days",
+      "Week Warrior",
+      true,
+    ),
+    "streak-14-days": createMockAchievement(
+      "streak-14-days",
+      "Two Weeks Strong",
+    ),
     "streak-30-days": createMockAchievement("streak-30-days", "Month Master"),
-    "streak-60-days": createMockAchievement("streak-60-days", "60-Day Champion"),
+    "streak-60-days": createMockAchievement(
+      "streak-60-days",
+      "60-Day Champion",
+    ),
     "streak-90-days": createMockAchievement("streak-90-days", "90-Day Legend"),
 
     // First actions
     "first-entry": createMockAchievement("first-entry", "First Steps", true),
-    "first-checkin": createMockAchievement("first-checkin", "Check-In Champion"),
-    "first-pattern": createMockAchievement("first-pattern", "Pattern Detective"),
+    "first-checkin": createMockAchievement(
+      "first-checkin",
+      "Check-In Champion",
+    ),
+    "first-pattern": createMockAchievement(
+      "first-pattern",
+      "Pattern Detective",
+    ),
     "first-week": createMockAchievement("first-week", "Week One Complete"),
 
     // Milestones
@@ -47,7 +67,9 @@ describe("AchievementGrid", () => {
   };
 
   beforeEach(() => {
-    (useGamificationStore as unknown as jest.Mock).mockReturnValue(mockAchievements);
+    (useGamificationStore as unknown as jest.Mock).mockReturnValue(
+      mockAchievements,
+    );
   });
 
   afterEach(() => {
@@ -124,14 +146,17 @@ describe("AchievementGrid", () => {
     it("displays correct count for streak achievements category", () => {
       render(<AchievementGrid />);
 
-      const streakSection = screen.getByText("Streak Achievements").parentElement;
+      const streakSection = screen.getByText(
+        "Streak Achievements",
+      ).parentElement;
       expect(streakSection).toHaveTextContent("2/6");
     });
 
     it("displays correct count for first actions category", () => {
       render(<AchievementGrid />);
 
-      const firstActionsSection = screen.getByText("First Actions").parentElement;
+      const firstActionsSection =
+        screen.getByText("First Actions").parentElement;
       expect(firstActionsSection).toHaveTextContent("1/4");
     });
 
@@ -145,18 +170,28 @@ describe("AchievementGrid", () => {
     it("updates category counts when achievements unlock", () => {
       const { rerender } = render(<AchievementGrid />);
 
-      expect(screen.getByText("Streak Achievements").parentElement).toHaveTextContent("2/6");
+      expect(
+        screen.getByText("Streak Achievements").parentElement,
+      ).toHaveTextContent("2/6");
 
       const updatedAchievements = {
         ...mockAchievements,
-        "streak-14-days": createMockAchievement("streak-14-days", "Two Weeks Strong", true),
+        "streak-14-days": createMockAchievement(
+          "streak-14-days",
+          "Two Weeks Strong",
+          true,
+        ),
       };
 
-      (useGamificationStore as unknown as jest.Mock).mockReturnValue(updatedAchievements);
+      (useGamificationStore as unknown as jest.Mock).mockReturnValue(
+        updatedAchievements,
+      );
 
       rerender(<AchievementGrid />);
 
-      expect(screen.getByText("Streak Achievements").parentElement).toHaveTextContent("3/6");
+      expect(
+        screen.getByText("Streak Achievements").parentElement,
+      ).toHaveTextContent("3/6");
     });
   });
 
@@ -186,7 +221,9 @@ describe("AchievementGrid", () => {
         ]),
       );
 
-      (useGamificationStore as unknown as jest.Mock).mockReturnValue(allUnlocked);
+      (useGamificationStore as unknown as jest.Mock).mockReturnValue(
+        allUnlocked,
+      );
 
       render(<AchievementGrid />);
 
@@ -205,12 +242,26 @@ describe("AchievementGrid", () => {
       );
       const partiallyUnlocked = {
         ...allLocked,
-        "streak-3-days": createMockAchievement("streak-3-days", "3-Day Streak", true),
-        "streak-7-days": createMockAchievement("streak-7-days", "Week Warrior", true),
-        "first-entry": createMockAchievement("first-entry", "First Steps", true),
+        "streak-3-days": createMockAchievement(
+          "streak-3-days",
+          "3-Day Streak",
+          true,
+        ),
+        "streak-7-days": createMockAchievement(
+          "streak-7-days",
+          "Week Warrior",
+          true,
+        ),
+        "first-entry": createMockAchievement(
+          "first-entry",
+          "First Steps",
+          true,
+        ),
       };
 
-      (useGamificationStore as unknown as jest.Mock).mockReturnValue(partiallyUnlocked);
+      (useGamificationStore as unknown as jest.Mock).mockReturnValue(
+        partiallyUnlocked,
+      );
 
       render(<AchievementGrid />);
 
@@ -227,7 +278,9 @@ describe("AchievementGrid", () => {
       render(<AchievementGrid onAchievementClick={handleClick} />);
 
       const achievement = screen.getByText("3-Day Streak");
-      fireEvent.click(achievement.closest('[data-testid="achievement-badge"]')!);
+      fireEvent.click(
+        achievement.closest('[data-testid="achievement-badge"]')!,
+      );
 
       expect(handleClick).toHaveBeenCalledTimes(1);
       expect(handleClick).toHaveBeenCalledWith(
@@ -243,7 +296,9 @@ describe("AchievementGrid", () => {
       render(<AchievementGrid onAchievementClick={handleClick} />);
 
       const achievement = screen.getByText("Two Weeks Strong");
-      fireEvent.click(achievement.closest('[data-testid="achievement-badge"]')!);
+      fireEvent.click(
+        achievement.closest('[data-testid="achievement-badge"]')!,
+      );
 
       expect(handleClick).not.toHaveBeenCalled();
     });
@@ -255,8 +310,12 @@ describe("AchievementGrid", () => {
       const firstAchievement = screen.getByText("3-Day Streak");
       const secondAchievement = screen.getByText("Week Warrior");
 
-      fireEvent.click(firstAchievement.closest('[data-testid="achievement-badge"]')!);
-      fireEvent.click(secondAchievement.closest('[data-testid="achievement-badge"]')!);
+      fireEvent.click(
+        firstAchievement.closest('[data-testid="achievement-badge"]')!,
+      );
+      fireEvent.click(
+        secondAchievement.closest('[data-testid="achievement-badge"]')!,
+      );
 
       expect(handleClick).toHaveBeenCalledTimes(2);
     });
@@ -266,7 +325,9 @@ describe("AchievementGrid", () => {
 
       const achievement = screen.getByText("3-Day Streak");
       expect(() => {
-        fireEvent.click(achievement.closest('[data-testid="achievement-badge"]')!);
+        fireEvent.click(
+          achievement.closest('[data-testid="achievement-badge"]')!,
+        );
       }).not.toThrow();
     });
   });
@@ -275,14 +336,18 @@ describe("AchievementGrid", () => {
     it("uses grid layout for achievements", () => {
       render(<AchievementGrid />);
 
-      const grids = screen.getByTestId("achievement-grid").querySelectorAll(".grid");
+      const grids = screen
+        .getByTestId("achievement-grid")
+        .querySelectorAll(".grid");
       expect(grids.length).toBeGreaterThan(0);
     });
 
     it("applies responsive grid classes", () => {
       render(<AchievementGrid />);
 
-      const grids = screen.getByTestId("achievement-grid").querySelectorAll(".grid-cols-1");
+      const grids = screen
+        .getByTestId("achievement-grid")
+        .querySelectorAll(".grid-cols-1");
       expect(grids.length).toBeGreaterThan(0);
 
       grids.forEach((grid) => {
@@ -293,14 +358,18 @@ describe("AchievementGrid", () => {
     it("maintains spacing between sections", () => {
       render(<AchievementGrid />);
 
-      const content = screen.getByTestId("achievement-grid").querySelector(".space-y-6");
+      const content = screen
+        .getByTestId("achievement-grid")
+        .querySelector(".space-y-6");
       expect(content).toBeInTheDocument();
     });
 
     it("maintains spacing between achievements in grid", () => {
       render(<AchievementGrid />);
 
-      const grids = screen.getByTestId("achievement-grid").querySelectorAll(".gap-3");
+      const grids = screen
+        .getByTestId("achievement-grid")
+        .querySelectorAll(".gap-3");
       expect(grids.length).toBeGreaterThan(0);
     });
   });
@@ -314,7 +383,9 @@ describe("AchievementGrid", () => {
       expect(mainTitle).toBeInTheDocument();
 
       // Category titles exist and are visible
-      const categoryTitles = screen.getAllByText(/Streak Achievements|First Actions|Milestones/);
+      const categoryTitles = screen.getAllByText(
+        /Streak Achievements|First Actions|Milestones/,
+      );
       expect(categoryTitles.length).toBe(3);
       categoryTitles.forEach((title) => {
         expect(title).toBeVisible();
@@ -333,8 +404,11 @@ describe("AchievementGrid", () => {
     it("provides text context with category counts", () => {
       render(<AchievementGrid />);
 
-      const streakSection = screen.getByText("Streak Achievements").parentElement;
-      const firstActionsSection = screen.getByText("First Actions").parentElement;
+      const streakSection = screen.getByText(
+        "Streak Achievements",
+      ).parentElement;
+      const firstActionsSection =
+        screen.getByText("First Actions").parentElement;
       const milestonesSection = screen.getByText("Milestones").parentElement;
 
       expect(streakSection).toHaveTextContent("2/6");
@@ -385,7 +459,9 @@ describe("AchievementGrid", () => {
         ]),
       );
 
-      (useGamificationStore as unknown as jest.Mock).mockReturnValue(allLockedAchievements);
+      (useGamificationStore as unknown as jest.Mock).mockReturnValue(
+        allLockedAchievements,
+      );
 
       render(<AchievementGrid />);
 
@@ -402,7 +478,9 @@ describe("AchievementGrid", () => {
         ]),
       );
 
-      (useGamificationStore as unknown as jest.Mock).mockReturnValue(allLockedAchievements);
+      (useGamificationStore as unknown as jest.Mock).mockReturnValue(
+        allLockedAchievements,
+      );
 
       render(<AchievementGrid />);
 
@@ -419,14 +497,18 @@ describe("AchievementGrid", () => {
         ]),
       );
 
-      (useGamificationStore as unknown as jest.Mock).mockReturnValue(allUnlocked);
+      (useGamificationStore as unknown as jest.Mock).mockReturnValue(
+        allUnlocked,
+      );
 
       render(<AchievementGrid />);
 
       const grid = screen.getByTestId("achievement-grid");
       expect(grid.textContent).toMatch(/16\/16/);
 
-      const streakSection = screen.getByText("Streak Achievements").parentElement;
+      const streakSection = screen.getByText(
+        "Streak Achievements",
+      ).parentElement;
       expect(streakSection).toHaveTextContent("6/6");
     });
 
@@ -445,7 +527,9 @@ describe("AchievementGrid", () => {
       const grid = screen.getByTestId("achievement-grid");
       expect(grid.textContent).toMatch(/0\/16/);
 
-      const streakSection = screen.getByText("Streak Achievements").parentElement;
+      const streakSection = screen.getByText(
+        "Streak Achievements",
+      ).parentElement;
       expect(streakSection).toHaveTextContent("0/6");
     });
   });
@@ -459,10 +543,16 @@ describe("AchievementGrid", () => {
 
       const updatedAchievements = {
         ...mockAchievements,
-        "streak-14-days": createMockAchievement("streak-14-days", "Two Weeks Strong", true),
+        "streak-14-days": createMockAchievement(
+          "streak-14-days",
+          "Two Weeks Strong",
+          true,
+        ),
       };
 
-      (useGamificationStore as unknown as jest.Mock).mockReturnValue(updatedAchievements);
+      (useGamificationStore as unknown as jest.Mock).mockReturnValue(
+        updatedAchievements,
+      );
 
       rerender(<AchievementGrid />);
 
@@ -476,13 +566,31 @@ describe("AchievementGrid", () => {
 
       const moreUnlocked = {
         ...mockAchievements,
-        "streak-14-days": createMockAchievement("streak-14-days", "Two Weeks Strong", true),
-        "streak-30-days": createMockAchievement("streak-30-days", "Month Master", true),
-        "first-checkin": createMockAchievement("first-checkin", "Check-In Champion", true),
-        "first-pattern": createMockAchievement("first-pattern", "Pattern Detective", true),
+        "streak-14-days": createMockAchievement(
+          "streak-14-days",
+          "Two Weeks Strong",
+          true,
+        ),
+        "streak-30-days": createMockAchievement(
+          "streak-30-days",
+          "Month Master",
+          true,
+        ),
+        "first-checkin": createMockAchievement(
+          "first-checkin",
+          "Check-In Champion",
+          true,
+        ),
+        "first-pattern": createMockAchievement(
+          "first-pattern",
+          "Pattern Detective",
+          true,
+        ),
       };
 
-      (useGamificationStore as unknown as jest.Mock).mockReturnValue(moreUnlocked);
+      (useGamificationStore as unknown as jest.Mock).mockReturnValue(
+        moreUnlocked,
+      );
 
       rerender(<AchievementGrid />);
 
@@ -493,20 +601,34 @@ describe("AchievementGrid", () => {
     it("updates category counts independently", () => {
       const { rerender } = render(<AchievementGrid />);
 
-      expect(screen.getByText("Streak Achievements").parentElement).toHaveTextContent("2/6");
-      expect(screen.getByText("First Actions").parentElement).toHaveTextContent("1/4");
+      expect(
+        screen.getByText("Streak Achievements").parentElement,
+      ).toHaveTextContent("2/6");
+      expect(screen.getByText("First Actions").parentElement).toHaveTextContent(
+        "1/4",
+      );
 
       const updatedAchievements = {
         ...mockAchievements,
-        "first-checkin": createMockAchievement("first-checkin", "Check-In Champion", true),
+        "first-checkin": createMockAchievement(
+          "first-checkin",
+          "Check-In Champion",
+          true,
+        ),
       };
 
-      (useGamificationStore as unknown as jest.Mock).mockReturnValue(updatedAchievements);
+      (useGamificationStore as unknown as jest.Mock).mockReturnValue(
+        updatedAchievements,
+      );
 
       rerender(<AchievementGrid />);
 
-      expect(screen.getByText("Streak Achievements").parentElement).toHaveTextContent("2/6");
-      expect(screen.getByText("First Actions").parentElement).toHaveTextContent("2/4");
+      expect(
+        screen.getByText("Streak Achievements").parentElement,
+      ).toHaveTextContent("2/6");
+      expect(screen.getByText("First Actions").parentElement).toHaveTextContent(
+        "2/4",
+      );
     });
   });
 

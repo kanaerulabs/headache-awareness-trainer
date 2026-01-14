@@ -35,10 +35,7 @@ export function FrequencyStep() {
   };
 
   return (
-    <WizardStep
-      title={t("frequencyTitle")}
-      description={t("frequencyDesc")}
-    >
+    <WizardStep title={t("frequencyTitle")} description={t("frequencyDesc")}>
       <div className="space-y-3" data-testid="frequency-options">
         {FREQUENCY_OPTIONS.map((option) => (
           <button
@@ -57,7 +54,9 @@ export function FrequencyStep() {
           >
             <div className="flex items-start justify-between gap-3">
               <div className="flex-1 space-y-1">
-                <div className="font-medium">{t(`frequencyOptions.${option.translationKey}.label`)}</div>
+                <div className="font-medium">
+                  {t(`frequencyOptions.${option.translationKey}.label`)}
+                </div>
                 <div className="text-sm text-muted-foreground">
                   {t(`frequencyOptions.${option.translationKey}.description`)}
                 </div>

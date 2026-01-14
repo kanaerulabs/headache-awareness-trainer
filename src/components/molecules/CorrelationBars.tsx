@@ -134,7 +134,8 @@ export const CorrelationBars: React.FC<CorrelationBarsProps> = ({
   const [isAnimated, setIsAnimated] = React.useState(false);
 
   // Get translated factor label
-  const getFactorLabel = (factor: CorrelationFactor) => t(factorLabelKeys[factor]);
+  const getFactorLabel = (factor: CorrelationFactor) =>
+    t(factorLabelKeys[factor]);
 
   // Get translated strength category
   const getStrengthLabel = (category: "weak" | "medium" | "strong") => {

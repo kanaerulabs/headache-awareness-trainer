@@ -843,9 +843,7 @@ describe("GamificationStore", () => {
         expect(unlocked).toContain("checkins-100");
       });
 
-      expect(result.current.achievements["checkins-100"].isUnlocked).toBe(
-        true,
-      );
+      expect(result.current.achievements["checkins-100"].isUnlocked).toBe(true);
     });
   });
 
@@ -1059,7 +1057,8 @@ describe("GamificationStore", () => {
         await result1.current.unlockAchievement("first-entry");
       });
 
-      const originalDate = result1.current.achievements["first-entry"].unlockedAt;
+      const originalDate =
+        result1.current.achievements["first-entry"].unlockedAt;
 
       // Reset store (simulate app restart)
       await act(async () => {
@@ -1137,4 +1136,3 @@ describe("GamificationStore", () => {
     });
   });
 });
-

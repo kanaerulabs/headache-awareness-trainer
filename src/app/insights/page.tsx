@@ -325,15 +325,14 @@ export default function InsightsPage() {
           </h2>
           <AIInsightsCard
             aiInsights={aiInsights}
-            onGenerate={() => generateAIInsights(timeFilter === "all" ? 365 : timeFilter)}
+            onGenerate={() =>
+              generateAIInsights(timeFilter === "all" ? 365 : timeFilter)
+            }
           />
         </section>
 
         {/* Chat Section */}
-        <section
-          aria-labelledby="chat-heading"
-          data-testid="chat-section"
-        >
+        <section aria-labelledby="chat-heading" data-testid="chat-section">
           <h2 id="chat-heading" className="sr-only">
             Ask About Your Data
           </h2>
@@ -375,9 +374,7 @@ export default function InsightsPage() {
               <CardTitle id="trends-heading" className="text-xl sm:text-2xl">
                 {t("headachesOverTime")}
               </CardTitle>
-              <p className="text-sm text-muted-foreground">
-                {t("trendsDesc")}
-              </p>
+              <p className="text-sm text-muted-foreground">{t("trendsDesc")}</p>
             </CardHeader>
             <CardContent>
               <TrendCharts
@@ -445,9 +442,7 @@ export default function InsightsPage() {
                 {personalInsights.length === 0 && (
                   <div className="text-center py-8 text-muted-foreground">
                     <p>{t("noPersonalInsights")}</p>
-                    <p className="text-sm mt-2">
-                      {t("keepLogging")}
-                    </p>
+                    <p className="text-sm mt-2">{t("keepLogging")}</p>
                   </div>
                 )}
               </CardContent>
