@@ -131,8 +131,9 @@ export function BottomNav() {
   // Show install button if not standalone and (iOS or has deferred prompt)
   const showInstallButton = !isStandalone && (isIOS || deferredPrompt);
 
-  // Don't show navigation if not authenticated (after all hooks)
-  if (status !== "authenticated") {
+  // Don't show navigation if explicitly unauthenticated
+  // Show during "loading" state since protected routes handle redirect via proxy
+  if (status === "unauthenticated") {
     return null;
   }
 
@@ -322,8 +323,8 @@ export function BottomNav() {
 export function BottomNavSpacer() {
   const { status } = useSession();
 
-  // Don't add spacing if not authenticated (no nav shown)
-  if (status !== "authenticated") {
+  // Don't add spacing if explicitly unauthenticated (no nav shown)
+  if (status === "unauthenticated") {
     return null;
   }
 
@@ -344,8 +345,8 @@ export function MainContentWrapper({
 }) {
   const { status } = useSession();
 
-  // Don't add margin for sidebar if not authenticated (no nav shown)
-  const marginClass = status === "authenticated" ? "lg:ml-64" : "";
+  // Add margin for sidebar unless explicitly unauthenticated
+  const marginClass = status !== "unauthenticated" ? "lg:ml-64" : "";
 
   return (
     <div className={cn(marginClass, "transition-all duration-300", className)}>
