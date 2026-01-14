@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useInsightsStore } from "@/interface-adapters/store/insightsStore";
 import { useLoggingStore } from "@/interface-adapters/store/loggingStore";
 import { useCheckInStore } from "@/interface-adapters/store/checkinStore";
@@ -92,9 +92,18 @@ export default function InsightsPage() {
     Awaited<ReturnType<typeof getTimeOfDayAnalysis>>
   >([]);
 
-  // Scroll to top immediately on mount (mobile fix)
+  // Scroll to top on mount (mobile fix) - use layoutEffect for sync execution
+  // and also scroll after a delay to handle async content loading
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    // Scroll again after short delay to handle any async content shifts
+    const timer = setTimeout(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }, 100);
+    return () => clearTimeout(timer);
   }, []);
 
   /**
