@@ -19,7 +19,7 @@ import {
   selectUserId,
   selectUserEmail,
   selectIsSessionExpiringSoon,
-} from "@/stores/auth/auth.store";
+} from "@/interface-adapters/store/auth/auth.store";
 import { Session } from "@/domains/auth/value-objects/session.vo";
 
 describe("Auth Store", () => {

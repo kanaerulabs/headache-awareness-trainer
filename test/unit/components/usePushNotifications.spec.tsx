@@ -4,7 +4,7 @@ import {
   REMINDER_PRESETS,
   scheduleCheckInReminder,
   cancelCheckInReminder,
-} from "@/hooks/usePushNotifications";
+} from "@/interface-adapters/hooks/usePushNotifications";
 
 // Mock Notification API
 const mockNotification = {

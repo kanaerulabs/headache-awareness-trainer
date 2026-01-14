@@ -1,6 +1,6 @@
 import { renderHook, act, waitFor } from "@testing-library/react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { useServiceWorker, UpdatePrompt } from "@/hooks/useServiceWorker";
+import { useServiceWorker, UpdatePrompt } from "@/interface-adapters/hooks/useServiceWorker";
 
 // Mock service worker APIs
 const mockServiceWorkerRegistration = {

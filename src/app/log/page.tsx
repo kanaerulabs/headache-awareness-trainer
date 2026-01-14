@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useQuickLogging } from "@/hooks/useQuickLogging";
+import { useQuickLogging } from "@/interface-adapters/hooks/useQuickLogging";
 import { ImFineButton } from "@/components/atoms/ImFineButton";
 import { IntensitySlider } from "@/components/molecules/IntensitySlider";
 import { NoteInput } from "@/components/molecules/NoteInput";

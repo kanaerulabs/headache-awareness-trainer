@@ -7,7 +7,7 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { UserProfile } from "./user-profile";
 import { User } from "@/domains/auth/entities/user.entity";
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from "@/interface-adapters/store/auth";
 import { Session } from "@/domains/auth/value-objects/session.vo";
 import { useEffect } from "react";
 

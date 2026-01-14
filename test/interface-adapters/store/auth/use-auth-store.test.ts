@@ -33,8 +33,8 @@ import {
   useIsSessionExpiringSoon,
   useAuthActions,
   useAuth,
-} from "@/stores/auth/use-auth-store";
-import { useAuthStore } from "@/stores/auth/auth.store";
+} from "@/interface-adapters/store/auth/use-auth-store";
+import { useAuthStore } from "@/interface-adapters/store/auth/auth.store";
 import { Session } from "@/domains/auth/value-objects/session.vo";
 
 describe("Auth Store Custom Hooks", () => {

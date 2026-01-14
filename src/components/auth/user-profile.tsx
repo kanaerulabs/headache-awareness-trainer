@@ -8,7 +8,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useUser, useIsAuthenticated, useAuthLoading } from "@/stores/auth";
+import { useUser, useIsAuthenticated, useAuthLoading } from "@/interface-adapters/store/auth";
 import { UserAvatar } from "./user-avatar";
 import { SignOutButton } from "./sign-out-button";
 import { cn } from "@/lib/utils";

@@ -7,7 +7,7 @@
 
 "use client";
 
-import { useUser, useIsAuthenticated } from "@/stores/auth";
+import { useUser, useIsAuthenticated } from "@/interface-adapters/store/auth";
 import { UserAvatar } from "./user-avatar";
 import { SignInButton } from "./sign-in-button";
 import { SignOutButton } from "./sign-out-button";

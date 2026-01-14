@@ -18,7 +18,7 @@
 
 import { render, screen, waitFor } from "@testing-library/react";
 import { UserProfile } from "@/components/auth/user-profile";
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore } from "@/interface-adapters/store/auth";
 import { User } from "@/domains/auth/entities/user.entity";
 import { Session } from "@/domains/auth/value-objects/session.vo";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useUserDataInit } from "@/hooks/useUserDataInit";
+import { useUserDataInit } from "@/interface-adapters/hooks/useUserDataInit";
 
 /**
  * Provider component that initializes user-scoped data storage.

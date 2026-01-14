@@ -3,11 +3,11 @@ import {
   useMicroWinToast,
   useAutoMicroWinToast,
 } from "@/components/molecules/MicroWinToast";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/interface-adapters/hooks/use-toast";
 import type { MicroWinMessage } from "@/interface-adapters/store/gamificationStore";
 
 // Mock the useToast hook
-jest.mock("@/hooks/use-toast", () => ({
+jest.mock("@/interface-adapters/hooks/use-toast", () => ({
   useToast: jest.fn(),
 }));
 

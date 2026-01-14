@@ -2,7 +2,7 @@ import { renderHook, act, waitFor } from "@testing-library/react";
 import {
   useBackgroundSync,
   registerBackgroundSync,
-} from "@/hooks/useBackgroundSync";
+} from "@/interface-adapters/hooks/useBackgroundSync";
 import * as indexeddb from "@/lib/indexeddb";
 
 // Mock IndexedDB operations

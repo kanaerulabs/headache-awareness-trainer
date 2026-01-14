@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/interface-adapters/hooks/use-toast";
 import type { MicroWinMessage } from "@/interface-adapters/store/gamificationStore";
 
 export interface MicroWinToastProps {
