@@ -10,6 +10,7 @@ import { InstallPrompt } from "@/components/organisms/InstallPrompt";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { SessionProvider } from "@/components/providers/SessionProvider";
 import { UserDataProvider } from "@/components/providers/UserDataProvider";
+import { KanaeruFooter } from "@/components/molecules/KanaeruFooter";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 
@@ -89,6 +90,7 @@ export default async function RootLayout({
                 <BottomNav />
                 <MainContentWrapper>
                   <main className="min-h-screen-safe">{children}</main>
+                  <KanaeruFooter />
                   <BottomNavSpacer />
                 </MainContentWrapper>
                 <InstallPrompt />
