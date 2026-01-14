@@ -208,14 +208,18 @@ GOOGLE_CLIENT_SECRET=your-client-secret
 
 See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed setup instructions.
 
+## Credits
+
+- **Vision & UX Lead**: [@jinit](https://github.com/jinit) (Jinit Bhatt)
+
 ## License
 
-Proprietary - Jinit Labs
+MIT License - see [LICENSE](./LICENSE) for details.
 
 ## Support
 
-For questions or issues, contact the development team.
+For questions or issues, open an issue on GitHub.
 
 ---
 
-Generated with Kanaeru AI Platform
+Built with [Kanaeru AI Platform](https://kanaeru.ai)
