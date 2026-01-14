@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useOnboardingStore } from "@/interface-adapters/store/onboardingStore";
+import { useOnboardingStore, useHasHydrated } from "@/interface-adapters/store/onboardingStore";
 import { WizardContainer } from "@/components/organisms/WizardContainer";
 import {
   WelcomeStep,
@@ -14,13 +14,26 @@ import {
 export default function OnboardingPage() {
   const router = useRouter();
   const { isCompleted, currentStep, totalSteps } = useOnboardingStore();
+  const hasHydrated = useHasHydrated();
 
-  // Redirect to homepage if onboarding is already completed
+  // Redirect to homepage if onboarding is already completed (only after hydration)
   useEffect(() => {
-    if (isCompleted) {
+    if (hasHydrated && isCompleted) {
       router.push("/");
     }
-  }, [isCompleted, router]);
+  }, [hasHydrated, isCompleted, router]);
+
+  // Show loading skeleton until hydration completes
+  if (!hasHydrated) {
+    return (
+      <div
+        className="min-h-screen bg-gradient-to-b from-background to-muted/20 flex items-center justify-center"
+        data-testid="onboarding-loading"
+      >
+        <div className="animate-pulse text-muted-foreground">Loading...</div>
+      </div>
+    );
+  }
 
   // Render the appropriate step based on currentStep
   const renderStep = () => {
