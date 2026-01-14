@@ -1,21 +1,27 @@
 "use client";
 
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 /**
- * KanaeruFooter - Branding footer shown on all pages
+ * KanaeruFooter - Branding footer shown on most pages
  *
  * Displays "Fulfilled by" text with KanaeruAI logo as clickable link
- * Appears above the bottom navigation on all pages
- * Includes safe area padding to avoid being cut off by mobile nav
+ * Hidden on pages with fixed bottom elements (like /log with its submit bar)
  */
 export function KanaeruFooter() {
   const t = useTranslations("settings");
+  const pathname = usePathname();
+
+  // Hide footer on pages with fixed bottom elements that would overlap
+  if (pathname === "/log") {
+    return null;
+  }
 
   return (
     <footer
-      className="pt-4 pb-20 lg:pb-4 text-center"
+      className="py-3 text-center"
       data-testid="kanaeru-footer"
     >
       <a
