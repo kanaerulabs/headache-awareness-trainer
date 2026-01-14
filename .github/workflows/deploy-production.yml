@@ -45,6 +45,39 @@ jobs:
           vercel-args: '--prod'
           working-directory: ./
 
+      - name: Run Smoke Tests
+        run: |
+          echo "Running smoke tests against ${{ steps.deploy.outputs.url }}"
+
+          # Wait for deployment to be fully ready
+          sleep 10
+
+          # Test 1: Homepage loads successfully
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${{ steps.deploy.outputs.url }}")
+          if [ "$HTTP_STATUS" != "200" ]; then
+            echo "❌ Homepage returned HTTP $HTTP_STATUS (expected 200)"
+            exit 1
+          fi
+          echo "✅ Homepage loads (HTTP 200)"
+
+          # Test 2: Check that critical page assets are present
+          PAGE_CONTENT=$(curl -s "${{ steps.deploy.outputs.url }}")
+          if ! echo "$PAGE_CONTENT" | grep -q "Headache"; then
+            echo "❌ Page content missing expected text"
+            exit 1
+          fi
+          echo "✅ Page content verified"
+
+          # Test 3: API health check (Next.js API route)
+          API_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${{ steps.deploy.outputs.url }}/api/health" || echo "404")
+          if [ "$API_STATUS" = "200" ]; then
+            echo "✅ API health endpoint available"
+          else
+            echo "⚠️ API health endpoint not available (optional)"
+          fi
+
+          echo "🎉 All smoke tests passed!"
+
       - name: Post deployment summary
         run: |
           echo "### Deployment Summary" >> $GITHUB_STEP_SUMMARY
@@ -53,3 +86,5 @@ jobs:
           echo "**URL:** ${{ steps.deploy.outputs.url }}" >> $GITHUB_STEP_SUMMARY
           echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
           echo "**Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Smoke Tests:** ✅ Passed" >> $GITHUB_STEP_SUMMARY

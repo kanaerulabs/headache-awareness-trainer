@@ -25,6 +25,7 @@ import {
 } from "@/components/organisms/settings";
 import { ArrowLeft } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { SignOutButton } from "@/components/auth";
 
 /**
  * Settings Page
@@ -145,6 +146,19 @@ export default function SettingsPage() {
           <section data-testid="accordion-about">
             <AboutHelp />
           </section>
+
+          {/* Account Section */}
+          <section data-testid="accordion-account">
+            <Card>
+              <CardHeader>
+                <CardTitle>{t("account")}</CardTitle>
+                <CardDescription>{t("accountDesc")}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <SignOutButton variant="outline" className="w-full" />
+              </CardContent>
+            </Card>
+          </section>
         </div>
 
         {/* Desktop: Expanded Card Layout */}
@@ -219,6 +233,22 @@ export default function SettingsPage() {
           {/* About & Help Section */}
           <section aria-labelledby="about-heading" data-testid="section-about">
             <AboutHelp />
+          </section>
+
+          {/* Account Section */}
+          <section
+            aria-labelledby="account-heading"
+            data-testid="section-account"
+          >
+            <Card>
+              <CardHeader>
+                <CardTitle id="account-heading">{t("account")}</CardTitle>
+                <CardDescription>{t("accountDesc")}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <SignOutButton variant="outline" className="w-full" />
+              </CardContent>
+            </Card>
           </section>
         </div>
       </div>
