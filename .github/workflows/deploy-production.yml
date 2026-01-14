@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: production
-      url: ${{ steps.deploy.outputs.url }}
+      url: ${{ steps.deploy.outputs.preview-url }}
 
     steps:
       - name: Checkout code
@@ -47,13 +47,13 @@ jobs:
 
       - name: Run Smoke Tests
         run: |
-          echo "Running smoke tests against ${{ steps.deploy.outputs.url }}"
+          echo "Running smoke tests against ${{ steps.deploy.outputs.preview-url }}"
 
           # Wait for deployment to be fully ready
           sleep 10
 
           # Test 1: Homepage loads successfully
-          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${{ steps.deploy.outputs.url }}")
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${{ steps.deploy.outputs.preview-url }}")
           if [ "$HTTP_STATUS" != "200" ]; then
             echo "❌ Homepage returned HTTP $HTTP_STATUS (expected 200)"
             exit 1
@@ -61,7 +61,7 @@ jobs:
           echo "✅ Homepage loads (HTTP 200)"
 
           # Test 2: Check that critical page assets are present
-          PAGE_CONTENT=$(curl -s "${{ steps.deploy.outputs.url }}")
+          PAGE_CONTENT=$(curl -s "${{ steps.deploy.outputs.preview-url }}")
           if ! echo "$PAGE_CONTENT" | grep -q "Headache"; then
             echo "❌ Page content missing expected text"
             exit 1
@@ -69,7 +69,7 @@ jobs:
           echo "✅ Page content verified"
 
           # Test 3: API health check (Next.js API route)
-          API_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${{ steps.deploy.outputs.url }}/api/health" || echo "404")
+          API_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${{ steps.deploy.outputs.preview-url }}/api/health" || echo "404")
           if [ "$API_STATUS" = "200" ]; then
             echo "✅ API health endpoint available"
           else
@@ -83,7 +83,7 @@ jobs:
           echo "### Deployment Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Environment:** Production" >> $GITHUB_STEP_SUMMARY
-          echo "**URL:** ${{ steps.deploy.outputs.url }}" >> $GITHUB_STEP_SUMMARY
+          echo "**URL:** ${{ steps.deploy.outputs.preview-url }}" >> $GITHUB_STEP_SUMMARY
           echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
           echo "**Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
