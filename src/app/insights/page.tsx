@@ -251,7 +251,7 @@ export default function InsightsPage() {
 
   return (
     <div
-      className="min-h-screen bg-gradient-to-b from-purple-50 to-white dark:from-gray-900 dark:to-gray-950 p-4 sm:p-6 pb-24"
+      className="min-h-screen bg-gradient-to-b from-purple-50 to-white dark:from-gray-900 dark:to-gray-950 p-4 sm:p-6 pb-4"
       data-testid="insights-page"
       role="main"
       aria-label={t("title")}

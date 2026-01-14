@@ -22,7 +22,7 @@ export default function HomePage() {
 function HomePageSkeleton() {
   return (
     <main
-      className="flex min-h-screen flex-col p-6 pb-24"
+      className="flex min-h-screen flex-col p-6 pb-4"
       data-testid="home-page-loading"
     >
       <div className="mx-auto w-full max-w-2xl space-y-8 animate-pulse">
@@ -127,7 +127,7 @@ function HomePageContent() {
 
   return (
     <main
-      className="flex min-h-screen flex-col p-6 pb-24"
+      className="flex min-h-screen flex-col p-6 pb-4"
       data-testid="home-page"
     >
       <div className="mx-auto w-full max-w-2xl space-y-8">
