@@ -59,7 +59,6 @@ export default function InsightsPage() {
   const [personalInsightsExpanded, setPersonalInsightsExpanded] =
     useState(false);
   const [generalInsightsExpanded, setGeneralInsightsExpanded] = useState(true);
-  const [hasScrolledToTop, setHasScrolledToTop] = useState(false);
 
   // Insights store state
   const {
@@ -93,13 +92,10 @@ export default function InsightsPage() {
     Awaited<ReturnType<typeof getTimeOfDayAnalysis>>
   >([]);
 
-  // Scroll to top once loading completes (mobile fix)
+  // Scroll to top immediately on mount (mobile fix)
   useEffect(() => {
-    if (!isLoading && !hasScrolledToTop) {
-      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-      setHasScrolledToTop(true);
-    }
-  }, [isLoading, hasScrolledToTop]);
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, []);
 
   /**
    * Initialize databases and load insights data on mount

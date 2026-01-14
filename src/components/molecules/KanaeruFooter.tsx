@@ -1,33 +1,32 @@
 "use client";
 
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 /**
  * KanaeruFooter - Branding footer shown on all pages
  *
- * Displays KanaeruAI logo as clickable link to kanaeru.ai
+ * Displays "Fulfilled by" text with KanaeruAI logo as clickable link
  * Appears above the bottom navigation on all pages
- * Extra bottom padding ensures it's not cut off by mobile nav bar
  */
 export function KanaeruFooter() {
+  const t = useTranslations("settings");
+
   return (
-    <footer
-      className="pt-8 pb-24 sm:pb-8 text-center"
-      data-testid="kanaeru-footer"
-    >
+    <footer className="py-6 text-center" data-testid="kanaeru-footer">
       <a
         href="https://kanaeru.ai"
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-block opacity-60 hover:opacity-100 transition-opacity"
-        aria-label="Fulfilled by KanaeruAI"
+        className="inline-flex items-center gap-2 opacity-50 hover:opacity-80 transition-opacity"
       >
+        <span className="text-xs text-muted-foreground">{t("fulfilledBy")}</span>
         <Image
           src="/kanaeru-logo.png"
           alt="KanaeruAI"
-          width={40}
-          height={40}
-          className="rounded-lg"
+          width={24}
+          height={24}
+          className="rounded"
         />
       </a>
     </footer>
