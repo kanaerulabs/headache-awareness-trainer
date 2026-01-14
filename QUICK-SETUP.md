@@ -6,7 +6,7 @@ Your deployment infrastructure is fully configured and ready to use. Follow thes
 
 ## Prerequisites
 
-- GitHub repository: `kanaerulabs/jinit-labs-headache-awareness-trainer`
+- GitHub repository: `kanaerulabs/headache-awareness-trainer`
 - Vercel account (sign up at https://vercel.com)
 - GitHub account with repository access
 
@@ -14,7 +14,7 @@ Your deployment infrastructure is fully configured and ready to use. Follow thes
 
 1. Visit https://vercel.com and sign in with GitHub
 2. Click "Add New Project"
-3. Select `kanaerulabs/jinit-labs-headache-awareness-trainer`
+3. Select `kanaerulabs/headache-awareness-trainer`
 4. Configure project:
    - **Framework Preset:** Next.js (auto-detected)
    - **Root Directory:** `./`
@@ -64,7 +64,7 @@ The file will contain:
 
 ## Step 3: Add GitHub Secrets (2 minutes)
 
-1. Go to https://github.com/kanaerulabs/jinit-labs-headache-awareness-trainer/settings/secrets/actions
+1. Go to https://github.com/kanaerulabs/headache-awareness-trainer/settings/secrets/actions
 2. Click "New repository secret"
 3. Add three secrets:
 
@@ -201,4 +201,4 @@ For issues:
 
 **Estimated Total Time:** 20-30 minutes
 
-**Last Updated:** 2026-01-10
+**Last Updated:** 2026-01-14

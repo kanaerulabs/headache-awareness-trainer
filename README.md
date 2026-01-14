@@ -11,7 +11,7 @@ An awareness training app for people with chronic mild-to-moderate tension heada
 
 ## Tech Stack
 
-- **Frontend**: Next.js 15 with App Router
+- **Frontend**: Next.js 16 with App Router
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS + shadcn/ui
 - **State Management**: Zustand
@@ -123,26 +123,39 @@ Then test:
 - Offline mode
 - Push notifications (when implemented)
 
-## Project Structure
+## Project Structure (Clean Architecture)
 
 ```
-.
-├── app/                    # Next.js App Router
-│   ├── (auth)/            # Authentication routes
-│   ├── (main)/            # Main app routes
-│   ├── layout.tsx         # Root layout
-│   └── page.tsx           # Home page
-├── components/            # React components
-│   ├── ui/               # shadcn/ui components
-│   └── ...               # Feature components
-├── lib/                  # Utilities and helpers
-│   ├── db/              # IndexedDB utilities
-│   └── utils.ts         # General utilities
-├── stores/              # Zustand stores
-├── public/              # Static assets
-│   ├── manifest.json    # PWA manifest
-│   └── icons/          # PWA icons
-└── types/              # TypeScript type definitions
+src/
+├── app/                          # Next.js App Router (pages)
+│   ├── login/                    # Login page
+│   ├── onboarding/               # Onboarding flow
+│   ├── dashboard/                # Dashboard page
+│   ├── insights/                 # Insights & patterns
+│   ├── log/                      # Quick logging
+│   ├── checkin/                  # Daily check-in
+│   ├── learn/                    # Educational content
+│   ├── settings/                 # User settings
+│   └── api/auth/                 # NextAuth API routes
+├── components/                   # React components
+│   ├── ui/                       # shadcn/ui primitives
+│   ├── atoms/                    # Small reusable components
+│   ├── molecules/                # Composite components
+│   └── organisms/                # Complex features
+├── domains/                      # Domain layer (entities, VOs)
+│   ├── auth/                     # Auth domain
+│   └── ...                       # Other domains
+├── interface-adapters/           # Clean Architecture adapters
+│   ├── store/                    # Zustand stores (state management)
+│   ├── hooks/                    # React hooks
+│   ├── agents/                   # AI agent adapters
+│   └── api/                      # API adapters
+├── usecases/                     # Business logic
+├── lib/                          # Utilities
+└── config/                       # Configuration
+
+public/                           # Static assets (manifest, icons)
+test/                            # Tests (unit, integration, e2e)
 ```
 
 ## Development Guidelines
