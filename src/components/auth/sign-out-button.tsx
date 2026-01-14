@@ -62,7 +62,7 @@ export interface SignOutButtonProps {
  * ```
  */
 export function SignOutButton({
-  callbackUrl = "/",
+  callbackUrl = "/login",
   className,
   variant = "outline",
   size = "default",
@@ -73,13 +73,14 @@ export function SignOutButton({
   const handleSignOut = async () => {
     try {
       setIsLoading(true);
-      // Trigger NextAuth sign-out
-      await signOut({ callbackUrl });
+      // Use NextAuth's built-in signOut with redirect
+      // This ensures cookies are properly cleared before redirect
+      await signOut({ callbackUrl, redirect: true });
     } catch (error) {
       // Error handling is managed by NextAuth
       console.error("Sign out error:", error);
-    } finally {
-      setIsLoading(false);
+      // Fallback: direct navigation to logout endpoint
+      window.location.href = `/api/auth/signout?callbackUrl=${encodeURIComponent(callbackUrl)}`;
     }
   };
 
