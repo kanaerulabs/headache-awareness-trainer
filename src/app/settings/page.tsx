@@ -256,6 +256,21 @@ export default function SettingsPage() {
               </CardContent>
             </Card>
           </section>
+
+          {/* Kanaeru Branding Footer */}
+          <footer className="pt-8 pb-4 text-center">
+            <p className="text-sm text-muted-foreground">
+              {t("fulfilledBy")}{" "}
+              <a
+                href="https://kanaeru.ai"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:text-primary transition-colors"
+              >
+                KanaeruAI
+              </a>
+            </p>
+          </footer>
         </div>
       </div>
     </div>

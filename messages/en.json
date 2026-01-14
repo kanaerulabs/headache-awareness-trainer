@@ -470,7 +470,8 @@
     "iosStep2": "Scroll down and tap \"Add to Home Screen\"",
     "iosStep3": "Tap \"Add\" to confirm",
     "account": "Account",
-    "accountDesc": "Manage your account settings"
+    "accountDesc": "Manage your account settings",
+    "fulfilledBy": "Fulfilled by"
   },
   "onboarding": {
     "welcome": "Welcome to Headache Awareness Trainer",

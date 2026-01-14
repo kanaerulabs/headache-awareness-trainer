@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useInsightsStore } from "@/interface-adapters/store/insightsStore";
 import { useLoggingStore } from "@/interface-adapters/store/loggingStore";
 import { useCheckInStore } from "@/interface-adapters/store/checkinStore";
@@ -51,12 +51,6 @@ import { useTranslations } from "next-intl";
  */
 export default function InsightsPage() {
   const t = useTranslations("insights");
-  const pageRef = useRef<HTMLDivElement>(null);
-
-  // Scroll to top on page mount
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
 
   // Filter state
   const [timeFilter, setTimeFilter] = useState<TimeFilter>(30);
@@ -65,6 +59,7 @@ export default function InsightsPage() {
   const [personalInsightsExpanded, setPersonalInsightsExpanded] =
     useState(false);
   const [generalInsightsExpanded, setGeneralInsightsExpanded] = useState(true);
+  const [hasScrolledToTop, setHasScrolledToTop] = useState(false);
 
   // Insights store state
   const {
@@ -97,6 +92,14 @@ export default function InsightsPage() {
   const [timeOfDayData, setTimeOfDayData] = useState<
     Awaited<ReturnType<typeof getTimeOfDayAnalysis>>
   >([]);
+
+  // Scroll to top once loading completes (mobile fix)
+  useEffect(() => {
+    if (!isLoading && !hasScrolledToTop) {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      setHasScrolledToTop(true);
+    }
+  }, [isLoading, hasScrolledToTop]);
 
   /**
    * Initialize databases and load insights data on mount
