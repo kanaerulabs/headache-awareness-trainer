@@ -13,7 +13,7 @@ import { UserDataProvider } from "@/components/providers/UserDataProvider";
 import { KanaeruFooter } from "@/components/molecules/KanaeruFooter";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
-import { Analytics } from "@vercel/analytics/react";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({ subsets: ["latin"] });
 
