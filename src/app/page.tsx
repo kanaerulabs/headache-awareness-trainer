@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useRef, useState, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useOnboardingStore } from "@/interface-adapters/store/onboardingStore";
+import { useOnboardingStore, useHasHydrated } from "@/interface-adapters/store/onboardingStore";
 import {
   useLoggingStore,
   HeadacheEntry,
@@ -44,6 +44,7 @@ function HomePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { isCompleted, headacheType } = useOnboardingStore();
+  const hasHydrated = useHasHydrated();
 
   // Use logging store (same as log page)
   const loggingStore = useLoggingStore();
@@ -81,12 +82,12 @@ function HomePageContent() {
   // Check if we just logged an entry
   const justLogged = searchParams.get("logged") === "true";
 
-  // Redirect new users to onboarding
+  // Redirect new users to onboarding (only after hydration to avoid flash)
   useEffect(() => {
-    if (!isCompleted) {
+    if (hasHydrated && !isCompleted) {
       router.push("/onboarding");
     }
-  }, [isCompleted, router]);
+  }, [hasHydrated, isCompleted, router]);
 
   // Handle the ?logged=true param - trigger refresh and clear URL
   useEffect(() => {
@@ -103,9 +104,9 @@ function HomePageContent() {
     }
   }, [justLogged, router, isReady, refreshRecentEntries]);
 
-  // If not completed, show nothing (will redirect)
-  if (!isCompleted) {
-    return null;
+  // Show loading until hydration is complete, then redirect if needed
+  if (!hasHydrated || !isCompleted) {
+    return <HomePageSkeleton />;
   }
 
   // Get headache type label for personalized greeting

@@ -13,6 +13,7 @@ export interface OnboardingState {
   frequency: Frequency | null;
   reminderPreference: ReminderPreference | null;
   skipped: boolean;
+  _hasHydrated: boolean;
 }
 
 export interface OnboardingActions {
@@ -39,6 +40,7 @@ const initialState: OnboardingState = {
   frequency: null,
   reminderPreference: null,
   skipped: false,
+  _hasHydrated: false,
 };
 
 export const useOnboardingStore = create<OnboardingStore>()(
@@ -78,6 +80,24 @@ export const useOnboardingStore = create<OnboardingStore>()(
     }),
     {
       name: "onboarding-storage",
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          state._hasHydrated = true;
+        }
+      },
+      partialize: (state) => ({
+        isCompleted: state.isCompleted,
+        currentStep: state.currentStep,
+        totalSteps: state.totalSteps,
+        headacheType: state.headacheType,
+        frequency: state.frequency,
+        reminderPreference: state.reminderPreference,
+        skipped: state.skipped,
+        // Don't persist _hasHydrated
+      }),
     },
   ),
 );
+
+// Hook to check hydration status
+export const useHasHydrated = () => useOnboardingStore((state) => state._hasHydrated);
