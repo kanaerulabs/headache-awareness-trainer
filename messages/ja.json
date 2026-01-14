@@ -446,6 +446,8 @@
       "gettingStartedDesc": "アプリの効果的な使い方を学ぶ",
       "patterns": "頭痛パターンを理解する",
       "patternsDesc": "トリガーを特定するためのヒント",
+      "aiSetup": "AI分析の設定（BYOK）",
+      "aiSetupDesc": "自分のAPIキーでAI分析を利用する",
       "privacyHelp": "プライバシーとデータセキュリティ",
       "privacyHelpDesc": "あなたの情報をどのように保護するか",
       "faq": "よくある質問",

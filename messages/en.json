@@ -446,6 +446,8 @@
       "gettingStartedDesc": "Learn how to use the app effectively",
       "patterns": "Understanding Headache Patterns",
       "patternsDesc": "Tips for identifying your triggers",
+      "aiSetup": "AI Insights Setup (BYOK)",
+      "aiSetupDesc": "Use your own API key for AI-powered analysis",
       "privacyHelp": "Privacy & Data Security",
       "privacyHelpDesc": "How we protect your information",
       "faq": "Frequently Asked Questions",

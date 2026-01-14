@@ -46,6 +46,39 @@ An awareness training app for people with chronic mild-to-moderate tension heada
 - Early intervention tracking
 - Continuous pattern discovery
 
+## Using Your Own AI API Key (BYOK)
+
+This app supports **Bring Your Own Key (BYOK)** for AI-powered insights. Your API key is stored locally in your browser and never transmitted to our servers.
+
+### Why BYOK?
+- **Privacy**: Your data stays on your device
+- **Control**: You manage your own API usage and costs
+- **No account needed**: Works without signing up for our services
+
+### Setting Up Your AI Key
+
+1. **Get an API Key**:
+   - Sign up at [Anthropic](https://console.anthropic.com) (recommended for Claude)
+   - Or use [OpenAI](https://platform.openai.com) for GPT models
+
+2. **Add Your Key in Settings**:
+   - Open the app → Settings → AI Settings
+   - Paste your API key
+   - Select your preferred model
+   - Save
+
+3. **Usage & Costs**:
+   - Each AI insight generation uses a small number of tokens
+   - Typical usage: ~$0.01-0.05 per insight
+   - Chat queries use similar amounts
+   - Check your provider's dashboard for detailed usage
+
+### Security Notes
+- Your API key is stored in browser localStorage
+- It's only used for direct API calls to your chosen provider
+- Clear your data in Settings to remove the key
+- Never share your API key with others
+
 ## Getting Started
 
 ### Prerequisites

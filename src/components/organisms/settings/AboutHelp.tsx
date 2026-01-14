@@ -26,6 +26,7 @@ export interface AboutHelpProps {
 const HELP_LINK_KEYS = [
   { key: "gettingStarted", url: "/learn" },
   { key: "patterns", url: "/learn/body-signals" },
+  { key: "aiSetup", url: "/settings#ai-settings" },
   { key: "privacyHelp", url: "/learn/tracking-basics" },
   { key: "faq", url: "/learn" },
 ] as const;

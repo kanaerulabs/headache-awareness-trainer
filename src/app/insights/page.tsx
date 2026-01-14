@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useInsightsStore } from "@/interface-adapters/store/insightsStore";
 import { useLoggingStore } from "@/interface-adapters/store/loggingStore";
 import { useCheckInStore } from "@/interface-adapters/store/checkinStore";
@@ -51,6 +51,12 @@ import { useTranslations } from "next-intl";
  */
 export default function InsightsPage() {
   const t = useTranslations("insights");
+  const pageRef = useRef<HTMLDivElement>(null);
+
+  // Scroll to top on page mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   // Filter state
   const [timeFilter, setTimeFilter] = useState<TimeFilter>(30);

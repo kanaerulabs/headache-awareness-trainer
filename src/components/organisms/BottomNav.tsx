@@ -205,8 +205,12 @@ export function BottomNav() {
         data-testid="sidebar-nav"
         className="hidden lg:flex fixed left-0 top-0 bottom-0 z-50 w-64 flex-col bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 shadow-lg"
       >
-        {/* Logo / App Title */}
-        <div className="flex items-center gap-3 px-6 py-6 border-b border-gray-100 dark:border-gray-800">
+        {/* Logo / App Title - Clickable to go home */}
+        <Link
+          href="/"
+          className="flex items-center gap-3 px-6 py-6 border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
+          aria-label={t("home")}
+        >
           <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/30">
             <Home className="h-5 w-5 text-purple-600 dark:text-purple-400" />
           </div>
@@ -218,7 +222,7 @@ export function BottomNav() {
               {t("tagline")}
             </p>
           </div>
-        </div>
+        </Link>
 
         {/* Navigation Items */}
         <div className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -55,6 +56,11 @@ import { SignOutButton } from "@/components/auth";
 export default function SettingsPage() {
   const router = useRouter();
   const t = useTranslations("settings");
+
+  // Scroll to top on page mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleBack = () => {
     router.push("/");
