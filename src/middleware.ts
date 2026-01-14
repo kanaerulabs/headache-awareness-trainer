@@ -10,17 +10,14 @@ import type { NextRequest } from "next/server";
 import { auth } from "@/lib/auth";
 
 /**
- * Protected routes that require authentication
- */
-const protectedRoutes = ["/", "/dashboard", "/profile", "/settings"];
-
-/**
  * Public routes that don't require authentication
+ * ALL other routes are protected by default
  */
 const publicRoutes = ["/login", "/api/auth"];
 
 /**
  * Middleware function to protect routes
+ * Default: PROTECT all routes except those in publicRoutes
  */
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -30,16 +27,7 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Check if route requires authentication
-  const isProtectedRoute = protectedRoutes.some(
-    (route) => pathname === route || pathname.startsWith(`${route}/`),
-  );
-
-  if (!isProtectedRoute) {
-    return NextResponse.next();
-  }
-
-  // Check authentication
+  // ALL other routes require authentication
   const session = await auth();
 
   if (!session) {
