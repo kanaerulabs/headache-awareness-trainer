@@ -1,5 +1,40 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage, StateStorage } from "zustand/middleware";
+import { getCurrentUserId } from "@/lib/indexeddb";
+
+const STORAGE_KEY_PREFIX = "onboarding-storage";
+
+/**
+ * Get the storage key scoped to the current user
+ */
+function getStorageKey(): string {
+  const userId = getCurrentUserId();
+  if (userId) {
+    return `${STORAGE_KEY_PREFIX}-${userId}`;
+  }
+  return `${STORAGE_KEY_PREFIX}-anonymous`;
+}
+
+/**
+ * Custom storage adapter that scopes localStorage to the current user
+ */
+const userScopedStorage: StateStorage = {
+  getItem: (): string | null => {
+    if (typeof window === "undefined") return null;
+    const key = getStorageKey();
+    return localStorage.getItem(key);
+  },
+  setItem: (_name: string, value: string): void => {
+    if (typeof window === "undefined") return;
+    const key = getStorageKey();
+    localStorage.setItem(key, value);
+  },
+  removeItem: (): void => {
+    if (typeof window === "undefined") return;
+    const key = getStorageKey();
+    localStorage.removeItem(key);
+  },
+};
 
 export type HeadacheType = "tension" | "migraine" | "mixed" | "unsure";
 export type Frequency = "daily" | "few-times-week" | "weekly" | "occasional";
@@ -79,7 +114,8 @@ export const useOnboardingStore = create<OnboardingStore>()(
       resetOnboarding: () => set(initialState),
     }),
     {
-      name: "onboarding-storage",
+      name: "onboarding-storage", // Used for consistency, actual key is computed by userScopedStorage
+      storage: createJSONStorage(() => userScopedStorage),
       onRehydrateStorage: () => (state) => {
         if (state) {
           state._hasHydrated = true;

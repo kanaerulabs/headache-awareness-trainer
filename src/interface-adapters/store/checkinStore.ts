@@ -1,6 +1,53 @@
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { persist, createJSONStorage, StateStorage } from "zustand/middleware";
 import { openDB, DBSchema, IDBPDatabase } from "idb";
+import { getCurrentUserId } from "@/lib/indexeddb";
+
+const CHECKIN_DB_PREFIX = "headache-checkin-db";
+const CHECKIN_STORAGE_PREFIX = "checkin-storage";
+
+/**
+ * Get the user-scoped database name for check-ins
+ */
+function getCheckInDBName(): string {
+  const userId = getCurrentUserId();
+  if (userId) {
+    return `${CHECKIN_DB_PREFIX}-${userId}`;
+  }
+  return `${CHECKIN_DB_PREFIX}-anonymous`;
+}
+
+/**
+ * Get the user-scoped localStorage key
+ */
+function getCheckInStorageKey(): string {
+  const userId = getCurrentUserId();
+  if (userId) {
+    return `${CHECKIN_STORAGE_PREFIX}-${userId}`;
+  }
+  return `${CHECKIN_STORAGE_PREFIX}-anonymous`;
+}
+
+/**
+ * Custom storage adapter that scopes localStorage to the current user
+ */
+const userScopedCheckInStorage: StateStorage = {
+  getItem: (): string | null => {
+    if (typeof window === "undefined") return null;
+    const key = getCheckInStorageKey();
+    return localStorage.getItem(key);
+  },
+  setItem: (_name: string, value: string): void => {
+    if (typeof window === "undefined") return;
+    const key = getCheckInStorageKey();
+    localStorage.setItem(key, value);
+  },
+  removeItem: (): void => {
+    if (typeof window === "undefined") return;
+    const key = getCheckInStorageKey();
+    localStorage.removeItem(key);
+  },
+};
 
 /**
  * Check-in Entry Types
@@ -59,10 +106,11 @@ export interface CheckInState {
 }
 
 /**
- * Initialize IndexedDB
+ * Initialize IndexedDB with user-scoped database name
  */
 const initDB = async (): Promise<IDBPDatabase<CheckInDB>> => {
-  return openDB<CheckInDB>("headache-checkin-db", 2, {
+  const dbName = getCheckInDBName();
+  return openDB<CheckInDB>(dbName, 2, {
     upgrade(db) {
       // Create checkins store with indexes
       if (!db.objectStoreNames.contains("checkins")) {
@@ -319,8 +367,8 @@ export const useCheckInStore = create<CheckInState>()(
       },
     }),
     {
-      name: "checkin-storage",
-      storage: createJSONStorage(() => localStorage),
+      name: "checkin-storage", // Used for consistency, actual key is computed by userScopedCheckInStorage
+      storage: createJSONStorage(() => userScopedCheckInStorage),
       partialize: () => ({}), // Don't persist anything to localStorage, use IndexedDB only
     },
   ),

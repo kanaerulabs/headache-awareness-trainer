@@ -1,5 +1,40 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage, StateStorage } from "zustand/middleware";
+import { getCurrentUserId } from "@/lib/indexeddb";
+
+const EDUCATION_STORAGE_PREFIX = "education-storage";
+
+/**
+ * Get the user-scoped localStorage key for education progress
+ */
+function getEducationStorageKey(): string {
+  const userId = getCurrentUserId();
+  if (userId) {
+    return `${EDUCATION_STORAGE_PREFIX}-${userId}`;
+  }
+  return `${EDUCATION_STORAGE_PREFIX}-anonymous`;
+}
+
+/**
+ * Custom storage adapter that scopes localStorage to the current user
+ */
+const userScopedEducationStorage: StateStorage = {
+  getItem: (): string | null => {
+    if (typeof window === "undefined") return null;
+    const key = getEducationStorageKey();
+    return localStorage.getItem(key);
+  },
+  setItem: (_name: string, value: string): void => {
+    if (typeof window === "undefined") return;
+    const key = getEducationStorageKey();
+    localStorage.setItem(key, value);
+  },
+  removeItem: (): void => {
+    if (typeof window === "undefined") return;
+    const key = getEducationStorageKey();
+    localStorage.removeItem(key);
+  },
+};
 
 /**
  * Educational content types
@@ -171,7 +206,8 @@ export const useEducationStore = create<EducationState>()(
       },
     }),
     {
-      name: "education-storage",
+      name: "education-storage", // Used for consistency, actual key is computed by userScopedEducationStorage
+      storage: createJSONStorage(() => userScopedEducationStorage),
     },
   ),
 );

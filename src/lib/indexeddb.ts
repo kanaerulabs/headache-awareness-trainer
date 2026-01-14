@@ -63,17 +63,50 @@ interface HeadacheTrackerDB extends DBSchema {
   };
 }
 
-const DB_NAME = "headache-tracker-db";
+const DB_NAME_PREFIX = "headache-tracker-db";
 const DB_VERSION = 2;
 
+// Store current user ID for DB namespacing
+let currentUserId: string | null = null;
 let dbPromise: Promise<IDBPDatabase<HeadacheTrackerDB>> | null = null;
+
+/**
+ * Set the current user ID for database namespacing
+ * Call this when user logs in to isolate their data
+ */
+export function setCurrentUserId(userId: string | null): void {
+  if (currentUserId !== userId) {
+    // Close existing DB connection when user changes
+    dbPromise = null;
+    currentUserId = userId;
+  }
+}
+
+/**
+ * Get the current user ID
+ */
+export function getCurrentUserId(): string | null {
+  return currentUserId;
+}
+
+/**
+ * Get the database name for the current user
+ * Returns user-specific DB name or default for unauthenticated state
+ */
+function getDBName(): string {
+  if (currentUserId) {
+    return `${DB_NAME_PREFIX}-${currentUserId}`;
+  }
+  return `${DB_NAME_PREFIX}-anonymous`;
+}
 
 /**
  * Get or create the IndexedDB database instance
  */
 export async function getDB(): Promise<IDBPDatabase<HeadacheTrackerDB>> {
   if (!dbPromise) {
-    dbPromise = openDB<HeadacheTrackerDB>(DB_NAME, DB_VERSION, {
+    const dbName = getDBName();
+    dbPromise = openDB<HeadacheTrackerDB>(dbName, DB_VERSION, {
       upgrade(db) {
         // Create logs store
         if (!db.objectStoreNames.contains("logs")) {

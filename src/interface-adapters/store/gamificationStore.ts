@@ -1,6 +1,53 @@
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { persist, createJSONStorage, StateStorage } from "zustand/middleware";
 import { openDB, DBSchema, IDBPDatabase } from "idb";
+import { getCurrentUserId } from "@/lib/indexeddb";
+
+const GAMIFICATION_DB_PREFIX = "headache-gamification-db";
+const GAMIFICATION_STORAGE_PREFIX = "gamification-storage";
+
+/**
+ * Get the user-scoped database name for gamification
+ */
+function getGamificationDBName(): string {
+  const userId = getCurrentUserId();
+  if (userId) {
+    return `${GAMIFICATION_DB_PREFIX}-${userId}`;
+  }
+  return `${GAMIFICATION_DB_PREFIX}-anonymous`;
+}
+
+/**
+ * Get the user-scoped localStorage key
+ */
+function getGamificationStorageKey(): string {
+  const userId = getCurrentUserId();
+  if (userId) {
+    return `${GAMIFICATION_STORAGE_PREFIX}-${userId}`;
+  }
+  return `${GAMIFICATION_STORAGE_PREFIX}-anonymous`;
+}
+
+/**
+ * Custom storage adapter that scopes localStorage to the current user
+ */
+const userScopedGamificationStorage: StateStorage = {
+  getItem: (): string | null => {
+    if (typeof window === "undefined") return null;
+    const key = getGamificationStorageKey();
+    return localStorage.getItem(key);
+  },
+  setItem: (_name: string, value: string): void => {
+    if (typeof window === "undefined") return;
+    const key = getGamificationStorageKey();
+    localStorage.setItem(key, value);
+  },
+  removeItem: (): void => {
+    if (typeof window === "undefined") return;
+    const key = getGamificationStorageKey();
+    localStorage.removeItem(key);
+  },
+};
 
 /**
  * Achievement Types
@@ -310,10 +357,11 @@ const MICRO_WIN_MESSAGES: Record<string, MicroWinMessage[]> = {
 };
 
 /**
- * Initialize IndexedDB
+ * Initialize IndexedDB with user-scoped database name
  */
 const initDB = async (): Promise<IDBPDatabase<GamificationDB>> => {
-  return openDB<GamificationDB>("headache-gamification-db", 2, {
+  const dbName = getGamificationDBName();
+  return openDB<GamificationDB>(dbName, 2, {
     upgrade(db) {
       // Create achievements store
       if (!db.objectStoreNames.contains("achievements")) {
@@ -716,8 +764,8 @@ export const useGamificationStore = create<GamificationState>()(
       },
     }),
     {
-      name: "gamification-storage",
-      storage: createJSONStorage(() => localStorage),
+      name: "gamification-storage", // Used for consistency, actual key is computed by userScopedGamificationStorage
+      storage: createJSONStorage(() => userScopedGamificationStorage),
       partialize: () => ({}), // Don't persist to localStorage, use IndexedDB only
     },
   ),

@@ -1,9 +1,44 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage, StateStorage } from "zustand/middleware";
 import { useLoggingStore, HeadacheEntry } from "./loggingStore";
 import { useCheckInStore, CheckInEntry } from "./checkinStore";
 import { useEducationStore } from "./educationStore";
 import { useOnboardingStore } from "./onboardingStore";
+import { getCurrentUserId } from "@/lib/indexeddb";
+
+const SETTINGS_STORAGE_PREFIX = "settings-storage";
+
+/**
+ * Get the user-scoped localStorage key for settings
+ */
+function getSettingsStorageKey(): string {
+  const userId = getCurrentUserId();
+  if (userId) {
+    return `${SETTINGS_STORAGE_PREFIX}-${userId}`;
+  }
+  return `${SETTINGS_STORAGE_PREFIX}-anonymous`;
+}
+
+/**
+ * Custom storage adapter that scopes localStorage to the current user
+ */
+const userScopedSettingsStorage: StateStorage = {
+  getItem: (): string | null => {
+    if (typeof window === "undefined") return null;
+    const key = getSettingsStorageKey();
+    return localStorage.getItem(key);
+  },
+  setItem: (_name: string, value: string): void => {
+    if (typeof window === "undefined") return;
+    const key = getSettingsStorageKey();
+    localStorage.setItem(key, value);
+  },
+  removeItem: (): void => {
+    if (typeof window === "undefined") return;
+    const key = getSettingsStorageKey();
+    localStorage.removeItem(key);
+  },
+};
 
 /**
  * Reminder Settings Types
@@ -792,12 +827,14 @@ export const useSettingsStore = create<SettingsState>()(
             await tx.done;
           }
 
-          // Clear localStorage for all stores
-          localStorage.removeItem("logging-storage");
-          localStorage.removeItem("checkin-storage");
-          localStorage.removeItem("education-storage");
-          localStorage.removeItem("onboarding-storage");
-          localStorage.removeItem("settings-storage");
+          // Clear localStorage for all stores using user-scoped keys
+          const userId = getCurrentUserId();
+          const suffix = userId ? `-${userId}` : "-anonymous";
+          localStorage.removeItem(`logging-storage${suffix}`);
+          localStorage.removeItem(`checkin-storage${suffix}`);
+          localStorage.removeItem(`education-storage${suffix}`);
+          localStorage.removeItem(`onboarding-storage${suffix}`);
+          localStorage.removeItem(`settings-storage${suffix}`);
 
           // Reset all stores to initial state
           useLoggingStore.setState({
@@ -845,7 +882,8 @@ export const useSettingsStore = create<SettingsState>()(
       },
     }),
     {
-      name: "settings-storage",
+      name: "settings-storage", // Used for consistency, actual key is computed by userScopedSettingsStorage
+      storage: createJSONStorage(() => userScopedSettingsStorage),
     },
   ),
 );

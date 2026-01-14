@@ -1,6 +1,53 @@
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { persist, createJSONStorage, StateStorage } from "zustand/middleware";
 import { openDB, DBSchema, IDBPDatabase } from "idb";
+import { getCurrentUserId } from "@/lib/indexeddb";
+
+const LOGGING_DB_PREFIX = "headache-logging-db";
+const LOGGING_STORAGE_PREFIX = "logging-storage";
+
+/**
+ * Get the user-scoped database name
+ */
+function getLoggingDBName(): string {
+  const userId = getCurrentUserId();
+  if (userId) {
+    return `${LOGGING_DB_PREFIX}-${userId}`;
+  }
+  return `${LOGGING_DB_PREFIX}-anonymous`;
+}
+
+/**
+ * Get the user-scoped localStorage key
+ */
+function getLoggingStorageKey(): string {
+  const userId = getCurrentUserId();
+  if (userId) {
+    return `${LOGGING_STORAGE_PREFIX}-${userId}`;
+  }
+  return `${LOGGING_STORAGE_PREFIX}-anonymous`;
+}
+
+/**
+ * Custom storage adapter that scopes localStorage to the current user
+ */
+const userScopedLoggingStorage: StateStorage = {
+  getItem: (): string | null => {
+    if (typeof window === "undefined") return null;
+    const key = getLoggingStorageKey();
+    return localStorage.getItem(key);
+  },
+  setItem: (_name: string, value: string): void => {
+    if (typeof window === "undefined") return;
+    const key = getLoggingStorageKey();
+    localStorage.setItem(key, value);
+  },
+  removeItem: (): void => {
+    if (typeof window === "undefined") return;
+    const key = getLoggingStorageKey();
+    localStorage.removeItem(key);
+  },
+};
 
 /**
  * Headache Entry Types
@@ -112,10 +159,11 @@ export interface LoggingState {
 }
 
 /**
- * Initialize IndexedDB
+ * Initialize IndexedDB with user-scoped database name
  */
 const initDB = async (): Promise<IDBPDatabase<LoggingDB>> => {
-  return openDB<LoggingDB>("headache-logging-db", 2, {
+  const dbName = getLoggingDBName();
+  return openDB<LoggingDB>(dbName, 2, {
     upgrade(db) {
       // Create entries store with timestamp index
       if (!db.objectStoreNames.contains("entries")) {
@@ -616,8 +664,8 @@ export const useLoggingStore = create<LoggingState>()(
       },
     }),
     {
-      name: "logging-storage",
-      storage: createJSONStorage(() => localStorage), // Only for metadata, entries go to IndexedDB
+      name: "logging-storage", // Used for consistency, actual key is computed by userScopedLoggingStorage
+      storage: createJSONStorage(() => userScopedLoggingStorage),
       partialize: (state) => ({
         metadata: state.metadata,
         unlockedFeatures: state.unlockedFeatures,
