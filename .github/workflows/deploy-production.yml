@@ -47,33 +47,34 @@ jobs:
 
       - name: Run Smoke Tests
         run: |
-          echo "Running smoke tests against ${{ steps.deploy.outputs.preview-url }}"
+          DEPLOY_URL="${{ steps.deploy.outputs.preview-url }}"
+          echo "Running smoke tests against $DEPLOY_URL"
 
           # Wait for deployment to be fully ready
           sleep 10
 
-          # Test 1: Homepage loads successfully
-          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${{ steps.deploy.outputs.preview-url }}")
+          # Test 1: Site is reachable (follow redirects - app redirects to /onboarding for new users)
+          HTTP_STATUS=$(curl -sL -o /dev/null -w "%{http_code}" "$DEPLOY_URL")
           if [ "$HTTP_STATUS" != "200" ]; then
-            echo "❌ Homepage returned HTTP $HTTP_STATUS (expected 200)"
+            echo "❌ Site returned HTTP $HTTP_STATUS (expected 200)"
             exit 1
           fi
-          echo "✅ Homepage loads (HTTP 200)"
+          echo "✅ Site is reachable (HTTP 200)"
 
-          # Test 2: Check that critical page assets are present
-          PAGE_CONTENT=$(curl -s "${{ steps.deploy.outputs.preview-url }}")
-          if ! echo "$PAGE_CONTENT" | grep -q "Headache"; then
+          # Test 2: Check that page content loads (follow redirects)
+          PAGE_CONTENT=$(curl -sL "$DEPLOY_URL")
+          if ! echo "$PAGE_CONTENT" | grep -qi "headache"; then
             echo "❌ Page content missing expected text"
             exit 1
           fi
           echo "✅ Page content verified"
 
-          # Test 3: API health check (Next.js API route)
-          API_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${{ steps.deploy.outputs.preview-url }}/api/health" || echo "404")
-          if [ "$API_STATUS" = "200" ]; then
-            echo "✅ API health endpoint available"
+          # Test 3: Login page accessible
+          LOGIN_STATUS=$(curl -sL -o /dev/null -w "%{http_code}" "$DEPLOY_URL/login")
+          if [ "$LOGIN_STATUS" = "200" ]; then
+            echo "✅ Login page accessible"
           else
-            echo "⚠️ API health endpoint not available (optional)"
+            echo "⚠️ Login page returned HTTP $LOGIN_STATUS"
           fi
 
           echo "🎉 All smoke tests passed!"
