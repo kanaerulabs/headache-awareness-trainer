@@ -210,7 +210,7 @@ See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed setup instructions.
 
 ## Credits
 
-- **Vision & UX Lead**: [@jinit](https://github.com/jinit) (Jinit Bhatt)
+- **Vision & UX Lead**: [@somepersonjin](https://github.com/somepersonjin) (Jinit Bhatt)
 
 ## License
 
