@@ -51,9 +51,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
     <Card className={cn("", className)} data-testid="theme-toggle">
       <CardHeader>
         <CardTitle>{t("appearance")}</CardTitle>
-        <CardDescription>
-          {t("appearanceDesc")}
-        </CardDescription>
+        <CardDescription>{t("appearanceDesc")}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-3 gap-3">

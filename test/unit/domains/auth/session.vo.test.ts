@@ -193,13 +193,11 @@ describe("Session Value Object", () => {
         expires,
       });
 
-      // TypeScript compile-time check - these should error if uncommented:
-      // @ts-expect-error - readonly properties cannot be reassigned
-      // session.user = null;
-      // @ts-expect-error - readonly properties cannot be reassigned
-      // session.expires = new Date();
-      // @ts-expect-error - readonly properties cannot be reassigned
-      // session.accessToken = "new-token";
+      // TypeScript compile-time check - session properties are readonly
+      // These assignments would fail at compile time if attempted:
+      //   session.user = null;
+      //   session.expires = new Date();
+      //   session.accessToken = "new-token";
 
       // Verify session exists and has expected structure
       expect(session.user).toBeDefined();

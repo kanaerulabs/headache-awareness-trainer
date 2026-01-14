@@ -11,8 +11,8 @@ import { Session } from "@/domains/auth/value-objects/session.vo";
 import { User } from "@/domains/auth/entities/user.entity";
 import { useEffect } from "react";
 
-// Mock user for authenticated stories
-const mockUser = User.create({
+// Mock user for authenticated stories (using load() to provide explicit ID)
+const mockUser = User.load({
   id: "1",
   email: "john.doe@example.com",
   name: "John Doe",

@@ -253,7 +253,12 @@ export const MoodStressTracker: React.FC<MoodStressTrackerProps> = ({
               aria-valuemin={0}
               aria-valuemax={10}
               aria-valuenow={stressLevel}
-              aria-valuetext={t("stressAriaValueText", { value: stressLevel, label: currentStressLabel ? t(`stressLevels.${currentStressLabel.labelKey}`) : "" })}
+              aria-valuetext={t("stressAriaValueText", {
+                value: stressLevel,
+                label: currentStressLabel
+                  ? t(`stressLevels.${currentStressLabel.labelKey}`)
+                  : "",
+              })}
               className={cn(
                 "flex-1 h-2 rounded-lg appearance-none cursor-pointer",
                 "bg-gray-200 dark:bg-gray-700",

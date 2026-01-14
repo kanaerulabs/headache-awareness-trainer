@@ -123,7 +123,10 @@ export const IntensitySlider: React.FC<IntensitySliderProps> = ({
               type="button"
               role="radio"
               aria-checked={isSelected}
-              aria-label={t("ariaLabel", { value: config.value, label: t(`levels.${config.labelKey}`) })}
+              aria-label={t("ariaLabel", {
+                value: config.value,
+                label: t(`levels.${config.labelKey}`),
+              })}
               disabled={disabled}
               onClick={() => onChange(config.value)}
               onKeyDown={(e) => handleKeyDown(e, config.value)}

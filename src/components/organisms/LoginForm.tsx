@@ -114,6 +114,7 @@ export function LoginForm() {
           <div
             className="rounded-md bg-destructive/10 border border-destructive/20 p-3 text-sm text-destructive"
             role="alert"
+            aria-live="assertive"
             data-testid="error-message"
           >
             {error}
@@ -127,7 +128,8 @@ export function LoginForm() {
           size="lg"
           className="w-full"
           data-testid="google-signin-button"
-          aria-label="Sign in with Google"
+          aria-label={isLoading ? "Signing in..." : "Sign in with Google"}
+          aria-busy={isLoading}
         >
           {isLoading ? (
             <>

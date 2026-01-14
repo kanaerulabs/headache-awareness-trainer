@@ -5,15 +5,15 @@
  * and provide personalized insights.
  */
 
-import { generateObject } from 'ai';
-import { openai } from '@ai-sdk/openai';
-import { z } from 'zod';
+import { generateObject } from "ai";
+import { openai } from "@ai-sdk/openai";
+import { z } from "zod";
 import {
   IInsightsAgent,
   InsightsInput,
   InsightsOutput,
   AgentError,
-} from '../../../usecases/generate-ai-insights/interfaces/insights-agent.interface';
+} from "../../../usecases/generate-ai-insights/interfaces/insights-agent.interface";
 
 /**
  * Zod schema for structured AI output validation
@@ -32,7 +32,7 @@ const OutputSchema = z.object({
  * structured insights about headache patterns and correlations with check-in data.
  */
 export class InsightsAgent implements IInsightsAgent {
-  private readonly model = openai('gpt-4o-mini');
+  private readonly model = openai("gpt-4o-mini");
 
   async execute(input: InsightsInput): Promise<InsightsOutput> {
     const startTime = Date.now();
@@ -78,18 +78,18 @@ export class InsightsAgent implements IInsightsAgent {
                 `- ${entry.timestamp.toISOString()}: Intensity ${entry.intensity}/10`,
               ];
               if (entry.location && entry.location.length > 0) {
-                parts.push(`Location: ${entry.location.join(', ')}`);
+                parts.push(`Location: ${entry.location.join(", ")}`);
               }
               if (entry.triggers && entry.triggers.length > 0) {
-                parts.push(`Triggers: ${entry.triggers.join(', ')}`);
+                parts.push(`Triggers: ${entry.triggers.join(", ")}`);
               }
               if (entry.notes) {
                 parts.push(`Notes: ${entry.notes}`);
               }
-              return parts.join(' | ');
+              return parts.join(" | ");
             })
-            .join('\n')
-        : 'No headache entries provided';
+            .join("\n")
+        : "No headache entries provided";
 
     // Build checkin data text
     const checkinText =
@@ -97,15 +97,15 @@ export class InsightsAgent implements IInsightsAgent {
         ? checkinData
             .map(
               (entry) =>
-                `- ${entry.timestamp.toISOString()}: Sleep quality: ${entry.sleepQuality}, Mood: ${entry.mood}, Body tension: ${entry.bodyTension.join(', ')}`,
+                `- ${entry.timestamp.toISOString()}: Sleep quality: ${entry.sleepQuality}, Mood: ${entry.mood}, Body tension: ${entry.bodyTension.join(", ")}`,
             )
-            .join('\n')
-        : 'No check-in data provided';
+            .join("\n")
+        : "No check-in data provided";
 
     // Context with default
     const context =
       input.context ??
-      'You are a health awareness assistant analyzing headache patterns for a person with chronic mild-to-moderate tension headaches. Help them build interoception skills by identifying patterns and correlations.';
+      "You are a health awareness assistant analyzing headache patterns for a person with chronic mild-to-moderate tension headaches. Help them build interoception skills by identifying patterns and correlations.";
 
     return `${context}
 
@@ -141,55 +141,55 @@ Be specific, actionable, and empathetic. Focus on building awareness of body sig
       const errorMessage = error.message.toLowerCase();
 
       // Rate limit detection
-      if (errorMessage.includes('rate limit') || errorMessage.includes('429')) {
-        return new AgentError('Rate limit exceeded', 'RATE_LIMIT', error);
+      if (errorMessage.includes("rate limit") || errorMessage.includes("429")) {
+        return new AgentError("Rate limit exceeded", "RATE_LIMIT", error);
       }
 
       // Timeout detection
       if (
-        errorMessage.includes('timeout') ||
-        errorMessage.includes('etimedout')
+        errorMessage.includes("timeout") ||
+        errorMessage.includes("etimedout")
       ) {
-        return new AgentError('Request timeout', 'TIMEOUT', error);
+        return new AgentError("Request timeout", "TIMEOUT", error);
       }
 
       // Authentication detection
       if (
-        errorMessage.includes('authentication') ||
-        errorMessage.includes('401') ||
-        errorMessage.includes('unauthorized')
+        errorMessage.includes("authentication") ||
+        errorMessage.includes("401") ||
+        errorMessage.includes("unauthorized")
       ) {
-        return new AgentError('Authentication failed', 'AUTH_ERROR', error);
+        return new AgentError("Authentication failed", "AUTH_ERROR", error);
       }
 
       // Invalid response (parse/schema errors)
       if (
-        errorMessage.includes('parse') ||
-        errorMessage.includes('schema') ||
-        errorMessage.includes('validation')
+        errorMessage.includes("parse") ||
+        errorMessage.includes("schema") ||
+        errorMessage.includes("validation")
       ) {
         return new AgentError(
-          'Invalid response format',
-          'INVALID_RESPONSE',
+          "Invalid response format",
+          "INVALID_RESPONSE",
           error,
         );
       }
 
       // Network errors
       if (
-        errorMessage.includes('network') ||
-        errorMessage.includes('econnrefused') ||
-        errorMessage.includes('enotfound')
+        errorMessage.includes("network") ||
+        errorMessage.includes("econnrefused") ||
+        errorMessage.includes("enotfound")
       ) {
         return new AgentError(
-          'Network connection failed',
-          'NETWORK_ERROR',
+          "Network connection failed",
+          "NETWORK_ERROR",
           error,
         );
       }
     }
 
     // Unknown error
-    return new AgentError('Unknown error occurred', 'UNKNOWN', error as Error);
+    return new AgentError("Unknown error occurred", "UNKNOWN", error as Error);
   }
 }

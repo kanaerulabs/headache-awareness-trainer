@@ -94,9 +94,7 @@ export function ReminderSettings({ className }: ReminderSettingsProps) {
     <Card className={cn("", className)} data-testid="reminder-settings">
       <CardHeader>
         <CardTitle>{t("reminders")}</CardTitle>
-        <CardDescription>
-          {t("remindersDesc")}
-        </CardDescription>
+        <CardDescription>{t("remindersDesc")}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Enable/Disable Reminders */}

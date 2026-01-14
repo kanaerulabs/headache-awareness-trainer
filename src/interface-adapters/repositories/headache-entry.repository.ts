@@ -15,7 +15,9 @@ import { HeadacheEntryRepository } from "../../usecases/log-headache.usecase";
 /**
  * Stored format - timestamp serialized as string
  */
-type StoredHeadacheEntry = Omit<HeadacheEntryProps, "timestamp"> & { timestamp: string };
+type StoredHeadacheEntry = Omit<HeadacheEntryProps, "timestamp"> & {
+  timestamp: string;
+};
 
 /**
  * IndexedDB Schema for Headache Entries
@@ -136,7 +138,10 @@ export class IndexedDBHeadacheEntryRepository implements HeadacheEntryRepository
   /**
    * Find entries by date range
    */
-  async findByDateRange(startDate: Date, endDate: Date): Promise<HeadacheEntry[]> {
+  async findByDateRange(
+    startDate: Date,
+    endDate: Date,
+  ): Promise<HeadacheEntry[]> {
     const db = await this.ensureDB();
     const tx = db.transaction("entries", "readonly");
     const index = tx.store.index("timestamp");

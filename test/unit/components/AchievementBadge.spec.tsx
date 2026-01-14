@@ -91,7 +91,7 @@ describe("AchievementBadge", () => {
 
       const lockIcon = screen
         .getByTestId("achievement-badge")
-        .querySelector('svg.lucide-lock');
+        .querySelector("svg.lucide-lock");
       expect(lockIcon).toBeInTheDocument();
     });
 

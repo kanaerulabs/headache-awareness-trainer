@@ -1,9 +1,9 @@
-import { getRequestConfig } from 'next-intl/server';
-import { cookies, headers } from 'next/headers';
+import { getRequestConfig } from "next-intl/server";
+import { cookies, headers } from "next/headers";
 
-export const locales = ['en', 'ja'] as const;
+export const locales = ["en", "ja"] as const;
 export type Locale = (typeof locales)[number];
-export const defaultLocale: Locale = 'en'; // Default to English if no preference detected
+export const defaultLocale: Locale = "en"; // Default to English if no preference detected
 
 /**
  * Detects preferred locale from browser's Accept-Language header
@@ -14,11 +14,11 @@ function detectBrowserLocale(acceptLanguage: string | null): Locale | null {
 
   // Parse Accept-Language header (e.g., "ja,en-US;q=0.9,en;q=0.8")
   const languages = acceptLanguage
-    .split(',')
-    .map(lang => {
-      const [code, priority] = lang.trim().split(';q=');
+    .split(",")
+    .map((lang) => {
+      const [code, priority] = lang.trim().split(";q=");
       return {
-        code: code.split('-')[0].toLowerCase(), // Get base language code (e.g., "en" from "en-US")
+        code: code.split("-")[0].toLowerCase(), // Get base language code (e.g., "en" from "en-US")
         priority: priority ? parseFloat(priority) : 1.0,
       };
     })
@@ -39,7 +39,7 @@ export default getRequestConfig(async () => {
   const headerStore = await headers();
 
   // Priority: 1. Cookie (user's explicit choice) > 2. Browser language > 3. Default
-  const localeCookie = cookieStore.get('locale')?.value;
+  const localeCookie = cookieStore.get("locale")?.value;
 
   let locale: Locale;
 
@@ -48,7 +48,7 @@ export default getRequestConfig(async () => {
     locale = localeCookie as Locale;
   } else {
     // Detect from browser's Accept-Language header
-    const acceptLanguage = headerStore.get('accept-language');
+    const acceptLanguage = headerStore.get("accept-language");
     const browserLocale = detectBrowserLocale(acceptLanguage);
     locale = browserLocale ?? defaultLocale;
   }

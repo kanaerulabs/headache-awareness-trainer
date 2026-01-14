@@ -31,14 +31,17 @@ import { useTranslations } from "next-intl";
  * - Quick dismiss "All good!" button
  */
 
-const moodOptions: Array<{ value: CheckInMood; emoji: string; labelKey: string }> =
-  [
-    { value: "calm", emoji: "😌", labelKey: "moods.calm" },
-    { value: "ok", emoji: "🙂", labelKey: "moods.ok" },
-    { value: "stressed", emoji: "😰", labelKey: "moods.stressed" },
-    { value: "anxious", emoji: "😟", labelKey: "moods.anxious" },
-    { value: "avoidant", emoji: "😶", labelKey: "moods.avoidant" },
-  ];
+const moodOptions: Array<{
+  value: CheckInMood;
+  emoji: string;
+  labelKey: string;
+}> = [
+  { value: "calm", emoji: "😌", labelKey: "moods.calm" },
+  { value: "ok", emoji: "🙂", labelKey: "moods.ok" },
+  { value: "stressed", emoji: "😰", labelKey: "moods.stressed" },
+  { value: "anxious", emoji: "😟", labelKey: "moods.anxious" },
+  { value: "avoidant", emoji: "😶", labelKey: "moods.avoidant" },
+];
 
 const sleepOptions: Array<{
   value: SleepQuality;
@@ -231,7 +234,9 @@ export default function CheckinPage() {
             aria-live="polite"
           >
             <div className="flex items-center gap-2 text-green-800 dark:text-green-200">
-              <span className="text-2xl" aria-hidden="true">✓</span>
+              <span className="text-2xl" aria-hidden="true">
+                ✓
+              </span>
               <span className="font-medium">{t("successMessage")}</span>
             </div>
           </Card>

@@ -285,7 +285,8 @@ describe("EducationHub", () => {
       ).not.toBeInTheDocument();
 
       // Restore original content
-      (educationalContent as any)["advanced-patterns"] = originalAdvancedPatterns;
+      (educationalContent as any)["advanced-patterns"] =
+        originalAdvancedPatterns;
     });
 
     it("should display locked content cards", () => {

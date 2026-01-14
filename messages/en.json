@@ -466,7 +466,9 @@
     "iosInstructions": "To install on iOS:",
     "iosStep1": "Tap the Share button at the bottom of Safari",
     "iosStep2": "Scroll down and tap \"Add to Home Screen\"",
-    "iosStep3": "Tap \"Add\" to confirm"
+    "iosStep3": "Tap \"Add\" to confirm",
+    "account": "Account",
+    "accountDesc": "Manage your account settings"
   },
   "onboarding": {
     "welcome": "Welcome to Headache Awareness Trainer",

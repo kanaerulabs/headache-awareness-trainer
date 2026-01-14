@@ -266,7 +266,10 @@ export const TensionTracker: React.FC<TensionTrackerProps> = ({
             aria-valuemin={0}
             aria-valuemax={10}
             aria-valuenow={value}
-            aria-valuetext={t("ariaValueText", { value, label: currentLabel ? t(`levels.${currentLabel.labelKey}`) : "" })}
+            aria-valuetext={t("ariaValueText", {
+              value,
+              label: currentLabel ? t(`levels.${currentLabel.labelKey}`) : "",
+            })}
             className={cn(
               "flex-1 h-2 rounded-lg appearance-none cursor-pointer",
               "bg-gray-200 dark:bg-gray-700",

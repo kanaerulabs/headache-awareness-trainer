@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
 /**
  * Responsive Viewport E2E Tests
@@ -13,18 +13,18 @@ import { test, expect } from '@playwright/test';
 
 // Skip all responsive tests - they look for data-testids that don't exist
 // (home-page, quick-actions, etc.) - components need data-testid attributes added
-test.describe.skip('Responsive Viewport Tests', () => {
-  test.describe('Mobile Viewport (375x667 - iPhone SE)', () => {
+test.describe.skip("Responsive Viewport Tests", () => {
+  test.describe("Mobile Viewport (375x667 - iPhone SE)", () => {
     test.use({ viewport: { width: 375, height: 667 } });
 
-    test('should display mobile layout correctly', async ({ page }) => {
-      await page.goto('/');
+    test("should display mobile layout correctly", async ({ page }) => {
+      await page.goto("/");
 
       // Home page should load
       await expect(page.locator('[data-testid="home-page"]')).toBeVisible();
 
       // Bottom nav should be visible
-      const bottomNav = page.locator('nav').filter({ hasText: 'Home' }).first();
+      const bottomNav = page.locator("nav").filter({ hasText: "Home" }).first();
       await expect(bottomNav).toBeVisible();
 
       // Content should fit viewport without horizontal scroll
@@ -32,12 +32,12 @@ test.describe.skip('Responsive Viewport Tests', () => {
       expect(scrollWidth).toBeLessThanOrEqual(375);
     });
 
-    test('should stack content vertically on mobile', async ({ page }) => {
-      await page.goto('/');
+    test("should stack content vertically on mobile", async ({ page }) => {
+      await page.goto("/");
 
       // Quick action cards should stack vertically
       const cards = page.locator('[data-testid="quick-actions"] button');
-      if (await cards.count() >= 2) {
+      if ((await cards.count()) >= 2) {
         const card1Box = await cards.nth(0).boundingBox();
         const card2Box = await cards.nth(1).boundingBox();
 
@@ -51,11 +51,11 @@ test.describe.skip('Responsive Viewport Tests', () => {
       }
     });
 
-    test('should display mobile-optimized font sizes', async ({ page }) => {
-      await page.goto('/');
+    test("should display mobile-optimized font sizes", async ({ page }) => {
+      await page.goto("/");
 
       // Main heading should be readable
-      const heading = page.locator('h1').first();
+      const heading = page.locator("h1").first();
       const fontSize = await heading.evaluate((el) => {
         return window.getComputedStyle(el).fontSize;
       });
@@ -65,8 +65,10 @@ test.describe.skip('Responsive Viewport Tests', () => {
       expect(fontSizeNum).toBeGreaterThanOrEqual(24);
     });
 
-    test('should have appropriate touch targets on mobile', async ({ page }) => {
-      await page.goto('/');
+    test("should have appropriate touch targets on mobile", async ({
+      page,
+    }) => {
+      await page.goto("/");
 
       // Action cards should be large enough for touch
       const firstCard = page.locator('[data-testid="learn-card"]');
@@ -78,8 +80,8 @@ test.describe.skip('Responsive Viewport Tests', () => {
       }
     });
 
-    test('should maintain safe area spacing on mobile', async ({ page }) => {
-      await page.goto('/');
+    test("should maintain safe area spacing on mobile", async ({ page }) => {
+      await page.goto("/");
 
       // Content should have proper padding
       const mainContent = page.locator('[data-testid="home-page"]');
@@ -92,8 +94,8 @@ test.describe.skip('Responsive Viewport Tests', () => {
       expect(paddingNum).toBeGreaterThanOrEqual(16);
     });
 
-    test('should hide desktop-only elements on mobile', async ({ page }) => {
-      await page.goto('/');
+    test("should hide desktop-only elements on mobile", async ({ page }) => {
+      await page.goto("/");
 
       // Page should load without errors
       await expect(page.locator('[data-testid="home-page"]')).toBeVisible();
@@ -104,11 +106,11 @@ test.describe.skip('Responsive Viewport Tests', () => {
     });
   });
 
-  test.describe('Tablet Viewport (768x1024 - iPad)', () => {
+  test.describe("Tablet Viewport (768x1024 - iPad)", () => {
     test.use({ viewport: { width: 768, height: 1024 } });
 
-    test('should display tablet layout correctly', async ({ page }) => {
-      await page.goto('/');
+    test("should display tablet layout correctly", async ({ page }) => {
+      await page.goto("/");
 
       await expect(page.locator('[data-testid="home-page"]')).toBeVisible();
 
@@ -122,12 +124,12 @@ test.describe.skip('Responsive Viewport Tests', () => {
       }
     });
 
-    test('should display cards in grid on tablet', async ({ page }) => {
-      await page.goto('/');
+    test("should display cards in grid on tablet", async ({ page }) => {
+      await page.goto("/");
 
       // Quick action cards should be side-by-side (sm:grid-cols-2)
       const cards = page.locator('[data-testid="quick-actions"] button');
-      if (await cards.count() >= 2) {
+      if ((await cards.count()) >= 2) {
         const card1Box = await cards.nth(0).boundingBox();
         const card2Box = await cards.nth(1).boundingBox();
 
@@ -141,11 +143,11 @@ test.describe.skip('Responsive Viewport Tests', () => {
       }
     });
 
-    test('should display bottom navigation on tablet', async ({ page }) => {
-      await page.goto('/');
+    test("should display bottom navigation on tablet", async ({ page }) => {
+      await page.goto("/");
 
       // Bottom nav should be visible (mobile-first design)
-      const bottomNav = page.locator('nav').filter({ hasText: 'Home' }).first();
+      const bottomNav = page.locator("nav").filter({ hasText: "Home" }).first();
       await expect(bottomNav).toBeVisible();
 
       // Should span full width
@@ -155,8 +157,8 @@ test.describe.skip('Responsive Viewport Tests', () => {
       }
     });
 
-    test('should use tablet-optimized spacing', async ({ page }) => {
-      await page.goto('/');
+    test("should use tablet-optimized spacing", async ({ page }) => {
+      await page.goto("/");
 
       // Content container should have reasonable max-width
       const container = page.locator('[data-testid="home-page"] > div').first();
@@ -168,8 +170,8 @@ test.describe.skip('Responsive Viewport Tests', () => {
       }
     });
 
-    test('should display readable text on tablet', async ({ page }) => {
-      await page.goto('/');
+    test("should display readable text on tablet", async ({ page }) => {
+      await page.goto("/");
 
       // Text should scale appropriately
       const description = page.locator('[data-testid="greeting-section"] p');
@@ -182,11 +184,11 @@ test.describe.skip('Responsive Viewport Tests', () => {
     });
   });
 
-  test.describe('Desktop Viewport (1280x720)', () => {
+  test.describe("Desktop Viewport (1280x720)", () => {
     test.use({ viewport: { width: 1280, height: 720 } });
 
-    test('should display desktop layout correctly', async ({ page }) => {
-      await page.goto('/');
+    test("should display desktop layout correctly", async ({ page }) => {
+      await page.goto("/");
 
       await expect(page.locator('[data-testid="home-page"]')).toBeVisible();
 
@@ -206,25 +208,33 @@ test.describe.skip('Responsive Viewport Tests', () => {
       }
     });
 
-    test('should display bottom navigation on desktop', async ({ page }) => {
-      await page.goto('/');
+    test("should display bottom navigation on desktop", async ({ page }) => {
+      await page.goto("/");
 
       // Bottom nav should be visible (mobile-first approach)
-      const bottomNav = page.locator('nav').filter({ hasText: 'Home' }).first();
+      const bottomNav = page.locator("nav").filter({ hasText: "Home" }).first();
       await expect(bottomNav).toBeVisible();
     });
 
-    test('should utilize vertical space efficiently on desktop', async ({ page }) => {
-      await page.goto('/');
+    test("should utilize vertical space efficiently on desktop", async ({
+      page,
+    }) => {
+      await page.goto("/");
 
       // Content should be visible without excessive scrolling
-      await expect(page.locator('[data-testid="greeting-section"]')).toBeInViewport();
-      await expect(page.locator('[data-testid="daily-tip-section"]')).toBeInViewport();
-      await expect(page.locator('[data-testid="quick-actions"]')).toBeInViewport();
+      await expect(
+        page.locator('[data-testid="greeting-section"]'),
+      ).toBeInViewport();
+      await expect(
+        page.locator('[data-testid="daily-tip-section"]'),
+      ).toBeInViewport();
+      await expect(
+        page.locator('[data-testid="quick-actions"]'),
+      ).toBeInViewport();
     });
 
-    test('should handle mouse interactions on desktop', async ({ page }) => {
-      await page.goto('/');
+    test("should handle mouse interactions on desktop", async ({ page }) => {
+      await page.goto("/");
 
       // Hover should work on action cards
       const learnCard = page.locator('[data-testid="learn-card"]');
@@ -236,30 +246,32 @@ test.describe.skip('Responsive Viewport Tests', () => {
       });
 
       // Should have some shadow (hover effect)
-      expect(boxShadow).not.toBe('none');
+      expect(boxShadow).not.toBe("none");
     });
 
-    test('should support keyboard navigation on desktop', async ({ page }) => {
-      await page.goto('/');
+    test("should support keyboard navigation on desktop", async ({ page }) => {
+      await page.goto("/");
 
       // Tab through interactive elements
-      await page.keyboard.press('Tab');
-      await page.keyboard.press('Tab');
+      await page.keyboard.press("Tab");
+      await page.keyboard.press("Tab");
 
       // Should be able to focus on action cards
       const focusedElement = await page.evaluate(() => {
-        return document.activeElement?.getAttribute('data-testid');
+        return document.activeElement?.getAttribute("data-testid");
       });
 
       expect(focusedElement).toBeTruthy();
     });
   });
 
-  test.describe('Viewport Transition Tests', () => {
-    test('should adapt layout when resizing from mobile to tablet', async ({ page }) => {
+  test.describe("Viewport Transition Tests", () => {
+    test("should adapt layout when resizing from mobile to tablet", async ({
+      page,
+    }) => {
       // Start at mobile
       await page.setViewportSize({ width: 375, height: 667 });
-      await page.goto('/');
+      await page.goto("/");
 
       // Verify mobile layout
       await expect(page.locator('[data-testid="home-page"]')).toBeVisible();
@@ -270,7 +282,7 @@ test.describe.skip('Responsive Viewport Tests', () => {
 
       // Layout should adapt
       const cards = page.locator('[data-testid="quick-actions"] button');
-      if (await cards.count() >= 2) {
+      if ((await cards.count()) >= 2) {
         const card1Box = await cards.nth(0).boundingBox();
         const card2Box = await cards.nth(1).boundingBox();
 
@@ -281,10 +293,12 @@ test.describe.skip('Responsive Viewport Tests', () => {
       }
     });
 
-    test('should adapt layout when resizing from tablet to desktop', async ({ page }) => {
+    test("should adapt layout when resizing from tablet to desktop", async ({
+      page,
+    }) => {
       // Start at tablet
       await page.setViewportSize({ width: 768, height: 1024 });
-      await page.goto('/');
+      await page.goto("/");
 
       await expect(page.locator('[data-testid="home-page"]')).toBeVisible();
 
@@ -303,14 +317,16 @@ test.describe.skip('Responsive Viewport Tests', () => {
       }
     });
 
-    test('should maintain functionality across viewport changes', async ({ page }) => {
+    test("should maintain functionality across viewport changes", async ({
+      page,
+    }) => {
       // Start at mobile
       await page.setViewportSize({ width: 375, height: 667 });
-      await page.goto('/');
+      await page.goto("/");
 
       // Click Learn card
       await page.click('[data-testid="learn-card"]');
-      await expect(page).toHaveURL('/learn');
+      await expect(page).toHaveURL("/learn");
 
       // Resize to desktop
       await page.setViewportSize({ width: 1280, height: 720 });
@@ -320,15 +336,17 @@ test.describe.skip('Responsive Viewport Tests', () => {
       await expect(page.locator('[data-testid="learn-page"]')).toBeVisible();
 
       // Navigation should still work
-      await page.click('text=Home');
-      await expect(page).toHaveURL('/');
+      await page.click("text=Home");
+      await expect(page).toHaveURL("/");
     });
   });
 
-  test.describe('Learn Page Responsive Behavior', () => {
-    test('should display learn page responsively on mobile', async ({ page }) => {
+  test.describe("Learn Page Responsive Behavior", () => {
+    test("should display learn page responsively on mobile", async ({
+      page,
+    }) => {
       await page.setViewportSize({ width: 375, height: 667 });
-      await page.goto('/learn');
+      await page.goto("/learn");
 
       await expect(page.locator('[data-testid="learn-page"]')).toBeVisible();
 
@@ -337,15 +355,15 @@ test.describe.skip('Responsive Viewport Tests', () => {
       expect(scrollWidth).toBeLessThanOrEqual(375);
     });
 
-    test('should display learn page in grid on tablet', async ({ page }) => {
+    test("should display learn page in grid on tablet", async ({ page }) => {
       await page.setViewportSize({ width: 768, height: 1024 });
-      await page.goto('/learn');
+      await page.goto("/learn");
 
       await expect(page.locator('[data-testid="learn-page"]')).toBeVisible();
 
       // Content cards should be in grid
       const contentCards = page.locator('a[href^="/learn/"]');
-      if (await contentCards.count() >= 2) {
+      if ((await contentCards.count()) >= 2) {
         const card1Box = await contentCards.nth(0).boundingBox();
         const card2Box = await contentCards.nth(1).boundingBox();
 
@@ -356,9 +374,9 @@ test.describe.skip('Responsive Viewport Tests', () => {
       }
     });
 
-    test('should display learn page optimally on desktop', async ({ page }) => {
+    test("should display learn page optimally on desktop", async ({ page }) => {
       await page.setViewportSize({ width: 1280, height: 720 });
-      await page.goto('/learn');
+      await page.goto("/learn");
 
       await expect(page.locator('[data-testid="learn-page"]')).toBeVisible();
 
@@ -374,16 +392,18 @@ test.describe.skip('Responsive Viewport Tests', () => {
     });
   });
 
-  test.describe('Onboarding Responsive Behavior', () => {
+  test.describe("Onboarding Responsive Behavior", () => {
     test.beforeEach(async ({ page }) => {
       // Clear onboarding state
-      await page.goto('/');
+      await page.goto("/");
       await page.evaluate(() => localStorage.clear());
     });
 
-    test('should display onboarding wizard responsively on mobile', async ({ page }) => {
+    test("should display onboarding wizard responsively on mobile", async ({
+      page,
+    }) => {
       await page.setViewportSize({ width: 375, height: 667 });
-      await page.goto('/onboarding');
+      await page.goto("/onboarding");
 
       const wizardContainer = page.locator('[data-testid="wizard-container"]');
       await expect(wizardContainer).toBeVisible();
@@ -395,9 +415,9 @@ test.describe.skip('Responsive Viewport Tests', () => {
       }
     });
 
-    test('should center onboarding wizard on tablet', async ({ page }) => {
+    test("should center onboarding wizard on tablet", async ({ page }) => {
       await page.setViewportSize({ width: 768, height: 1024 });
-      await page.goto('/onboarding');
+      await page.goto("/onboarding");
 
       const wizardContainer = page.locator('[data-testid="wizard-container"]');
       await expect(wizardContainer).toBeVisible();
@@ -410,9 +430,9 @@ test.describe.skip('Responsive Viewport Tests', () => {
       }
     });
 
-    test('should center onboarding wizard on desktop', async ({ page }) => {
+    test("should center onboarding wizard on desktop", async ({ page }) => {
       await page.setViewportSize({ width: 1280, height: 720 });
-      await page.goto('/onboarding');
+      await page.goto("/onboarding");
 
       const wizardContainer = page.locator('[data-testid="wizard-container"]');
       await expect(wizardContainer).toBeVisible();

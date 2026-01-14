@@ -144,27 +144,21 @@ describe("StreakCounter", () => {
       render(<StreakCounter currentStreak={20} />);
 
       expect(screen.getByText("30")).toBeInTheDocument();
-      expect(
-        screen.getByText("10 days to 30-day streak!"),
-      ).toBeInTheDocument();
+      expect(screen.getByText("10 days to 30-day streak!")).toBeInTheDocument();
     });
 
     it("shows 60-day milestone when between 30 and 60", () => {
       render(<StreakCounter currentStreak={45} />);
 
       expect(screen.getByText("60")).toBeInTheDocument();
-      expect(
-        screen.getByText("15 days to 60-day streak!"),
-      ).toBeInTheDocument();
+      expect(screen.getByText("15 days to 60-day streak!")).toBeInTheDocument();
     });
 
     it("shows 90-day milestone when between 60 and 90", () => {
       render(<StreakCounter currentStreak={75} />);
 
       expect(screen.getByText("90")).toBeInTheDocument();
-      expect(
-        screen.getByText("15 days to 90-day streak!"),
-      ).toBeInTheDocument();
+      expect(screen.getByText("15 days to 90-day streak!")).toBeInTheDocument();
     });
   });
 
@@ -286,7 +280,9 @@ describe("StreakCounter", () => {
     it("hides decorative emoji from screen readers", () => {
       render(<StreakCounter currentStreak={5} />);
 
-      const emojiContainer = screen.getByText("🔥").closest('[aria-hidden="true"]');
+      const emojiContainer = screen
+        .getByText("🔥")
+        .closest('[aria-hidden="true"]');
       expect(emojiContainer).toBeInTheDocument();
     });
 
@@ -302,7 +298,9 @@ describe("StreakCounter", () => {
 
       const streakLabel = screen.getByText("Current Streak");
       expect(streakLabel).toHaveClass("text-xs");
-      expect(streakLabel.parentElement?.querySelector(".text-3xl")).toBeTruthy();
+      expect(
+        streakLabel.parentElement?.querySelector(".text-3xl"),
+      ).toBeTruthy();
     });
   });
 
@@ -325,7 +323,9 @@ describe("StreakCounter", () => {
     it("applies responsive padding", () => {
       render(<StreakCounter currentStreak={5} />);
 
-      const content = screen.getByTestId("streak-counter").querySelector(".p-4");
+      const content = screen
+        .getByTestId("streak-counter")
+        .querySelector(".p-4");
       expect(content).toHaveClass("sm:p-6");
     });
 
@@ -450,7 +450,9 @@ describe("StreakCounter", () => {
     it("has card structure with proper padding", () => {
       render(<StreakCounter currentStreak={5} />);
 
-      const content = screen.getByTestId("streak-counter").querySelector(".p-4");
+      const content = screen
+        .getByTestId("streak-counter")
+        .querySelector(".p-4");
       expect(content).toBeInTheDocument();
       expect(content).toHaveClass("sm:p-6");
     });

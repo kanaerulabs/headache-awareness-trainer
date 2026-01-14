@@ -12,10 +12,7 @@ export function WelcomeStep() {
   const t = useTranslations("onboarding");
 
   return (
-    <WizardStep
-      title={t("welcome")}
-      description={t("welcomeDesc")}
-    >
+    <WizardStep title={t("welcome")} description={t("welcomeDesc")}>
       <div
         className="flex flex-col items-center space-y-6"
         data-testid="welcome-step"
@@ -30,9 +27,7 @@ export function WelcomeStep() {
           </div>
 
           <div className="space-y-3 max-w-md">
-            <h3 className="text-lg font-medium">
-              {t("takeControl")}
-            </h3>
+            <h3 className="text-lg font-medium">{t("takeControl")}</h3>
 
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li className="flex items-start gap-2">

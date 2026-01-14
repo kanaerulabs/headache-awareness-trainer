@@ -12,10 +12,6 @@ export const metadata: Metadata = {
   },
 };
 
-export default function LogLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function LogLayout({ children }: { children: React.ReactNode }) {
   return children;
 }

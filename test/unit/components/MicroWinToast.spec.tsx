@@ -277,7 +277,9 @@ describe("useAutoMicroWinToast", () => {
   beforeEach(() => {
     (useToast as jest.Mock).mockReturnValue({ toast: mockToast });
 
-    const { useGamificationStore } = require("@/interface-adapters/store/gamificationStore");
+    const {
+      useGamificationStore,
+    } = require("@/interface-adapters/store/gamificationStore");
     useGamificationStore.getState.mockReturnValue({
       getMicroWinMessage: mockGetMicroWinMessage,
     });

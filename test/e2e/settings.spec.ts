@@ -28,18 +28,19 @@ async function waitForResponsiveVisibility(
   page: import("@playwright/test").Page,
   selector: string,
   shouldBeVisible: boolean,
-  timeout = 10000
+  timeout = 10000,
 ) {
   await page.waitForFunction(
     ({ sel, visible }) => {
       const el = document.querySelector(sel);
       if (!el) return !visible;
       const style = window.getComputedStyle(el);
-      const isVisible = style.display !== "none" && style.visibility !== "hidden";
+      const isVisible =
+        style.display !== "none" && style.visibility !== "hidden";
       return visible ? isVisible : !isVisible;
     },
     { sel: selector, visible: shouldBeVisible },
-    { timeout }
+    { timeout },
   );
 }
 
@@ -47,9 +48,13 @@ async function waitForResponsiveVisibility(
  * Helper to get the visible settings container selector based on viewport.
  * At lg+ (1024px), desktop container is visible; below that, mobile accordion is visible.
  */
-function getVisibleContainer(viewport: { width: number; height: number } | null) {
+function getVisibleContainer(
+  viewport: { width: number; height: number } | null,
+) {
   const isDesktop = viewport && viewport.width >= 1024;
-  return isDesktop ? '[data-testid="settings-cards-desktop"]' : '[data-testid="settings-accordion-mobile"]';
+  return isDesktop
+    ? '[data-testid="settings-cards-desktop"]'
+    : '[data-testid="settings-accordion-mobile"]';
 }
 
 test.describe("Settings Page", () => {
@@ -65,16 +70,28 @@ test.describe("Settings Page", () => {
     // Use computed style check because Playwright's toBeVisible() doesn't evaluate CSS media queries
     const isDesktop = viewport && viewport.width >= 1024;
     if (isDesktop) {
-      await waitForResponsiveVisibility(page, '[data-testid="settings-cards-desktop"]', true);
+      await waitForResponsiveVisibility(
+        page,
+        '[data-testid="settings-cards-desktop"]',
+        true,
+      );
       // Wait for desktop settings to be fully rendered - scope to visible container
       await expect(
-        page.locator('[data-testid="settings-cards-desktop"] [data-testid="reminder-settings"]')
+        page.locator(
+          '[data-testid="settings-cards-desktop"] [data-testid="reminder-settings"]',
+        ),
       ).toBeVisible({ timeout: 10000 });
     } else {
-      await waitForResponsiveVisibility(page, '[data-testid="settings-accordion-mobile"]', true);
+      await waitForResponsiveVisibility(
+        page,
+        '[data-testid="settings-accordion-mobile"]',
+        true,
+      );
       // Wait for mobile settings to be fully rendered - scope to visible container
       await expect(
-        page.locator('[data-testid="settings-accordion-mobile"] [data-testid="reminder-settings"]')
+        page.locator(
+          '[data-testid="settings-accordion-mobile"] [data-testid="reminder-settings"]',
+        ),
       ).toBeVisible({ timeout: 10000 });
     }
   });
@@ -119,7 +136,9 @@ test.describe("Settings Page", () => {
       ];
 
       for (const sectionId of sectionIds) {
-        await expect(page.locator(`[data-testid="${sectionId}"]`)).toBeVisible();
+        await expect(
+          page.locator(`[data-testid="${sectionId}"]`),
+        ).toBeVisible();
       }
     });
   });
@@ -127,7 +146,9 @@ test.describe("Settings Page", () => {
   test.describe("Reminder Configuration", () => {
     test("should enable and disable reminders", async ({ page }) => {
       // Scope to desktop cards (visible on default viewport)
-      const desktopCards = page.locator('[data-testid="settings-cards-desktop"]');
+      const desktopCards = page.locator(
+        '[data-testid="settings-cards-desktop"]',
+      );
       const reminderSwitch = desktopCards.locator(
         '[data-testid="reminders-enabled-switch"]',
       );
@@ -149,10 +170,14 @@ test.describe("Settings Page", () => {
     });
 
     test("should add a reminder time", async ({ page }) => {
-      const desktopCards = page.locator('[data-testid="settings-cards-desktop"]');
+      const desktopCards = page.locator(
+        '[data-testid="settings-cards-desktop"]',
+      );
 
       // Enable reminders first
-      const reminderSwitch = desktopCards.locator('[data-testid="reminders-enabled-switch"]');
+      const reminderSwitch = desktopCards.locator(
+        '[data-testid="reminders-enabled-switch"]',
+      );
       const isEnabled = await reminderSwitch.getAttribute("aria-checked");
 
       if (isEnabled !== "true") {
@@ -174,10 +199,14 @@ test.describe("Settings Page", () => {
     });
 
     test("should remove a reminder time", async ({ page }) => {
-      const desktopCards = page.locator('[data-testid="settings-cards-desktop"]');
+      const desktopCards = page.locator(
+        '[data-testid="settings-cards-desktop"]',
+      );
 
       // Enable reminders
-      const reminderSwitch = desktopCards.locator('[data-testid="reminders-enabled-switch"]');
+      const reminderSwitch = desktopCards.locator(
+        '[data-testid="reminders-enabled-switch"]',
+      );
       const isEnabled = await reminderSwitch.getAttribute("aria-checked");
 
       if (isEnabled !== "true") {
@@ -192,7 +221,9 @@ test.describe("Settings Page", () => {
       await page.waitForTimeout(300);
 
       // Remove the time
-      const removeButton = desktopCards.locator('[data-testid="remove-time-10:00"]');
+      const removeButton = desktopCards.locator(
+        '[data-testid="remove-time-10:00"]',
+      );
       await removeButton.click();
 
       // Verify time is removed
@@ -202,10 +233,14 @@ test.describe("Settings Page", () => {
     });
 
     test("should toggle reminder days", async ({ page }) => {
-      const desktopCards = page.locator('[data-testid="settings-cards-desktop"]');
+      const desktopCards = page.locator(
+        '[data-testid="settings-cards-desktop"]',
+      );
 
       // Enable reminders
-      const reminderSwitch = desktopCards.locator('[data-testid="reminders-enabled-switch"]');
+      const reminderSwitch = desktopCards.locator(
+        '[data-testid="reminders-enabled-switch"]',
+      );
       const isEnabled = await reminderSwitch.getAttribute("aria-checked");
 
       if (isEnabled !== "true") {
@@ -214,7 +249,9 @@ test.describe("Settings Page", () => {
       }
 
       // Toggle Monday - verify the toggle is clickable
-      const mondayToggle = desktopCards.locator('[data-testid="day-toggle-mon"]');
+      const mondayToggle = desktopCards.locator(
+        '[data-testid="day-toggle-mon"]',
+      );
 
       // Verify toggle is visible and clickable
       await expect(mondayToggle).toBeVisible();
@@ -226,10 +263,14 @@ test.describe("Settings Page", () => {
     });
 
     test("should change reminder style", async ({ page }) => {
-      const desktopCards = page.locator('[data-testid="settings-cards-desktop"]');
+      const desktopCards = page.locator(
+        '[data-testid="settings-cards-desktop"]',
+      );
 
       // Enable reminders
-      const reminderSwitch = desktopCards.locator('[data-testid="reminders-enabled-switch"]');
+      const reminderSwitch = desktopCards.locator(
+        '[data-testid="reminders-enabled-switch"]',
+      );
       const isEnabled = await reminderSwitch.getAttribute("aria-checked");
 
       if (isEnabled !== "true") {
@@ -238,7 +279,9 @@ test.describe("Settings Page", () => {
       }
 
       // Select persistent style
-      const persistentOption = desktopCards.locator('[data-testid="style-persistent"]');
+      const persistentOption = desktopCards.locator(
+        '[data-testid="style-persistent"]',
+      );
       await expect(persistentOption).toBeVisible();
       await persistentOption.click();
       await page.waitForTimeout(300);
@@ -253,7 +296,9 @@ test.describe("Settings Page", () => {
       let desktopCards = page.locator('[data-testid="settings-cards-desktop"]');
 
       // Enable reminders
-      const reminderSwitch = desktopCards.locator('[data-testid="reminders-enabled-switch"]');
+      const reminderSwitch = desktopCards.locator(
+        '[data-testid="reminders-enabled-switch"]',
+      );
       await reminderSwitch.click();
       await page.waitForTimeout(500);
 
@@ -265,7 +310,11 @@ test.describe("Settings Page", () => {
       // Reload page
       await page.reload();
       await expect(page.locator('[data-testid="settings-page"]')).toBeVisible();
-      await waitForResponsiveVisibility(page, '[data-testid="settings-cards-desktop"]', true);
+      await waitForResponsiveVisibility(
+        page,
+        '[data-testid="settings-cards-desktop"]',
+        true,
+      );
 
       // Re-scope after reload
       desktopCards = page.locator('[data-testid="settings-cards-desktop"]');
@@ -283,7 +332,9 @@ test.describe("Settings Page", () => {
   test.describe("Tracked Factors", () => {
     test("should toggle off a default factor", async ({ page, viewport }) => {
       const container = getVisibleContainer(viewport);
-      const sleepToggle = page.locator(`${container} [data-testid="toggle-sleep"]`);
+      const sleepToggle = page.locator(
+        `${container} [data-testid="toggle-sleep"]`,
+      );
 
       // Get initial state
       const initialState = await sleepToggle.getAttribute("aria-checked");
@@ -299,8 +350,12 @@ test.describe("Settings Page", () => {
 
     test("should add a custom factor", async ({ page, viewport }) => {
       const container = getVisibleContainer(viewport);
-      const customFactorInput = page.locator(`${container} [data-testid="custom-factor-input"]`);
-      const addButton = page.locator(`${container} [data-testid="add-factor-button"]`);
+      const customFactorInput = page.locator(
+        `${container} [data-testid="custom-factor-input"]`,
+      );
+      const addButton = page.locator(
+        `${container} [data-testid="add-factor-button"]`,
+      );
 
       // Add a custom factor
       await customFactorInput.fill("Exercise");
@@ -320,8 +375,12 @@ test.describe("Settings Page", () => {
       const container = getVisibleContainer(viewport);
 
       // Add a custom factor first
-      await page.locator(`${container} [data-testid="custom-factor-input"]`).fill("Weather");
-      await page.locator(`${container} [data-testid="add-factor-button"]`).click();
+      await page
+        .locator(`${container} [data-testid="custom-factor-input"]`)
+        .fill("Weather");
+      await page
+        .locator(`${container} [data-testid="add-factor-button"]`)
+        .click();
       await page.waitForTimeout(300);
 
       // Verify it appears
@@ -330,7 +389,9 @@ test.describe("Settings Page", () => {
       ).toBeVisible();
 
       // Remove it
-      await page.locator(`${container} [data-testid="remove-factor-Weather"]`).click();
+      await page
+        .locator(`${container} [data-testid="remove-factor-Weather"]`)
+        .click();
       await page.waitForTimeout(300);
 
       // Verify it's removed
@@ -339,10 +400,17 @@ test.describe("Settings Page", () => {
       ).not.toBeVisible();
     });
 
-    test("should prevent adding empty custom factor", async ({ page, viewport }) => {
+    test("should prevent adding empty custom factor", async ({
+      page,
+      viewport,
+    }) => {
       const container = getVisibleContainer(viewport);
-      const customFactorInput = page.locator(`${container} [data-testid="custom-factor-input"]`);
-      const addButton = page.locator(`${container} [data-testid="add-factor-button"]`);
+      const customFactorInput = page.locator(
+        `${container} [data-testid="custom-factor-input"]`,
+      );
+      const addButton = page.locator(
+        `${container} [data-testid="add-factor-button"]`,
+      );
 
       // Try to add empty factor
       await customFactorInput.fill("");
@@ -360,16 +428,25 @@ test.describe("Settings Page", () => {
       }
     });
 
-    test("should persist tracked factors after reload", async ({ page, viewport }) => {
+    test("should persist tracked factors after reload", async ({
+      page,
+      viewport,
+    }) => {
       const container = getVisibleContainer(viewport);
 
       // Toggle hydration off
-      await page.locator(`${container} [data-testid="toggle-hydration"]`).click();
+      await page
+        .locator(`${container} [data-testid="toggle-hydration"]`)
+        .click();
       await page.waitForTimeout(300);
 
       // Add custom factor
-      await page.locator(`${container} [data-testid="custom-factor-input"]`).fill("Posture");
-      await page.locator(`${container} [data-testid="add-factor-button"]`).click();
+      await page
+        .locator(`${container} [data-testid="custom-factor-input"]`)
+        .fill("Posture");
+      await page
+        .locator(`${container} [data-testid="add-factor-button"]`)
+        .click();
       await page.waitForTimeout(500);
 
       // Reload page
@@ -388,7 +465,10 @@ test.describe("Settings Page", () => {
   });
 
   test.describe("Headache Types", () => {
-    test("should display default headache types", async ({ page, viewport }) => {
+    test("should display default headache types", async ({
+      page,
+      viewport,
+    }) => {
       const container = getVisibleContainer(viewport);
       const defaultTypes = ["tension", "migraine", "cluster", "sinus"];
 
@@ -401,8 +481,12 @@ test.describe("Settings Page", () => {
 
     test("should add a custom headache type", async ({ page, viewport }) => {
       const container = getVisibleContainer(viewport);
-      const typeInput = page.locator(`${container} [data-testid="custom-type-input"]`);
-      const addButton = page.locator(`${container} [data-testid="add-type-button"]`);
+      const typeInput = page.locator(
+        `${container} [data-testid="custom-type-input"]`,
+      );
+      const addButton = page.locator(
+        `${container} [data-testid="add-type-button"]`,
+      );
 
       // Add custom type
       await typeInput.fill("Cervicogenic");
@@ -419,8 +503,12 @@ test.describe("Settings Page", () => {
       const container = getVisibleContainer(viewport);
 
       // Add a custom type first
-      await page.locator(`${container} [data-testid="custom-type-input"]`).fill("Occipital");
-      await page.locator(`${container} [data-testid="add-type-button"]`).click();
+      await page
+        .locator(`${container} [data-testid="custom-type-input"]`)
+        .fill("Occipital");
+      await page
+        .locator(`${container} [data-testid="add-type-button"]`)
+        .click();
       await page.waitForTimeout(300);
 
       // Verify it appears
@@ -429,7 +517,9 @@ test.describe("Settings Page", () => {
       ).toBeVisible();
 
       // Remove it
-      await page.locator(`${container} [data-testid="remove-type-Occipital"]`).click();
+      await page
+        .locator(`${container} [data-testid="remove-type-Occipital"]`)
+        .click();
       await page.waitForTimeout(300);
 
       // Verify it's removed
@@ -438,12 +528,19 @@ test.describe("Settings Page", () => {
       ).not.toBeVisible();
     });
 
-    test("should persist custom headache types after reload", async ({ page, viewport }) => {
+    test("should persist custom headache types after reload", async ({
+      page,
+      viewport,
+    }) => {
       const container = getVisibleContainer(viewport);
 
       // Add custom type
-      await page.locator(`${container} [data-testid="custom-type-input"]`).fill("Hormonal");
-      await page.locator(`${container} [data-testid="add-type-button"]`).click();
+      await page
+        .locator(`${container} [data-testid="custom-type-input"]`)
+        .fill("Hormonal");
+      await page
+        .locator(`${container} [data-testid="add-type-button"]`)
+        .click();
       await page.waitForTimeout(500);
 
       // Reload page
@@ -460,8 +557,12 @@ test.describe("Settings Page", () => {
 
   test.describe("Display Settings", () => {
     test("should switch theme to dark mode", async ({ page }) => {
-      const desktopCards = page.locator('[data-testid="settings-cards-desktop"]');
-      const darkThemeOption = desktopCards.locator('[data-testid="theme-dark"]');
+      const desktopCards = page.locator(
+        '[data-testid="settings-cards-desktop"]',
+      );
+      const darkThemeOption = desktopCards.locator(
+        '[data-testid="theme-dark"]',
+      );
       await darkThemeOption.click();
       await page.waitForTimeout(300);
 
@@ -471,14 +572,18 @@ test.describe("Settings Page", () => {
     });
 
     test("should switch theme to light mode", async ({ page }) => {
-      const desktopCards = page.locator('[data-testid="settings-cards-desktop"]');
+      const desktopCards = page.locator(
+        '[data-testid="settings-cards-desktop"]',
+      );
 
       // First switch to dark
       await desktopCards.locator('[data-testid="theme-dark"]').click();
       await page.waitForTimeout(300);
 
       // Then switch to light
-      const lightThemeOption = desktopCards.locator('[data-testid="theme-light"]');
+      const lightThemeOption = desktopCards.locator(
+        '[data-testid="theme-light"]',
+      );
       await lightThemeOption.click();
       await page.waitForTimeout(300);
 
@@ -488,8 +593,12 @@ test.describe("Settings Page", () => {
     });
 
     test("should switch theme to system mode", async ({ page }) => {
-      const desktopCards = page.locator('[data-testid="settings-cards-desktop"]');
-      const systemThemeOption = desktopCards.locator('[data-testid="theme-system"]');
+      const desktopCards = page.locator(
+        '[data-testid="settings-cards-desktop"]',
+      );
+      const systemThemeOption = desktopCards.locator(
+        '[data-testid="theme-system"]',
+      );
       await systemThemeOption.click();
       await page.waitForTimeout(300);
 
@@ -497,16 +606,23 @@ test.describe("Settings Page", () => {
       await expect(systemThemeOption).toBeVisible();
     });
 
-    test("should change intensity scale from 5 to 10", async ({ page, viewport }) => {
+    test("should change intensity scale from 5 to 10", async ({
+      page,
+      viewport,
+    }) => {
       const container = getVisibleContainer(viewport);
 
       // Scroll to the Display section to ensure intensity scale is in view
-      const displaySection = page.locator(`${container} [data-testid="section-display"]`);
+      const displaySection = page.locator(
+        `${container} [data-testid="section-display"]`,
+      );
       await displaySection.scrollIntoViewIfNeeded();
       await page.waitForTimeout(300);
 
       // Click the 10-scale radio button directly (the div wrapper doesn't propagate clicks)
-      const radioButton = page.locator(`${container} [data-testid="scale-radio-10"]`);
+      const radioButton = page.locator(
+        `${container} [data-testid="scale-radio-10"]`,
+      );
       await radioButton.click();
       await page.waitForTimeout(300);
 
@@ -515,14 +631,18 @@ test.describe("Settings Page", () => {
     });
 
     test("should change intensity scale from 10 to 5", async ({ page }) => {
-      const desktopCards = page.locator('[data-testid="settings-cards-desktop"]');
+      const desktopCards = page.locator(
+        '[data-testid="settings-cards-desktop"]',
+      );
 
       // First switch to 10
       await desktopCards.locator('[data-testid="scale-option-10"]').click();
       await page.waitForTimeout(300);
 
       // Then switch to 5
-      const scale5Option = desktopCards.locator('[data-testid="scale-option-5"]');
+      const scale5Option = desktopCards.locator(
+        '[data-testid="scale-option-5"]',
+      );
       await scale5Option.click();
       await page.waitForTimeout(300);
 
@@ -531,11 +651,16 @@ test.describe("Settings Page", () => {
       await expect(radioButton).toHaveAttribute("aria-checked", "true");
     });
 
-    test("should persist display settings after reload", async ({ page, viewport }) => {
+    test("should persist display settings after reload", async ({
+      page,
+      viewport,
+    }) => {
       const container = getVisibleContainer(viewport);
 
       // Scroll to the display section to ensure it's in view
-      const displaySection = page.locator(`${container} [data-testid="section-display"]`);
+      const displaySection = page.locator(
+        `${container} [data-testid="section-display"]`,
+      );
       await displaySection.scrollIntoViewIfNeeded();
       await page.waitForTimeout(300);
 
@@ -552,7 +677,9 @@ test.describe("Settings Page", () => {
       await page.waitForTimeout(500);
 
       // Verify intensity scale setting persisted - scope to visible container
-      const radioButton = page.locator(`${container} [data-testid="scale-radio-10"]`);
+      const radioButton = page.locator(
+        `${container} [data-testid="scale-radio-10"]`,
+      );
       await expect(radioButton).toHaveAttribute("aria-checked", "true");
     });
   });
@@ -565,7 +692,9 @@ test.describe("Settings Page", () => {
       const downloadPromise = page.waitForEvent("download");
 
       // Click export JSON button - scope to visible container
-      await page.locator(`${container} [data-testid="export-json-button"]`).click();
+      await page
+        .locator(`${container} [data-testid="export-json-button"]`)
+        .click();
 
       // Wait for download
       const download = await downloadPromise;
@@ -581,7 +710,9 @@ test.describe("Settings Page", () => {
       const downloadPromise = page.waitForEvent("download");
 
       // Click export CSV button - scope to visible container
-      await page.locator(`${container} [data-testid="export-csv-button"]`).click();
+      await page
+        .locator(`${container} [data-testid="export-csv-button"]`)
+        .click();
 
       // Wait for download
       const download = await downloadPromise;
@@ -591,17 +722,23 @@ test.describe("Settings Page", () => {
     });
 
     test("should show loading state during export", async ({ page }) => {
-      const desktopCards = page.locator('[data-testid="settings-cards-desktop"]');
+      const desktopCards = page.locator(
+        '[data-testid="settings-cards-desktop"]',
+      );
 
       // Scroll to data section to ensure it's in view
-      await desktopCards.locator('[data-testid="section-data"]').scrollIntoViewIfNeeded();
+      await desktopCards
+        .locator('[data-testid="section-data"]')
+        .scrollIntoViewIfNeeded();
       await page.waitForTimeout(300);
 
       // Set up download listener
       const downloadPromise = page.waitForEvent("download");
 
       // Click export button
-      const exportButton = desktopCards.locator('[data-testid="export-json-button"]');
+      const exportButton = desktopCards.locator(
+        '[data-testid="export-json-button"]',
+      );
       await exportButton.click();
 
       // Wait for download to complete (proves export worked)
@@ -614,7 +751,9 @@ test.describe("Settings Page", () => {
     test("should show confirmation dialog when clicking clear data", async ({
       page,
     }) => {
-      const desktopCards = page.locator('[data-testid="settings-cards-desktop"]');
+      const desktopCards = page.locator(
+        '[data-testid="settings-cards-desktop"]',
+      );
       const clearDataButton = desktopCards.locator(
         '[data-testid="clear-data-trigger"]',
       );
@@ -630,22 +769,31 @@ test.describe("Settings Page", () => {
       await expect(confirmationDialog).toContainText(/permanently delete/i);
     });
 
-    test("should cancel clear data and keep data intact", async ({ page, viewport }) => {
+    test("should cancel clear data and keep data intact", async ({
+      page,
+      viewport,
+    }) => {
       const container = getVisibleContainer(viewport);
 
       // Scroll to clear data dialog (danger zone) to ensure it's in view
-      const clearDataSection = page.locator(`${container} [data-testid="clear-data-dialog"]`);
+      const clearDataSection = page.locator(
+        `${container} [data-testid="clear-data-dialog"]`,
+      );
       await clearDataSection.scrollIntoViewIfNeeded();
       await page.waitForTimeout(300);
 
       // Open dialog by clicking the Clear Data button
-      await page.locator(`${container} [data-testid="clear-data-trigger"]`).click();
+      await page
+        .locator(`${container} [data-testid="clear-data-trigger"]`)
+        .click();
       await expect(
         page.locator('[data-testid="clear-data-confirmation"]'),
       ).toBeVisible();
 
       // Click cancel - use dispatchEvent to bypass viewport check for modal dialog buttons
-      await page.locator('[data-testid="clear-data-cancel"]').dispatchEvent('click');
+      await page
+        .locator('[data-testid="clear-data-cancel"]')
+        .dispatchEvent("click");
 
       // Verify dialog closed
       await expect(
@@ -663,12 +811,18 @@ test.describe("Settings Page", () => {
       const container = getVisibleContainer(viewport);
 
       // First add some test data to settings - navigate to tracking section
-      const trackingSection = page.locator(`${container} [data-testid="section-tracking"]`);
+      const trackingSection = page.locator(
+        `${container} [data-testid="section-tracking"]`,
+      );
       await trackingSection.scrollIntoViewIfNeeded();
       await page.waitForTimeout(300);
 
-      await page.locator(`${container} [data-testid="custom-factor-input"]`).fill("Test Factor");
-      await page.locator(`${container} [data-testid="add-factor-button"]`).click();
+      await page
+        .locator(`${container} [data-testid="custom-factor-input"]`)
+        .fill("Test Factor");
+      await page
+        .locator(`${container} [data-testid="add-factor-button"]`)
+        .click();
       await page.waitForTimeout(300);
 
       // Verify test data exists
@@ -677,29 +831,37 @@ test.describe("Settings Page", () => {
       ).toBeVisible();
 
       // Scroll to clear data section
-      const clearDataSection = page.locator(`${container} [data-testid="clear-data-dialog"]`);
+      const clearDataSection = page.locator(
+        `${container} [data-testid="clear-data-dialog"]`,
+      );
       await clearDataSection.scrollIntoViewIfNeeded();
       await page.waitForTimeout(300);
 
       // Open clear data dialog
-      await page.locator(`${container} [data-testid="clear-data-trigger"]`).click();
+      await page
+        .locator(`${container} [data-testid="clear-data-trigger"]`)
+        .click();
       await expect(
         page.locator('[data-testid="clear-data-confirmation"]'),
       ).toBeVisible();
 
       // Confirm clear - use dispatchEvent to bypass viewport check for modal dialog buttons
-      await page.locator('[data-testid="clear-data-confirm"]').dispatchEvent('click');
+      await page
+        .locator('[data-testid="clear-data-confirm"]')
+        .dispatchEvent("click");
       await page.waitForTimeout(1000); // Wait for clear to complete
 
       // The page will reload after clearing data, wait for it
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState("networkidle");
 
       // Verify we're back on settings page
       await expect(page.locator('[data-testid="settings-page"]')).toBeVisible();
       await waitForResponsiveVisibility(page, container, true);
 
       // Custom factor should be gone - scroll to tracking section
-      await page.locator(`${container} [data-testid="section-tracking"]`).scrollIntoViewIfNeeded();
+      await page
+        .locator(`${container} [data-testid="section-tracking"]`)
+        .scrollIntoViewIfNeeded();
       await page.waitForTimeout(300);
 
       await expect(
@@ -711,7 +873,9 @@ test.describe("Settings Page", () => {
   test.describe("About & Help", () => {
     test("should display app version", async ({ page, viewport }) => {
       const container = getVisibleContainer(viewport);
-      const aboutSection = page.locator(`${container} [data-testid="about-help"]`);
+      const aboutSection = page.locator(
+        `${container} [data-testid="about-help"]`,
+      );
       await expect(aboutSection).toBeVisible();
 
       // Verify version information exists
@@ -720,7 +884,9 @@ test.describe("Settings Page", () => {
 
     test("should display help information", async ({ page, viewport }) => {
       const container = getVisibleContainer(viewport);
-      const aboutSection = page.locator(`${container} [data-testid="about-help"]`);
+      const aboutSection = page.locator(
+        `${container} [data-testid="about-help"]`,
+      );
       await expect(aboutSection).toBeVisible();
 
       // Verify help text or links are present
@@ -740,10 +906,18 @@ test.describe("Settings Page", () => {
       await page.waitForTimeout(100);
 
       // Verify accordion is visible using computed style check
-      await waitForResponsiveVisibility(page, '[data-testid="settings-accordion-mobile"]', true);
+      await waitForResponsiveVisibility(
+        page,
+        '[data-testid="settings-accordion-mobile"]',
+        true,
+      );
 
       // Verify desktop cards are hidden using computed style check
-      await waitForResponsiveVisibility(page, '[data-testid="settings-cards-desktop"]', false);
+      await waitForResponsiveVisibility(
+        page,
+        '[data-testid="settings-cards-desktop"]',
+        false,
+      );
     });
 
     test("should display card layout on desktop", async ({
@@ -757,10 +931,18 @@ test.describe("Settings Page", () => {
       await page.waitForTimeout(100);
 
       // Verify desktop cards are visible using computed style check
-      await waitForResponsiveVisibility(page, '[data-testid="settings-cards-desktop"]', true);
+      await waitForResponsiveVisibility(
+        page,
+        '[data-testid="settings-cards-desktop"]',
+        true,
+      );
 
       // Verify mobile accordion is hidden using computed style check
-      await waitForResponsiveVisibility(page, '[data-testid="settings-accordion-mobile"]', false);
+      await waitForResponsiveVisibility(
+        page,
+        '[data-testid="settings-accordion-mobile"]',
+        false,
+      );
     });
 
     test("should display all mobile sections stacked (not accordion)", async ({
@@ -771,14 +953,26 @@ test.describe("Settings Page", () => {
       await page.waitForTimeout(100);
 
       // Wait for responsive visibility
-      await waitForResponsiveVisibility(page, '[data-testid="settings-accordion-mobile"]', true);
+      await waitForResponsiveVisibility(
+        page,
+        '[data-testid="settings-accordion-mobile"]',
+        true,
+      );
 
-      const mobileContainer = page.locator('[data-testid="settings-accordion-mobile"]');
+      const mobileContainer = page.locator(
+        '[data-testid="settings-accordion-mobile"]',
+      );
 
       // All sections should be visible (the mobile layout is just stacked sections, not a collapsible accordion)
-      await expect(mobileContainer.locator('[data-testid="accordion-tracking"]')).toBeVisible();
-      await expect(mobileContainer.locator('[data-testid="accordion-display"]')).toBeVisible();
-      await expect(mobileContainer.locator('[data-testid="accordion-reminders"]')).toBeVisible();
+      await expect(
+        mobileContainer.locator('[data-testid="accordion-tracking"]'),
+      ).toBeVisible();
+      await expect(
+        mobileContainer.locator('[data-testid="accordion-display"]'),
+      ).toBeVisible();
+      await expect(
+        mobileContainer.locator('[data-testid="accordion-reminders"]'),
+      ).toBeVisible();
     });
 
     test("should show all sections expanded on desktop", async ({ page }) => {
@@ -787,17 +981,35 @@ test.describe("Settings Page", () => {
       await page.waitForTimeout(100);
 
       // Wait for responsive visibility
-      await waitForResponsiveVisibility(page, '[data-testid="settings-cards-desktop"]', true);
+      await waitForResponsiveVisibility(
+        page,
+        '[data-testid="settings-cards-desktop"]',
+        true,
+      );
 
-      const desktopContainer = page.locator('[data-testid="settings-cards-desktop"]');
+      const desktopContainer = page.locator(
+        '[data-testid="settings-cards-desktop"]',
+      );
 
       // All sections should be visible (no accordion collapse)
-      await expect(desktopContainer.locator('[data-testid="section-reminders"]')).toBeVisible();
-      await expect(desktopContainer.locator('[data-testid="section-tracking"]')).toBeVisible();
-      await expect(desktopContainer.locator('[data-testid="section-headache-types"]')).toBeVisible();
-      await expect(desktopContainer.locator('[data-testid="section-display"]')).toBeVisible();
-      await expect(desktopContainer.locator('[data-testid="section-data"]')).toBeVisible();
-      await expect(desktopContainer.locator('[data-testid="section-about"]')).toBeVisible();
+      await expect(
+        desktopContainer.locator('[data-testid="section-reminders"]'),
+      ).toBeVisible();
+      await expect(
+        desktopContainer.locator('[data-testid="section-tracking"]'),
+      ).toBeVisible();
+      await expect(
+        desktopContainer.locator('[data-testid="section-headache-types"]'),
+      ).toBeVisible();
+      await expect(
+        desktopContainer.locator('[data-testid="section-display"]'),
+      ).toBeVisible();
+      await expect(
+        desktopContainer.locator('[data-testid="section-data"]'),
+      ).toBeVisible();
+      await expect(
+        desktopContainer.locator('[data-testid="section-about"]'),
+      ).toBeVisible();
     });
   });
 
@@ -821,7 +1033,9 @@ test.describe("Settings Page", () => {
     test("should activate switches and buttons with Enter/Space", async ({
       page,
     }) => {
-      const desktopCards = page.locator('[data-testid="settings-cards-desktop"]');
+      const desktopCards = page.locator(
+        '[data-testid="settings-cards-desktop"]',
+      );
       const reminderSwitch = desktopCards.locator(
         '[data-testid="reminders-enabled-switch"]',
       );
@@ -852,44 +1066,72 @@ test.describe("Settings Page - Mobile Viewport Tests", () => {
     await expect(page.locator('[data-testid="settings-page"]')).toBeVisible();
 
     // Verify mobile accordion is visible using computed style check
-    await waitForResponsiveVisibility(page, '[data-testid="settings-accordion-mobile"]', true);
+    await waitForResponsiveVisibility(
+      page,
+      '[data-testid="settings-accordion-mobile"]',
+      true,
+    );
 
     // Verify desktop layout is hidden using computed style check
-    await waitForResponsiveVisibility(page, '[data-testid="settings-cards-desktop"]', false);
+    await waitForResponsiveVisibility(
+      page,
+      '[data-testid="settings-cards-desktop"]',
+      false,
+    );
   });
 
   test("should display all mobile sections", async ({ page }) => {
     await page.goto("/settings");
-    await waitForResponsiveVisibility(page, '[data-testid="settings-accordion-mobile"]', true);
+    await waitForResponsiveVisibility(
+      page,
+      '[data-testid="settings-accordion-mobile"]',
+      true,
+    );
 
-    const mobileContainer = page.locator('[data-testid="settings-accordion-mobile"]');
+    const mobileContainer = page.locator(
+      '[data-testid="settings-accordion-mobile"]',
+    );
 
     // Verify all mobile sections are visible (not actual accordion - just stacked sections)
     const sectionTestIds = [
-      'accordion-reminders',
-      'accordion-tracking',
-      'accordion-headache-types',
-      'accordion-display',
-      'accordion-data',
-      'accordion-about',
+      "accordion-reminders",
+      "accordion-tracking",
+      "accordion-headache-types",
+      "accordion-display",
+      "accordion-data",
+      "accordion-about",
     ];
 
     for (const testId of sectionTestIds) {
-      await expect(mobileContainer.locator(`[data-testid="${testId}"]`)).toBeVisible();
+      await expect(
+        mobileContainer.locator(`[data-testid="${testId}"]`),
+      ).toBeVisible();
     }
 
     // Verify content is visible - ThemeToggle is inside the display section
-    await expect(mobileContainer.locator('[data-testid="theme-toggle"]')).toBeVisible();
+    await expect(
+      mobileContainer.locator('[data-testid="theme-toggle"]'),
+    ).toBeVisible();
   });
 
-  test("should maintain section visibility when scrolling", async ({ page }) => {
+  test("should maintain section visibility when scrolling", async ({
+    page,
+  }) => {
     await page.goto("/settings");
-    await waitForResponsiveVisibility(page, '[data-testid="settings-accordion-mobile"]', true);
+    await waitForResponsiveVisibility(
+      page,
+      '[data-testid="settings-accordion-mobile"]',
+      true,
+    );
 
-    const mobileContainer = page.locator('[data-testid="settings-accordion-mobile"]');
+    const mobileContainer = page.locator(
+      '[data-testid="settings-accordion-mobile"]',
+    );
 
     // Verify tracking section is visible
-    const trackingSection = mobileContainer.locator('[data-testid="accordion-tracking"]');
+    const trackingSection = mobileContainer.locator(
+      '[data-testid="accordion-tracking"]',
+    );
     await expect(trackingSection).toBeVisible();
 
     // Scroll down
@@ -912,24 +1154,36 @@ test.describe("Settings Page - Tablet Viewport Tests", () => {
 
     // Tablet (768px) should use mobile accordion layout (< 1024px lg breakpoint)
     // Use computed style check for responsive visibility
-    await waitForResponsiveVisibility(page, '[data-testid="settings-accordion-mobile"]', true);
-    await waitForResponsiveVisibility(page, '[data-testid="settings-cards-desktop"]', false);
+    await waitForResponsiveVisibility(
+      page,
+      '[data-testid="settings-accordion-mobile"]',
+      true,
+    );
+    await waitForResponsiveVisibility(
+      page,
+      '[data-testid="settings-cards-desktop"]',
+      false,
+    );
   });
 
   test("should handle touch interactions for toggles", async ({ page }) => {
     await page.goto("/settings");
 
-    const mobileAccordion = page.locator('[data-testid="settings-accordion-mobile"]');
+    const mobileAccordion = page.locator(
+      '[data-testid="settings-accordion-mobile"]',
+    );
 
     // Expand tracking section - AccordionTrigger renders as a button element
     const trackingAccordion = mobileAccordion.locator(
       '[data-testid="accordion-tracking"]',
     );
-    await trackingAccordion.locator('button').first().click();
+    await trackingAccordion.locator("button").first().click();
     await page.waitForTimeout(300);
 
     // Toggle sleep factor with touch
-    const sleepToggle = trackingAccordion.locator('[data-testid="toggle-sleep"]');
+    const sleepToggle = trackingAccordion.locator(
+      '[data-testid="toggle-sleep"]',
+    );
     const initialState = await sleepToggle.getAttribute("aria-checked");
 
     await sleepToggle.click();

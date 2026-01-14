@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
+import { useSession } from "next-auth/react";
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
@@ -72,6 +73,7 @@ const navItems: NavItem[] = [
 export function BottomNav() {
   const pathname = usePathname();
   const t = useTranslations("nav");
+  const { status } = useSession();
   const [deferredPrompt, setDeferredPrompt] =
     useState<BeforeInstallPromptEvent | null>(null);
   const [isStandalone, setIsStandalone] = useState(true); // Default true to hide button initially
@@ -128,6 +130,11 @@ export function BottomNav() {
 
   // Show install button if not standalone and (iOS or has deferred prompt)
   const showInstallButton = !isStandalone && (isIOS || deferredPrompt);
+
+  // Don't show navigation if not authenticated (after all hooks)
+  if (status !== "authenticated") {
+    return null;
+  }
 
   return (
     <>
@@ -306,14 +313,23 @@ export function BottomNav() {
 /**
  * BottomNavSpacer - Responsive spacing for navigation
  * Adds bottom padding on mobile, left margin on desktop
+ * Only shows spacing when user is authenticated
  */
 export function BottomNavSpacer() {
+  const { status } = useSession();
+
+  // Don't add spacing if not authenticated (no nav shown)
+  if (status !== "authenticated") {
+    return null;
+  }
+
   return <div className="h-16 pb-safe lg:h-0 lg:pb-0" />;
 }
 
 /**
  * MainContentWrapper - Wrapper for main content that adjusts for sidebar
  * Use this in layout.tsx to properly position content
+ * Only adds sidebar margin when user is authenticated
  */
 export function MainContentWrapper({
   children,
@@ -322,8 +338,13 @@ export function MainContentWrapper({
   children: React.ReactNode;
   className?: string;
 }) {
+  const { status } = useSession();
+
+  // Don't add margin for sidebar if not authenticated (no nav shown)
+  const marginClass = status === "authenticated" ? "lg:ml-64" : "";
+
   return (
-    <div className={cn("lg:ml-64 transition-all duration-300", className)}>
+    <div className={cn(marginClass, "transition-all duration-300", className)}>
       {children}
     </div>
   );

@@ -109,9 +109,7 @@ describe("StreakDisplay", () => {
       (streak) => {
         render(<StreakDisplay streak={streak} />);
 
-        expect(
-          screen.getByText("One week milestone! 🎉"),
-        ).toBeInTheDocument();
+        expect(screen.getByText("One week milestone! 🎉")).toBeInTheDocument();
       },
     );
 
@@ -138,9 +136,7 @@ describe("StreakDisplay", () => {
       (streak) => {
         render(<StreakDisplay streak={streak} />);
 
-        expect(
-          screen.getByText("Two week milestone! 🔥"),
-        ).toBeInTheDocument();
+        expect(screen.getByText("Two week milestone! 🔥")).toBeInTheDocument();
       },
     );
 
@@ -158,9 +154,7 @@ describe("StreakDisplay", () => {
       (streak) => {
         render(<StreakDisplay streak={streak} />);
 
-        expect(
-          screen.getByText("One month milestone! 🏆"),
-        ).toBeInTheDocument();
+        expect(screen.getByText("One month milestone! 🏆")).toBeInTheDocument();
       },
     );
 

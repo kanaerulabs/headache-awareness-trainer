@@ -62,7 +62,9 @@ export const TimeOfDayAnalysis: React.FC<TimeOfDayAnalysisProps> = ({
   const [hoveredIndex, setHoveredIndex] = React.useState<number | null>(null);
 
   // Get translated time labels
-  const getTimeLabel = (timeOfDay: "morning" | "afternoon" | "evening" | "night") => {
+  const getTimeLabel = (
+    timeOfDay: "morning" | "afternoon" | "evening" | "night",
+  ) => {
     return t(timeOfDay);
   };
 
@@ -88,9 +90,7 @@ export const TimeOfDayAnalysis: React.FC<TimeOfDayAnalysisProps> = ({
         </CardHeader>
         <CardContent>
           <div className="flex flex-col items-center justify-center h-64 text-center">
-            <p className="text-muted-foreground text-sm">
-              {t("noTimeData")}
-            </p>
+            <p className="text-muted-foreground text-sm">{t("noTimeData")}</p>
             <p className="text-muted-foreground text-xs mt-2">
               {t("logToSeePatterns")}
             </p>
@@ -121,7 +121,9 @@ export const TimeOfDayAnalysis: React.FC<TimeOfDayAnalysisProps> = ({
       const data = payload[0].payload as TimeOfDayData;
       return (
         <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-3">
-          <p className="font-semibold text-sm">{getTimeLabel(data.timeOfDay)}</p>
+          <p className="font-semibold text-sm">
+            {getTimeLabel(data.timeOfDay)}
+          </p>
           <p className="text-sm text-muted-foreground">
             {t("headacheCount", { count: data.count })} (
             {data.percentage.toFixed(0)}%)

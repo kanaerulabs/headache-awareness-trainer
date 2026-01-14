@@ -37,7 +37,7 @@ export class Session {
   readonly accessToken?: string;
 
   private constructor(props: SessionProps) {
-    this.user = User.create(props.user);
+    this.user = User.load(props.user);
     this.expires = props.expires;
     this.accessToken = props.accessToken;
   }

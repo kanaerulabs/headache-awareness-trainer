@@ -58,8 +58,13 @@ export class OpenRouterChatAgent implements IChatAgent {
   /**
    * Build messages array for the chat API
    */
-  private buildMessages(input: ChatInput): Array<{ role: "system" | "user" | "assistant"; content: string }> {
-    const messages: Array<{ role: "system" | "user" | "assistant"; content: string }> = [];
+  private buildMessages(
+    input: ChatInput,
+  ): Array<{ role: "system" | "user" | "assistant"; content: string }> {
+    const messages: Array<{
+      role: "system" | "user" | "assistant";
+      content: string;
+    }> = [];
 
     // System message with health data context
     messages.push({
@@ -92,23 +97,34 @@ export class OpenRouterChatAgent implements IChatAgent {
 
     // Format headache entries (last 10 for context)
     const recentHeadaches = headacheEntries.slice(-10);
-    const headacheText = recentHeadaches.length > 0
-      ? recentHeadaches.map((entry) => {
-          const parts = [`${entry.timestamp.toLocaleDateString()}: Intensity ${entry.intensity}/10`];
-          if (entry.triggers?.length) parts.push(`Triggers: ${entry.triggers.join(", ")}`);
-          if (entry.location?.length) parts.push(`Location: ${entry.location.join(", ")}`);
-          if (entry.notes) parts.push(`Notes: ${entry.notes}`);
-          return `- ${parts.join(" | ")}`;
-        }).join("\n")
-      : "No headache entries yet.";
+    const headacheText =
+      recentHeadaches.length > 0
+        ? recentHeadaches
+            .map((entry) => {
+              const parts = [
+                `${entry.timestamp.toLocaleDateString()}: Intensity ${entry.intensity}/10`,
+              ];
+              if (entry.triggers?.length)
+                parts.push(`Triggers: ${entry.triggers.join(", ")}`);
+              if (entry.location?.length)
+                parts.push(`Location: ${entry.location.join(", ")}`);
+              if (entry.notes) parts.push(`Notes: ${entry.notes}`);
+              return `- ${parts.join(" | ")}`;
+            })
+            .join("\n")
+        : "No headache entries yet.";
 
     // Format check-in data (last 10 for context)
     const recentCheckins = checkinData.slice(-10);
-    const checkinText = recentCheckins.length > 0
-      ? recentCheckins.map((entry) =>
-          `- ${entry.timestamp.toLocaleDateString()}: Sleep: ${entry.sleepQuality}, Mood: ${entry.mood}, Tension: ${entry.bodyTension.join(", ") || "none"}`
-        ).join("\n")
-      : "No check-in data yet.";
+    const checkinText =
+      recentCheckins.length > 0
+        ? recentCheckins
+            .map(
+              (entry) =>
+                `- ${entry.timestamp.toLocaleDateString()}: Sleep: ${entry.sleepQuality}, Mood: ${entry.mood}, Tension: ${entry.bodyTension.join(", ") || "none"}`,
+            )
+            .join("\n")
+        : "No check-in data yet.";
 
     // Format summary if available
     const summaryText = summary
@@ -149,11 +165,22 @@ Guidelines:
       const errorMessage = error.message.toLowerCase();
 
       if (errorMessage.includes("rate limit") || errorMessage.includes("429")) {
-        return new AgentError("Rate limit exceeded. Please wait a moment.", "RATE_LIMIT", error);
+        return new AgentError(
+          "Rate limit exceeded. Please wait a moment.",
+          "RATE_LIMIT",
+          error,
+        );
       }
 
-      if (errorMessage.includes("timeout") || errorMessage.includes("etimedout")) {
-        return new AgentError("Request timed out. Please try again.", "TIMEOUT", error);
+      if (
+        errorMessage.includes("timeout") ||
+        errorMessage.includes("etimedout")
+      ) {
+        return new AgentError(
+          "Request timed out. Please try again.",
+          "TIMEOUT",
+          error,
+        );
       }
 
       if (
@@ -162,18 +189,40 @@ Guidelines:
         errorMessage.includes("unauthorized") ||
         errorMessage.includes("invalid api key")
       ) {
-        return new AgentError("API key invalid. Please check your settings.", "AUTH_ERROR", error);
+        return new AgentError(
+          "API key invalid. Please check your settings.",
+          "AUTH_ERROR",
+          error,
+        );
       }
 
-      if (errorMessage.includes("insufficient") || errorMessage.includes("credits")) {
-        return new AgentError("Insufficient credits on OpenRouter. Please add funds.", "AUTH_ERROR", error);
+      if (
+        errorMessage.includes("insufficient") ||
+        errorMessage.includes("credits")
+      ) {
+        return new AgentError(
+          "Insufficient credits on OpenRouter. Please add funds.",
+          "AUTH_ERROR",
+          error,
+        );
       }
 
-      if (errorMessage.includes("network") || errorMessage.includes("econnrefused")) {
-        return new AgentError("Network error. Please check your connection.", "NETWORK_ERROR", error);
+      if (
+        errorMessage.includes("network") ||
+        errorMessage.includes("econnrefused")
+      ) {
+        return new AgentError(
+          "Network error. Please check your connection.",
+          "NETWORK_ERROR",
+          error,
+        );
       }
     }
 
-    return new AgentError("Something went wrong. Please try again.", "UNKNOWN", error as Error);
+    return new AgentError(
+      "Something went wrong. Please try again.",
+      "UNKNOWN",
+      error as Error,
+    );
   }
 }

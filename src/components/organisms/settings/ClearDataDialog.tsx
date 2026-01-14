@@ -85,9 +85,7 @@ export function ClearDataDialog({
     >
       <CardHeader>
         <CardTitle className="text-destructive">{t("dangerZone")}</CardTitle>
-        <CardDescription>
-          {t("dangerZoneDesc")}
-        </CardDescription>
+        <CardDescription>{t("dangerZoneDesc")}</CardDescription>
       </CardHeader>
       <CardContent>
         <AlertDialog open={isOpen} onOpenChange={setIsOpen}>

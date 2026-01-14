@@ -163,9 +163,7 @@ export const HeadacheTypeSelector: React.FC<HeadacheTypeSelectorProps> = ({
             >
               <Icon className="h-8 w-8" aria-hidden="true" />
               <span className="text-sm font-semibold">{typeLabel}</span>
-              <span className="text-xs text-center opacity-90">
-                {typeDesc}
-              </span>
+              <span className="text-xs text-center opacity-90">{typeDesc}</span>
             </button>
           );
         })}
@@ -179,9 +177,7 @@ export const HeadacheTypeSelector: React.FC<HeadacheTypeSelectorProps> = ({
           aria-atomic="true"
         >
           {t("selectedType")}{" "}
-          <span className="font-semibold">
-            {t(`types.${value}.label`)}
-          </span>
+          <span className="font-semibold">{t(`types.${value}.label`)}</span>
         </div>
       )}
     </div>

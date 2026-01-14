@@ -262,14 +262,21 @@ export const useLoggingStore = create<LoggingState>()(
         // A new entry today either continues or starts a streak
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        const lastEntryDate = metadata.firstEntryDate ? new Date(metadata.firstEntryDate) : null;
+
+        // Get the most recent entry to calculate streak correctly
+        // Note: We query the DB for the latest entry, not metadata.firstEntryDate
+        const index = db.transaction("entries").store.index("timestamp");
+        const cursor = await index.openCursor(null, "prev");
+        const lastEntryDate = cursor ? new Date(cursor.value.timestamp) : null;
         let newStreak = metadata.currentStreak;
 
         // If we have entries, check if the last one was today or yesterday
         if (lastEntryDate) {
           const lastDate = new Date(lastEntryDate);
           lastDate.setHours(0, 0, 0, 0);
-          const diffDays = Math.floor((today.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
+          const diffDays = Math.floor(
+            (today.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24),
+          );
           if (diffDays === 0) {
             // Same day, streak continues
           } else if (diffDays === 1) {
@@ -295,7 +302,9 @@ export const useLoggingStore = create<LoggingState>()(
         const tx = db.transaction(["entries", "metadata"], "readwrite");
         await Promise.all([
           tx.objectStore("entries").add(fullEntry),
-          tx.objectStore("metadata").put({ ...updatedMetadata, key: "user-metadata" }),
+          tx
+            .objectStore("metadata")
+            .put({ ...updatedMetadata, key: "user-metadata" }),
           tx.done,
         ]);
 
@@ -544,7 +553,11 @@ export const useLoggingStore = create<LoggingState>()(
         const index = tx.store.index("timestamp");
 
         const now = new Date();
-        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const today = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate(),
+        );
         const yesterday = new Date(today);
         yesterday.setDate(yesterday.getDate() - 1);
 
@@ -556,7 +569,7 @@ export const useLoggingStore = create<LoggingState>()(
         const mostRecentDate = new Date(
           mostRecentEntry.getFullYear(),
           mostRecentEntry.getMonth(),
-          mostRecentEntry.getDate()
+          mostRecentEntry.getDate(),
         );
 
         // Streak broken if no entry today or yesterday
@@ -579,7 +592,7 @@ export const useLoggingStore = create<LoggingState>()(
           const entryDateOnly = new Date(
             entryDate.getFullYear(),
             entryDate.getMonth(),
-            entryDate.getDate()
+            entryDate.getDate(),
           );
 
           // Skip entries from the same day

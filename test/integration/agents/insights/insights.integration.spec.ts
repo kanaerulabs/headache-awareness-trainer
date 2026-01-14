@@ -12,30 +12,30 @@
  * To run: npm test -- test/integration/agents/insights
  */
 
-import { InsightsAgent } from '../../../../src/interface-adapters/agents/vercel-ai/insights.agent';
+import { InsightsAgent } from "../../../../src/interface-adapters/agents/vercel-ai/insights.agent";
 import {
   InsightsInput,
   InsightsOutput,
   AgentError,
-} from '../../../../src/usecases/generate-ai-insights/interfaces/insights-agent.interface';
+} from "../../../../src/usecases/generate-ai-insights/interfaces/insights-agent.interface";
 
-describe('InsightsAgent - Integration Tests', () => {
+describe("InsightsAgent - Integration Tests", () => {
   let agent: InsightsAgent;
 
   beforeAll(() => {
     // CRITICAL: Verify API key is present - FAIL with clear message if missing
     if (!process.env.OPENAI_API_KEY) {
       throw new Error(
-        'OPENAI_API_KEY not set. Integration tests require real API keys.\n' +
-          'Get your key from: https://platform.openai.com/api-keys\n' +
-          'Set it: export OPENAI_API_KEY=sk-...',
+        "OPENAI_API_KEY not set. Integration tests require real API keys.\n" +
+          "Get your key from: https://platform.openai.com/api-keys\n" +
+          "Set it: export OPENAI_API_KEY=sk-...",
       );
     }
 
     // Validate key format (optional but recommended)
-    if (!process.env.OPENAI_API_KEY.startsWith('sk-')) {
+    if (!process.env.OPENAI_API_KEY.startsWith("sk-")) {
       throw new Error(
-        'OPENAI_API_KEY appears to be invalid (should start with sk-)',
+        "OPENAI_API_KEY appears to be invalid (should start with sk-)",
       );
     }
   });
@@ -44,27 +44,27 @@ describe('InsightsAgent - Integration Tests', () => {
     agent = new InsightsAgent();
   });
 
-  describe('execute - Single Headache Entry', () => {
-    it('should successfully generate insights from a single headache entry using real API', async () => {
+  describe("execute - Single Headache Entry", () => {
+    it("should successfully generate insights from a single headache entry using real API", async () => {
       const input: InsightsInput = {
         data: {
           headacheEntries: [
             {
-              id: 'test-1',
-              timestamp: new Date('2025-01-12T08:00:00Z'),
+              id: "test-1",
+              timestamp: new Date("2025-01-12T08:00:00Z"),
               intensity: 7,
-              location: ['forehead', 'temples'],
-              triggers: ['stress', 'poor_sleep'],
-              notes: 'Woke up with headache after only 4 hours sleep',
+              location: ["forehead", "temples"],
+              triggers: ["stress", "poor_sleep"],
+              notes: "Woke up with headache after only 4 hours sleep",
             },
           ],
           checkinData: [
             {
-              id: 'checkin-1',
-              timestamp: new Date('2025-01-12T07:00:00Z'),
-              sleepQuality: 'poor',
-              mood: 'stressed',
-              bodyTension: ['neck', 'jaw'],
+              id: "checkin-1",
+              timestamp: new Date("2025-01-12T07:00:00Z"),
+              sleepQuality: "poor",
+              mood: "stressed",
+              bodyTension: ["neck", "jaw"],
             },
           ],
         },
@@ -74,14 +74,14 @@ describe('InsightsAgent - Integration Tests', () => {
 
       // Validate structure
       expect(result).toBeDefined();
-      expect(typeof result.summary).toBe('string');
+      expect(typeof result.summary).toBe("string");
       expect(result.summary.length).toBeGreaterThan(0);
 
       // Validate patterns array
       expect(Array.isArray(result.patterns)).toBe(true);
       expect(result.patterns.length).toBeGreaterThan(0);
       result.patterns.forEach((pattern) => {
-        expect(typeof pattern).toBe('string');
+        expect(typeof pattern).toBe("string");
         expect(pattern.length).toBeGreaterThan(0);
       });
 
@@ -89,12 +89,12 @@ describe('InsightsAgent - Integration Tests', () => {
       expect(Array.isArray(result.recommendations)).toBe(true);
       expect(result.recommendations.length).toBeGreaterThan(0);
       result.recommendations.forEach((rec) => {
-        expect(typeof rec).toBe('string');
+        expect(typeof rec).toBe("string");
         expect(rec.length).toBeGreaterThan(0);
       });
 
       // Validate confidence score
-      expect(typeof result.confidence).toBe('number');
+      expect(typeof result.confidence).toBe("number");
       expect(result.confidence).toBeGreaterThanOrEqual(0);
       expect(result.confidence).toBeLessThanOrEqual(1);
 
@@ -104,29 +104,29 @@ describe('InsightsAgent - Integration Tests', () => {
       expect(result.metadata?.processingTime).toBeGreaterThan(0);
     }, 30000); // 30 second timeout for real API call
 
-    it('should include contextually relevant insights', async () => {
+    it("should include contextually relevant insights", async () => {
       const input: InsightsInput = {
         data: {
           headacheEntries: [
             {
-              id: 'test-2',
-              timestamp: new Date('2025-01-12T14:00:00Z'),
+              id: "test-2",
+              timestamp: new Date("2025-01-12T14:00:00Z"),
               intensity: 5,
-              location: ['back_of_head'],
-              triggers: ['screen_time'],
+              location: ["back_of_head"],
+              triggers: ["screen_time"],
             },
           ],
           checkinData: [
             {
-              id: 'checkin-2',
-              timestamp: new Date('2025-01-12T13:00:00Z'),
-              sleepQuality: 'good',
-              mood: 'calm',
-              bodyTension: ['shoulders'],
+              id: "checkin-2",
+              timestamp: new Date("2025-01-12T13:00:00Z"),
+              sleepQuality: "good",
+              mood: "calm",
+              bodyTension: ["shoulders"],
             },
           ],
         },
-        context: 'Analyze patterns for someone working at a computer',
+        context: "Analyze patterns for someone working at a computer",
       };
 
       const result: InsightsOutput = await agent.execute(input);
@@ -142,54 +142,54 @@ describe('InsightsAgent - Integration Tests', () => {
     }, 30000);
   });
 
-  describe('execute - Multiple Entries', () => {
-    it('should analyze patterns across multiple headache entries', async () => {
+  describe("execute - Multiple Entries", () => {
+    it("should analyze patterns across multiple headache entries", async () => {
       const input: InsightsInput = {
         data: {
           headacheEntries: [
             {
-              id: 'test-3',
-              timestamp: new Date('2025-01-10T08:00:00Z'),
+              id: "test-3",
+              timestamp: new Date("2025-01-10T08:00:00Z"),
               intensity: 6,
-              location: ['temples'],
-              triggers: ['caffeine_withdrawal'],
+              location: ["temples"],
+              triggers: ["caffeine_withdrawal"],
             },
             {
-              id: 'test-4',
-              timestamp: new Date('2025-01-11T09:00:00Z'),
+              id: "test-4",
+              timestamp: new Date("2025-01-11T09:00:00Z"),
               intensity: 7,
-              location: ['temples', 'forehead'],
-              triggers: ['poor_sleep', 'stress'],
+              location: ["temples", "forehead"],
+              triggers: ["poor_sleep", "stress"],
             },
             {
-              id: 'test-5',
-              timestamp: new Date('2025-01-12T08:30:00Z'),
+              id: "test-5",
+              timestamp: new Date("2025-01-12T08:30:00Z"),
               intensity: 5,
-              location: ['temples'],
-              triggers: ['stress'],
+              location: ["temples"],
+              triggers: ["stress"],
             },
           ],
           checkinData: [
             {
-              id: 'checkin-3',
-              timestamp: new Date('2025-01-10T07:00:00Z'),
-              sleepQuality: 'good',
-              mood: 'calm',
+              id: "checkin-3",
+              timestamp: new Date("2025-01-10T07:00:00Z"),
+              sleepQuality: "good",
+              mood: "calm",
               bodyTension: [],
             },
             {
-              id: 'checkin-4',
-              timestamp: new Date('2025-01-11T07:00:00Z'),
-              sleepQuality: 'poor',
-              mood: 'anxious',
-              bodyTension: ['neck', 'jaw'],
+              id: "checkin-4",
+              timestamp: new Date("2025-01-11T07:00:00Z"),
+              sleepQuality: "poor",
+              mood: "anxious",
+              bodyTension: ["neck", "jaw"],
             },
             {
-              id: 'checkin-5',
-              timestamp: new Date('2025-01-12T07:00:00Z'),
-              sleepQuality: 'fair',
-              mood: 'stressed',
-              bodyTension: ['shoulders'],
+              id: "checkin-5",
+              timestamp: new Date("2025-01-12T07:00:00Z"),
+              sleepQuality: "fair",
+              mood: "stressed",
+              bodyTension: ["shoulders"],
             },
           ],
         },
@@ -205,29 +205,29 @@ describe('InsightsAgent - Integration Tests', () => {
       // Should identify the recurring pattern (stress/poor sleep)
       const hasStressPattern = result.patterns.some(
         (p) =>
-          p.toLowerCase().includes('stress') ||
-          p.toLowerCase().includes('sleep'),
+          p.toLowerCase().includes("stress") ||
+          p.toLowerCase().includes("sleep"),
       );
       expect(hasStressPattern).toBe(true);
     }, 30000);
 
-    it('should provide different confidence levels based on data quantity', async () => {
+    it("should provide different confidence levels based on data quantity", async () => {
       // Test with minimal data
       const minimalInput: InsightsInput = {
         data: {
           headacheEntries: [
             {
-              id: 'test-6',
+              id: "test-6",
               timestamp: new Date(),
               intensity: 5,
             },
           ],
           checkinData: [
             {
-              id: 'checkin-6',
+              id: "checkin-6",
               timestamp: new Date(),
-              sleepQuality: 'fair',
-              mood: 'neutral',
+              sleepQuality: "fair",
+              mood: "neutral",
               bodyTension: [],
             },
           ],
@@ -242,24 +242,24 @@ describe('InsightsAgent - Integration Tests', () => {
     }, 30000);
   });
 
-  describe('execute - Options', () => {
-    it('should respect maxTokens option', async () => {
+  describe("execute - Options", () => {
+    it("should respect maxTokens option", async () => {
       const input: InsightsInput = {
         data: {
           headacheEntries: [
             {
-              id: 'test-7',
+              id: "test-7",
               timestamp: new Date(),
               intensity: 6,
-              triggers: ['stress'],
+              triggers: ["stress"],
             },
           ],
           checkinData: [
             {
-              id: 'checkin-7',
+              id: "checkin-7",
               timestamp: new Date(),
-              sleepQuality: 'good',
-              mood: 'calm',
+              sleepQuality: "good",
+              mood: "calm",
               bodyTension: [],
             },
           ],
@@ -279,27 +279,27 @@ describe('InsightsAgent - Integration Tests', () => {
       // Response should be relatively short due to token limit
       const totalLength =
         result.summary.length +
-        result.patterns.join(' ').length +
-        result.recommendations.join(' ').length;
+        result.patterns.join(" ").length +
+        result.recommendations.join(" ").length;
       expect(totalLength).toBeLessThan(2000); // Rough heuristic
     }, 30000);
 
-    it('should respect temperature option for creativity', async () => {
+    it("should respect temperature option for creativity", async () => {
       const input: InsightsInput = {
         data: {
           headacheEntries: [
             {
-              id: 'test-8',
+              id: "test-8",
               timestamp: new Date(),
               intensity: 5,
             },
           ],
           checkinData: [
             {
-              id: 'checkin-8',
+              id: "checkin-8",
               timestamp: new Date(),
-              sleepQuality: 'fair',
-              mood: 'neutral',
+              sleepQuality: "fair",
+              mood: "neutral",
               bodyTension: [],
             },
           ],
@@ -317,13 +317,13 @@ describe('InsightsAgent - Integration Tests', () => {
     }, 30000);
   });
 
-  describe('execute - Edge Cases', () => {
-    it('should handle entries with minimal data', async () => {
+  describe("execute - Edge Cases", () => {
+    it("should handle entries with minimal data", async () => {
       const input: InsightsInput = {
         data: {
           headacheEntries: [
             {
-              id: 'test-9',
+              id: "test-9",
               timestamp: new Date(),
               intensity: 5,
               // No location, triggers, or notes
@@ -331,10 +331,10 @@ describe('InsightsAgent - Integration Tests', () => {
           ],
           checkinData: [
             {
-              id: 'checkin-9',
+              id: "checkin-9",
               timestamp: new Date(),
-              sleepQuality: 'fair',
-              mood: 'neutral',
+              sleepQuality: "fair",
+              mood: "neutral",
               bodyTension: [],
             },
           ],
@@ -350,32 +350,31 @@ describe('InsightsAgent - Integration Tests', () => {
       expect(result.confidence).toBeGreaterThan(0);
     }, 30000);
 
-    it('should handle entries with all optional fields populated', async () => {
+    it("should handle entries with all optional fields populated", async () => {
       const input: InsightsInput = {
         data: {
           headacheEntries: [
             {
-              id: 'test-10',
-              timestamp: new Date('2025-01-12T10:00:00Z'),
+              id: "test-10",
+              timestamp: new Date("2025-01-12T10:00:00Z"),
               intensity: 8,
-              location: ['forehead', 'temples', 'back_of_head'],
-              triggers: ['stress', 'poor_sleep', 'caffeine_withdrawal'],
+              location: ["forehead", "temples", "back_of_head"],
+              triggers: ["stress", "poor_sleep", "caffeine_withdrawal"],
               notes:
-                'Very intense headache, started suddenly, light sensitivity',
+                "Very intense headache, started suddenly, light sensitivity",
             },
           ],
           checkinData: [
             {
-              id: 'checkin-10',
-              timestamp: new Date('2025-01-12T09:00:00Z'),
-              sleepQuality: 'poor',
-              mood: 'anxious',
-              bodyTension: ['neck', 'jaw', 'shoulders', 'back'],
+              id: "checkin-10",
+              timestamp: new Date("2025-01-12T09:00:00Z"),
+              sleepQuality: "poor",
+              mood: "anxious",
+              bodyTension: ["neck", "jaw", "shoulders", "back"],
             },
           ],
         },
-        context:
-          'User has chronic tension headaches and is tracking triggers',
+        context: "User has chronic tension headaches and is tracking triggers",
       };
 
       const result: InsightsOutput = await agent.execute(input);
@@ -387,8 +386,8 @@ describe('InsightsAgent - Integration Tests', () => {
     }, 30000);
   });
 
-  describe('error handling', () => {
-    it('should throw AgentError with proper error code on failure', async () => {
+  describe("error handling", () => {
+    it("should throw AgentError with proper error code on failure", async () => {
       // Note: This is difficult to test reliably in integration tests
       // because we'd need to trigger actual API failures.
       // Error handling is better tested in unit tests with mocks.
@@ -409,30 +408,30 @@ describe('InsightsAgent - Integration Tests', () => {
       expect(true).toBe(true); // Placeholder test
     });
 
-    it('should include cause in AgentError', async () => {
+    it("should include cause in AgentError", async () => {
       // Similar to above - error handling verification
       // In real scenarios, we'd verify the error chain is preserved
       expect(true).toBe(true); // Placeholder test
     });
   });
 
-  describe('response validation', () => {
-    it('should always return valid InsightsOutput structure', async () => {
+  describe("response validation", () => {
+    it("should always return valid InsightsOutput structure", async () => {
       const input: InsightsInput = {
         data: {
           headacheEntries: [
             {
-              id: 'test-11',
+              id: "test-11",
               timestamp: new Date(),
               intensity: 6,
             },
           ],
           checkinData: [
             {
-              id: 'checkin-11',
+              id: "checkin-11",
               timestamp: new Date(),
-              sleepQuality: 'good',
-              mood: 'calm',
+              sleepQuality: "good",
+              mood: "calm",
               bodyTension: [],
             },
           ],
@@ -442,38 +441,38 @@ describe('InsightsAgent - Integration Tests', () => {
       const result: InsightsOutput = await agent.execute(input);
 
       // Verify complete structure
-      expect(result).toHaveProperty('summary');
-      expect(result).toHaveProperty('patterns');
-      expect(result).toHaveProperty('recommendations');
-      expect(result).toHaveProperty('confidence');
-      expect(result).toHaveProperty('metadata');
+      expect(result).toHaveProperty("summary");
+      expect(result).toHaveProperty("patterns");
+      expect(result).toHaveProperty("recommendations");
+      expect(result).toHaveProperty("confidence");
+      expect(result).toHaveProperty("metadata");
 
       // Verify types
-      expect(typeof result.summary).toBe('string');
+      expect(typeof result.summary).toBe("string");
       expect(Array.isArray(result.patterns)).toBe(true);
       expect(Array.isArray(result.recommendations)).toBe(true);
-      expect(typeof result.confidence).toBe('number');
-      expect(typeof result.metadata).toBe('object');
+      expect(typeof result.confidence).toBe("number");
+      expect(typeof result.metadata).toBe("object");
     }, 30000);
 
-    it('should return non-empty arrays for patterns and recommendations', async () => {
+    it("should return non-empty arrays for patterns and recommendations", async () => {
       const input: InsightsInput = {
         data: {
           headacheEntries: [
             {
-              id: 'test-12',
+              id: "test-12",
               timestamp: new Date(),
               intensity: 7,
-              triggers: ['stress'],
+              triggers: ["stress"],
             },
           ],
           checkinData: [
             {
-              id: 'checkin-12',
+              id: "checkin-12",
               timestamp: new Date(),
-              sleepQuality: 'poor',
-              mood: 'anxious',
-              bodyTension: ['neck'],
+              sleepQuality: "poor",
+              mood: "anxious",
+              bodyTension: ["neck"],
             },
           ],
         },
@@ -486,22 +485,22 @@ describe('InsightsAgent - Integration Tests', () => {
       expect(result.recommendations.length).toBeGreaterThan(0);
     }, 30000);
 
-    it('should return valid confidence score in range [0, 1]', async () => {
+    it("should return valid confidence score in range [0, 1]", async () => {
       const input: InsightsInput = {
         data: {
           headacheEntries: [
             {
-              id: 'test-13',
+              id: "test-13",
               timestamp: new Date(),
               intensity: 6,
             },
           ],
           checkinData: [
             {
-              id: 'checkin-13',
+              id: "checkin-13",
               timestamp: new Date(),
-              sleepQuality: 'fair',
-              mood: 'neutral',
+              sleepQuality: "fair",
+              mood: "neutral",
               bodyTension: [],
             },
           ],
@@ -517,23 +516,23 @@ describe('InsightsAgent - Integration Tests', () => {
     }, 30000);
   });
 
-  describe('metadata tracking', () => {
-    it('should include token usage in metadata', async () => {
+  describe("metadata tracking", () => {
+    it("should include token usage in metadata", async () => {
       const input: InsightsInput = {
         data: {
           headacheEntries: [
             {
-              id: 'test-14',
+              id: "test-14",
               timestamp: new Date(),
               intensity: 5,
             },
           ],
           checkinData: [
             {
-              id: 'checkin-14',
+              id: "checkin-14",
               timestamp: new Date(),
-              sleepQuality: 'good',
-              mood: 'calm',
+              sleepQuality: "good",
+              mood: "calm",
               bodyTension: [],
             },
           ],
@@ -546,22 +545,22 @@ describe('InsightsAgent - Integration Tests', () => {
       expect(result.metadata?.tokensUsed).toBeGreaterThan(0);
     }, 30000);
 
-    it('should include processing time in metadata', async () => {
+    it("should include processing time in metadata", async () => {
       const input: InsightsInput = {
         data: {
           headacheEntries: [
             {
-              id: 'test-15',
+              id: "test-15",
               timestamp: new Date(),
               intensity: 5,
             },
           ],
           checkinData: [
             {
-              id: 'checkin-15',
+              id: "checkin-15",
               timestamp: new Date(),
-              sleepQuality: 'good',
-              mood: 'calm',
+              sleepQuality: "good",
+              mood: "calm",
               bodyTension: [],
             },
           ],

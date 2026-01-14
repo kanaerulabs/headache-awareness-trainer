@@ -466,7 +466,9 @@
     "iosInstructions": "iOSでインストールするには：",
     "iosStep1": "Safariの下部にある共有ボタンをタップ",
     "iosStep2": "下にスクロールして「ホーム画面に追加」をタップ",
-    "iosStep3": "「追加」をタップして確認"
+    "iosStep3": "「追加」をタップして確認",
+    "account": "アカウント",
+    "accountDesc": "アカウント設定を管理"
   },
   "onboarding": {
     "welcome": "頭痛意識トレーナーへようこそ",

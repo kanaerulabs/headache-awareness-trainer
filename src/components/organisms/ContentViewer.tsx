@@ -210,7 +210,9 @@ export function ContentViewer({ contentId }: ContentViewerProps) {
       {/* Section content */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">{currentSection ? tc(currentSection.titleKey) : ""}</CardTitle>
+          <CardTitle className="text-lg">
+            {currentSection ? tc(currentSection.titleKey) : ""}
+          </CardTitle>
         </CardHeader>
         <CardContent className="prose prose-sm max-w-none">
           {currentSection && renderContent(tc(currentSection.contentKey))}

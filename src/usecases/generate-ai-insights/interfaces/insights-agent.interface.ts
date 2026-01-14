@@ -13,16 +13,16 @@ export class AgentError extends Error {
   constructor(
     message: string,
     public readonly code:
-      | 'RATE_LIMIT'
-      | 'TIMEOUT'
-      | 'INVALID_RESPONSE'
-      | 'NETWORK_ERROR'
-      | 'AUTH_ERROR'
-      | 'UNKNOWN',
+      | "RATE_LIMIT"
+      | "TIMEOUT"
+      | "INVALID_RESPONSE"
+      | "NETWORK_ERROR"
+      | "AUTH_ERROR"
+      | "UNKNOWN",
     public readonly cause?: Error,
   ) {
     super(message);
-    this.name = 'AgentError';
+    this.name = "AgentError";
   }
 }
 

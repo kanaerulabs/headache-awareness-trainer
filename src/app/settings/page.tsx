@@ -25,6 +25,7 @@ import {
 } from "@/components/organisms/settings";
 import { ArrowLeft } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { SignOutButton } from "@/components/auth";
 
 /**
  * Settings Page
@@ -92,7 +93,10 @@ export default function SettingsPage() {
 
         {/* Mobile: Accordion Layout */}
         {/* Note: Each settings component has its own Card, so accordion just provides expand/collapse */}
-        <div className="lg:hidden space-y-4" data-testid="settings-accordion-mobile">
+        <div
+          className="lg:hidden space-y-4"
+          data-testid="settings-accordion-mobile"
+        >
           {/* Reminders Section */}
           <section data-testid="accordion-reminders">
             <ReminderSettings />
@@ -125,9 +129,7 @@ export default function SettingsPage() {
                 <CardTitle className="text-red-600 dark:text-red-400">
                   {t("dangerZone")}
                 </CardTitle>
-                <CardDescription>
-                  {t("dangerZoneDesc")}
-                </CardDescription>
+                <CardDescription>{t("dangerZoneDesc")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <ClearDataDialog />
@@ -143,6 +145,19 @@ export default function SettingsPage() {
           {/* About & Help Section */}
           <section data-testid="accordion-about">
             <AboutHelp />
+          </section>
+
+          {/* Account Section */}
+          <section data-testid="accordion-account">
+            <Card>
+              <CardHeader>
+                <CardTitle>{t("account")}</CardTitle>
+                <CardDescription>{t("accountDesc")}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <SignOutButton variant="outline" className="w-full" />
+              </CardContent>
+            </Card>
           </section>
         </div>
 
@@ -202,9 +217,7 @@ export default function SettingsPage() {
                 <CardTitle className="text-red-600 dark:text-red-400">
                   {t("dangerZone")}
                 </CardTitle>
-                <CardDescription>
-                  {t("dangerZoneDesc")}
-                </CardDescription>
+                <CardDescription>{t("dangerZoneDesc")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <ClearDataDialog />
@@ -220,6 +233,22 @@ export default function SettingsPage() {
           {/* About & Help Section */}
           <section aria-labelledby="about-heading" data-testid="section-about">
             <AboutHelp />
+          </section>
+
+          {/* Account Section */}
+          <section
+            aria-labelledby="account-heading"
+            data-testid="section-account"
+          >
+            <Card>
+              <CardHeader>
+                <CardTitle id="account-heading">{t("account")}</CardTitle>
+                <CardDescription>{t("accountDesc")}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <SignOutButton variant="outline" className="w-full" />
+              </CardContent>
+            </Card>
           </section>
         </div>
       </div>

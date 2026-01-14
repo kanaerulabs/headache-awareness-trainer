@@ -29,35 +29,58 @@ export class ValidationError extends Error {
  * Encapsulates all business rules for users:
  * - Email must be valid format
  * - Name must not be empty
- * - ID must be provided
+ * - ID is auto-generated for new users
  */
 export class User {
-  readonly id: string;
-  readonly email: string;
-  readonly name: string;
-  readonly image?: string;
-  readonly emailVerified?: Date;
+  private _id: string;
+  private _email: string;
+  private _name: string;
+  private _image?: string;
+  private _emailVerified?: Date;
 
-  private constructor(props: UserProps) {
-    this.id = props.id;
-    this.email = props.email;
-    this.name = props.name;
-    this.image = props.image;
-    this.emailVerified = props.emailVerified;
+  private constructor() {
+    // Private constructor - use factory methods
+    this._id = "";
+    this._email = "";
+    this._name = "";
   }
 
   /**
-   * Factory method - creates and validates User from session data
-   * Use this when creating a User from authentication session
+   * Factory method - creates new User with auto-generated ID
+   * Use this when creating a NEW user (not from persistence)
    */
-  static create(props: UserProps): User {
-    User.validate(props);
-    return new User(props);
+  static create(props: Omit<UserProps, "id">): User {
+    const user = new User();
+    user._id = crypto.randomUUID();
+    user._email = props.email;
+    user._name = props.name;
+    user._image = props.image;
+    user._emailVerified = props.emailVerified;
+
+    User.validateUser(user);
+    return user;
+  }
+
+  /**
+   * Factory method - loads User from persistence with existing ID
+   * Use this when reconstructing a user from database/session
+   */
+  static load(props: UserProps): User {
+    const user = new User();
+    user._id = props.id;
+    user._email = props.email;
+    user._name = props.name;
+    user._image = props.image;
+    user._emailVerified = props.emailVerified;
+
+    User.validateUser(user);
+    return user;
   }
 
   /**
    * Factory method - creates User from NextAuth session
    * Convenience method for creating from session object
+   * Uses load() since session provides an existing ID
    */
   static fromSession(sessionUser: {
     id?: string;
@@ -75,7 +98,7 @@ export class User {
       throw new ValidationError("User name is required", "name");
     }
 
-    return User.create({
+    return User.load({
       id: sessionUser.id,
       email: sessionUser.email,
       name: sessionUser.name,
@@ -86,36 +109,36 @@ export class User {
   /**
    * Validation rules for User
    */
-  private static validate(props: UserProps): void {
+  private static validateUser(user: User): void {
     // ID validation
-    if (!props.id || props.id.trim().length === 0) {
+    if (!user._id || user._id.trim().length === 0) {
       throw new ValidationError("User ID is required", "id");
     }
 
     // Email validation
-    if (!props.email || props.email.trim().length === 0) {
+    if (!user._email || user._email.trim().length === 0) {
       throw new ValidationError("Email is required", "email");
     }
-    if (!User.isValidEmail(props.email)) {
+    if (!User.isValidEmail(user._email)) {
       throw new ValidationError("Invalid email format", "email");
     }
 
     // Name validation
-    if (!props.name || props.name.trim().length === 0) {
+    if (!user._name || user._name.trim().length === 0) {
       throw new ValidationError("Name is required", "name");
     }
-    if (props.name.length > 100) {
+    if (user._name.length > 100) {
       throw new ValidationError("Name cannot exceed 100 characters", "name");
     }
 
     // Email verified date validation (if provided)
-    if (props.emailVerified && !(props.emailVerified instanceof Date)) {
+    if (user._emailVerified && !(user._emailVerified instanceof Date)) {
       throw new ValidationError(
         "Email verified must be a valid date",
         "emailVerified",
       );
     }
-    if (props.emailVerified && props.emailVerified > new Date()) {
+    if (user._emailVerified && user._emailVerified > new Date()) {
       throw new ValidationError(
         "Email verified date cannot be in the future",
         "emailVerified",
@@ -131,25 +154,46 @@ export class User {
     return emailRegex.test(email);
   }
 
+  // Getters for private fields
+  get id(): string {
+    return this._id;
+  }
+
+  get email(): string {
+    return this._email;
+  }
+
+  get name(): string {
+    return this._name;
+  }
+
+  get image(): string | undefined {
+    return this._image;
+  }
+
+  get emailVerified(): Date | undefined {
+    return this._emailVerified;
+  }
+
   /**
    * Check if user's email is verified
    */
   isEmailVerified(): boolean {
-    return this.emailVerified !== undefined;
+    return this._emailVerified !== undefined;
   }
 
   /**
    * Get user's display name
    */
   getDisplayName(): string {
-    return this.name;
+    return this._name;
   }
 
   /**
    * Get user's initials for avatar fallback
    */
   getInitials(): string {
-    return this.name
+    return this._name
       .split(" ")
       .map((part) => part.charAt(0).toUpperCase())
       .slice(0, 2)
@@ -161,11 +205,11 @@ export class User {
    */
   toPlainObject(): UserProps {
     return {
-      id: this.id,
-      email: this.email,
-      name: this.name,
-      image: this.image,
-      emailVerified: this.emailVerified,
+      id: this._id,
+      email: this._email,
+      name: this._name,
+      image: this._image,
+      emailVerified: this._emailVerified,
     };
   }
 }

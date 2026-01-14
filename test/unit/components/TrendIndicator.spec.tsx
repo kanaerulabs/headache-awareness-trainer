@@ -221,9 +221,7 @@ describe("TrendIndicator", () => {
     it("icon is hidden from screen readers", () => {
       render(<TrendIndicator trend="improving" />);
 
-      const icon = screen
-        .getByTestId("trend-indicator")
-        .querySelector("svg");
+      const icon = screen.getByTestId("trend-indicator").querySelector("svg");
       expect(icon).toHaveAttribute("aria-hidden", "true");
     });
   });

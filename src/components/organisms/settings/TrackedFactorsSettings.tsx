@@ -54,9 +54,7 @@ export function TrackedFactorsSettings({
     <Card className={cn("", className)} data-testid="tracked-factors-settings">
       <CardHeader>
         <CardTitle>{t("trackedFactors")}</CardTitle>
-        <CardDescription>
-          {t("trackedFactorsDesc")}
-        </CardDescription>
+        <CardDescription>{t("trackedFactorsDesc")}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {FACTOR_CONFIG.map((factor) => (

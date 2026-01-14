@@ -41,9 +41,7 @@ describe("WeeklySummaryCard", () => {
 
     it("applies custom className when provided", () => {
       const customClass = "custom-test-class";
-      render(
-        <WeeklySummaryCard {...defaultProps} className={customClass} />,
-      );
+      render(<WeeklySummaryCard {...defaultProps} className={customClass} />);
 
       const card = screen.getByTestId("weekly-summary-card");
       expect(card).toHaveClass(customClass);
@@ -130,9 +128,7 @@ describe("WeeklySummaryCard", () => {
     it("displays 'No entries yet this week' when both counts are 0", () => {
       render(<WeeklySummaryCard headacheCount={0} checkinCount={0} />);
 
-      expect(
-        screen.getByText("No entries yet this week"),
-      ).toBeInTheDocument();
+      expect(screen.getByText("No entries yet this week")).toBeInTheDocument();
     });
 
     it("displays 'Monday through today' when headache count > 0", () => {
@@ -344,9 +340,7 @@ describe("WeeklySummaryCard", () => {
     it("shows empty state when no entries exist", () => {
       render(<WeeklySummaryCard headacheCount={0} checkinCount={0} />);
 
-      expect(
-        screen.getByText("No entries yet this week"),
-      ).toBeInTheDocument();
+      expect(screen.getByText("No entries yet this week")).toBeInTheDocument();
     });
 
     it("still displays 0 counts in empty state", () => {
@@ -360,9 +354,7 @@ describe("WeeklySummaryCard", () => {
       const { rerender } = render(
         <WeeklySummaryCard headacheCount={0} checkinCount={0} />,
       );
-      expect(
-        screen.getByText("No entries yet this week"),
-      ).toBeInTheDocument();
+      expect(screen.getByText("No entries yet this week")).toBeInTheDocument();
 
       rerender(<WeeklySummaryCard headacheCount={1} checkinCount={0} />);
       expect(

@@ -79,7 +79,10 @@ export class CheckIn {
    * Create a new regular check-in
    */
   static createNew(
-    input: Omit<CheckInProps, "id" | "timestamp" | "timeOfDay" | "isQuickDismiss">,
+    input: Omit<
+      CheckInProps,
+      "id" | "timestamp" | "timeOfDay" | "isQuickDismiss"
+    >,
   ): CheckIn {
     const id = `checkin-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const timestamp = new Date();
@@ -141,14 +144,23 @@ export class CheckIn {
     }
 
     // Mood validation (required for regular check-ins)
-    const validMoods: CheckInMood[] = ["calm", "ok", "stressed", "anxious", "avoidant"];
+    const validMoods: CheckInMood[] = [
+      "calm",
+      "ok",
+      "stressed",
+      "anxious",
+      "avoidant",
+    ];
     if (!props.mood || !validMoods.includes(props.mood)) {
       throw new ValidationError("Valid mood is required for check-in", "mood");
     }
 
     // Sleep quality validation (required for regular check-ins)
     const validSleepQualities: SleepQuality[] = ["good", "ok", "poor"];
-    if (!props.sleepQuality || !validSleepQualities.includes(props.sleepQuality)) {
+    if (
+      !props.sleepQuality ||
+      !validSleepQualities.includes(props.sleepQuality)
+    ) {
       throw new ValidationError(
         "Valid sleep quality is required for check-in",
         "sleepQuality",
@@ -162,8 +174,16 @@ export class CheckIn {
     }
 
     // Physical factors validation
-    const validPhysicalFactors: PhysicalFactor[] = ["acidity", "fatigue", "none"];
-    if (props.physicalFactors.some((factor) => !validPhysicalFactors.includes(factor))) {
+    const validPhysicalFactors: PhysicalFactor[] = [
+      "acidity",
+      "fatigue",
+      "none",
+    ];
+    if (
+      props.physicalFactors.some(
+        (factor) => !validPhysicalFactors.includes(factor),
+      )
+    ) {
       throw new ValidationError("Invalid physical factor", "physicalFactors");
     }
 
@@ -173,7 +193,12 @@ export class CheckIn {
     }
 
     // Time of day validation
-    const validTimesOfDay: TimeOfDay[] = ["morning", "afternoon", "evening", "night"];
+    const validTimesOfDay: TimeOfDay[] = [
+      "morning",
+      "afternoon",
+      "evening",
+      "night",
+    ];
     if (!validTimesOfDay.includes(props.timeOfDay)) {
       throw new ValidationError("Invalid time of day", "timeOfDay");
     }

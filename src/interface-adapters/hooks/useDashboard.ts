@@ -84,7 +84,9 @@ export function useDashboard(): UseDashboardResult {
         setUseCase(dashboardUseCase);
         setIsReady(true);
       } catch (err) {
-        setError(err instanceof Error ? err : new Error("Failed to initialize"));
+        setError(
+          err instanceof Error ? err : new Error("Failed to initialize"),
+        );
       }
     };
 
@@ -102,7 +104,8 @@ export function useDashboard(): UseDashboardResult {
       const dashboardData = await useCase.execute();
       setData(dashboardData);
     } catch (err) {
-      const error = err instanceof Error ? err : new Error("Failed to load dashboard");
+      const error =
+        err instanceof Error ? err : new Error("Failed to load dashboard");
       setError(error);
       // Set default data on error
       setData(defaultDashboardData);

@@ -61,20 +61,47 @@ export const AI_MODELS = {
   },
   openrouter: {
     // Latest Anthropic models (4.5 series)
-    "anthropic/claude-sonnet-4.5": { name: "Claude Sonnet 4.5", description: "Latest Sonnet, best for coding" },
-    "anthropic/claude-opus-4.5": { name: "Claude Opus 4.5", description: "Frontier reasoning model" },
-    "anthropic/claude-3.5-sonnet": { name: "Claude 3.5 Sonnet", description: "Great quality, proven" },
+    "anthropic/claude-sonnet-4.5": {
+      name: "Claude Sonnet 4.5",
+      description: "Latest Sonnet, best for coding",
+    },
+    "anthropic/claude-opus-4.5": {
+      name: "Claude Opus 4.5",
+      description: "Frontier reasoning model",
+    },
+    "anthropic/claude-3.5-sonnet": {
+      name: "Claude 3.5 Sonnet",
+      description: "Great quality, proven",
+    },
     // Latest OpenAI models
     "openai/gpt-5.1": { name: "GPT-5.1", description: "Latest GPT model" },
-    "openai/gpt-4.1-mini": { name: "GPT-4.1 Mini", description: "Fast and affordable" },
+    "openai/gpt-4.1-mini": {
+      name: "GPT-4.1 Mini",
+      description: "Fast and affordable",
+    },
     "openai/o3-mini": { name: "o3-mini", description: "Reasoning model" },
     // Latest Google models (Gemini 3)
-    "google/gemini-3-pro-preview": { name: "Gemini 3 Pro", description: "Best Google model" },
-    "google/gemini-2.5-flash-preview": { name: "Gemini 2.5 Flash", description: "Very fast" },
+    "google/gemini-3-pro-preview": {
+      name: "Gemini 3 Pro",
+      description: "Best Google model",
+    },
+    "google/gemini-2.5-flash-preview": {
+      name: "Gemini 2.5 Flash",
+      description: "Very fast",
+    },
     // DeepSeek models (affordable/free)
-    "deepseek/deepseek-v3.2": { name: "DeepSeek V3.2", description: "Latest DeepSeek" },
-    "deepseek/deepseek-chat": { name: "DeepSeek V3", description: "Affordable, high quality" },
-    "deepseek/deepseek-r1:free": { name: "DeepSeek R1", description: "Free tier!" },
+    "deepseek/deepseek-v3.2": {
+      name: "DeepSeek V3.2",
+      description: "Latest DeepSeek",
+    },
+    "deepseek/deepseek-chat": {
+      name: "DeepSeek V3",
+      description: "Affordable, high quality",
+    },
+    "deepseek/deepseek-r1:free": {
+      name: "DeepSeek R1",
+      description: "Free tier!",
+    },
   },
 } as const;
 
@@ -556,7 +583,10 @@ export const useSettingsStore = create<SettingsState>()(
         const now = Date.now();
 
         // Check if we're in a new window
-        if (now - aiRateLimit.insightRequestWindowStart >= AI_RATE_LIMITS.windowMs) {
+        if (
+          now - aiRateLimit.insightRequestWindowStart >=
+          AI_RATE_LIMITS.windowMs
+        ) {
           // Reset the window
           set({
             aiRateLimit: {
@@ -569,7 +599,9 @@ export const useSettingsStore = create<SettingsState>()(
         }
 
         // Check if we've exceeded the limit
-        return aiRateLimit.insightRequestCount < AI_RATE_LIMITS.maxInsightsPerHour;
+        return (
+          aiRateLimit.insightRequestCount < AI_RATE_LIMITS.maxInsightsPerHour
+        );
       },
 
       /**
@@ -580,7 +612,10 @@ export const useSettingsStore = create<SettingsState>()(
         const now = Date.now();
 
         // Check if we need to reset the window
-        if (now - aiRateLimit.insightRequestWindowStart >= AI_RATE_LIMITS.windowMs) {
+        if (
+          now - aiRateLimit.insightRequestWindowStart >=
+          AI_RATE_LIMITS.windowMs
+        ) {
           set({
             aiRateLimit: {
               ...aiRateLimit,
@@ -606,11 +641,17 @@ export const useSettingsStore = create<SettingsState>()(
         const now = Date.now();
 
         // Check if we're in a new window
-        if (now - aiRateLimit.insightRequestWindowStart >= AI_RATE_LIMITS.windowMs) {
+        if (
+          now - aiRateLimit.insightRequestWindowStart >=
+          AI_RATE_LIMITS.windowMs
+        ) {
           return AI_RATE_LIMITS.maxInsightsPerHour;
         }
 
-        return Math.max(0, AI_RATE_LIMITS.maxInsightsPerHour - aiRateLimit.insightRequestCount);
+        return Math.max(
+          0,
+          AI_RATE_LIMITS.maxInsightsPerHour - aiRateLimit.insightRequestCount,
+        );
       },
 
       /**
@@ -653,7 +694,9 @@ export const useSettingsStore = create<SettingsState>()(
 
         const lastDate = new Date(aiRateLimit.lastWeeklyInsightDate);
         const now = new Date();
-        const diffDays = Math.floor((now.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
+        const diffDays = Math.floor(
+          (now.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24),
+        );
 
         return diffDays >= 7;
       },

@@ -92,7 +92,9 @@ export class HeadacheEntry {
   /**
    * Create from partial input (for new entries)
    */
-  static createNew(input: Omit<HeadacheEntryProps, "id" | "timestamp">): HeadacheEntry {
+  static createNew(
+    input: Omit<HeadacheEntryProps, "id" | "timestamp">,
+  ): HeadacheEntry {
     const id = `entry-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const timestamp = new Date();
 
@@ -140,10 +142,7 @@ export class HeadacheEntry {
 
     // Note max length validation
     if (props.note && props.note.length > 500) {
-      throw new ValidationError(
-        "Note cannot exceed 500 characters",
-        "note",
-      );
+      throw new ValidationError("Note cannot exceed 500 characters", "note");
     }
 
     // Headache type validation
@@ -156,10 +155,7 @@ export class HeadacheEntry {
         "other",
       ];
       if (!validTypes.includes(props.headacheType)) {
-        throw new ValidationError(
-          "Invalid headache type",
-          "headacheType",
-        );
+        throw new ValidationError("Invalid headache type", "headacheType");
       }
     }
 

@@ -43,10 +43,13 @@ describe("CheckIn Store", () => {
 
     // Get initial store state and reset
     const initialState = useCheckInStore.getState();
-    useCheckInStore.setState({
-      ...initialState,
-      db: null,
-    }, true); // Replace entire state
+    useCheckInStore.setState(
+      {
+        ...initialState,
+        db: null,
+      },
+      true,
+    ); // Replace entire state
   });
 
   afterEach(async () => {
@@ -82,7 +85,7 @@ describe("CheckIn Store", () => {
       if (result.current.db) {
         // Verify object store exists
         expect(result.current.db.objectStoreNames.contains("checkins")).toBe(
-          true
+          true,
         );
 
         // Verify we can access the store
@@ -138,7 +141,7 @@ describe("CheckIn Store", () => {
             sleepQuality: "good",
             isQuickDismiss: false,
           });
-        })
+        }),
       ).rejects.toThrow("Mood is required for check-in");
     });
 
@@ -155,7 +158,7 @@ describe("CheckIn Store", () => {
             mood: "calm",
             isQuickDismiss: false,
           });
-        })
+        }),
       ).rejects.toThrow("Sleep quality is required for check-in");
     });
 
@@ -182,7 +185,7 @@ describe("CheckIn Store", () => {
       expect(entry?.timestamp).toBeDefined();
       expect(entry?.timestamp).toBeInstanceOf(Date);
       expect(entry!.timestamp.getTime()).toBeGreaterThanOrEqual(
-        before.getTime()
+        before.getTime(),
       );
       expect(entry!.timestamp.getTime()).toBeLessThanOrEqual(after.getTime());
     });
@@ -207,7 +210,7 @@ describe("CheckIn Store", () => {
 
       expect(entry?.timeOfDay).toBeDefined();
       expect(["morning", "afternoon", "evening", "night"]).toContain(
-        entry?.timeOfDay
+        entry?.timeOfDay,
       );
     });
 
@@ -267,7 +270,7 @@ describe("CheckIn Store", () => {
         result.current.addCheckIn({
           mood: "calm",
           sleepQuality: "good",
-        })
+        }),
       ).rejects.toThrow("Database not initialized. Call initializeDB first.");
     });
   });
@@ -387,7 +390,7 @@ describe("CheckIn Store", () => {
       const { result } = renderHook(() => useCheckInStore());
 
       await expect(result.current.addQuickDismiss()).rejects.toThrow(
-        "Database not initialized. Call initializeDB first."
+        "Database not initialized. Call initializeDB first.",
       );
     });
   });
@@ -630,9 +633,9 @@ describe("CheckIn Store", () => {
         act(async () => {
           await result.current.linkToHeadacheEntry(
             "non-existent-id",
-            "headache-123"
+            "headache-123",
           );
-        })
+        }),
       ).rejects.toThrow("Check-in with id non-existent-id not found");
     });
 
@@ -706,7 +709,7 @@ describe("CheckIn Store", () => {
       await expect(
         act(async () => {
           await result.current.deleteCheckIn("non-existent-id");
-        })
+        }),
       ).resolves.not.toThrow();
     });
 
@@ -726,7 +729,10 @@ describe("CheckIn Store", () => {
           mood: "calm",
           sleepQuality: "good",
         });
-        id2 = await result.current.addCheckIn({ mood: "ok", sleepQuality: "ok" });
+        id2 = await result.current.addCheckIn({
+          mood: "ok",
+          sleepQuality: "ok",
+        });
         id3 = await result.current.addCheckIn({
           mood: "stressed",
           sleepQuality: "poor",
@@ -814,7 +820,7 @@ describe("CheckIn Store", () => {
       // Verify descending order
       for (let i = 0; i < entries.length - 1; i++) {
         expect(entries[i].timestamp.getTime()).toBeGreaterThanOrEqual(
-          entries[i + 1].timestamp.getTime()
+          entries[i + 1].timestamp.getTime(),
         );
       }
     });
