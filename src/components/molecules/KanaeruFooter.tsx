@@ -5,17 +5,17 @@ import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 /**
- * KanaeruFooter - Branding footer shown on most pages
+ * KanaeruFooter - Branding footer shown on all pages
  *
  * Displays "Fulfilled by" text with KanaeruAI logo as clickable link
- * Hidden on pages with fixed bottom elements (like /log with its submit bar)
+ * On /log page, the layout's footer is hidden and the page adds its own
  */
-export function KanaeruFooter() {
+export function KanaeruFooter({ forceShow = false }: { forceShow?: boolean }) {
   const t = useTranslations("settings");
   const pathname = usePathname();
 
-  // Hide footer on pages with fixed bottom elements that would overlap
-  if (pathname === "/log") {
+  // Hide in layout on /log page (log page adds its own footer inside scrollable content)
+  if (!forceShow && pathname === "/log") {
     return null;
   }
 

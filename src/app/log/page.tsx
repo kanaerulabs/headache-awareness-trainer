@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { AlertCircle, Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { KanaeruFooter } from "@/components/molecules/KanaeruFooter";
 
 /**
  * Quick Logging Page - Frictionless headache entry with progressive feature unlocking
@@ -232,6 +233,9 @@ export default function QuickLoggingPage() {
             </div>
           )}
         </form>
+
+        {/* Kanaeru branding footer - inside scrollable content, above fixed submit bar */}
+        <KanaeruFooter forceShow />
       </main>
 
       {/* Fixed Bottom Submit Bar - positioned above bottom nav on mobile */}
