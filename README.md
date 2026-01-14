@@ -15,9 +15,11 @@ An awareness training app for people with chronic mild-to-moderate tension heada
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS + shadcn/ui
 - **State Management**: Zustand
+- **Authentication**: NextAuth.js v5 with Google OAuth
 - **Local Database**: IndexedDB (via idb)
 - **PWA**: Progressive Web App with offline support
 - **Deployment**: Vercel
+- **CI/CD**: GitHub Actions with post-deploy smoke tests
 
 ## Features
 
@@ -147,9 +149,18 @@ Then test:
 2. Import in Vercel
 3. Deploy automatically
 
-Environment variables (none required for MVP):
-- Future: Add analytics opt-in
-- Future: Add cloud sync endpoint
+**Required Environment Variables:**
+
+```bash
+# NextAuth.js (generate with: openssl rand -base64 32)
+AUTH_SECRET=your-secret-here
+
+# Google OAuth (from Google Cloud Console)
+GOOGLE_CLIENT_ID=your-client-id
+GOOGLE_CLIENT_SECRET=your-client-secret
+```
+
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed setup instructions.
 
 ## License
 
