@@ -3,7 +3,7 @@
  *
  * This hook should be used at the app root level to:
  * 1. Set the current user ID for IndexedDB namespacing
- * 2. Reset onboarding state when user changes
+ * 2. Force stores to re-hydrate when user changes
  *
  * This ensures each user has isolated data storage.
  */
@@ -12,29 +12,51 @@ import { useEffect, useRef } from "react";
 import { useUserId } from "@/stores/auth";
 import { setCurrentUserId } from "@/lib/indexeddb";
 import { useOnboardingStore } from "@/interface-adapters/store/onboardingStore";
+import { useLoggingStore } from "@/interface-adapters/store/loggingStore";
+import { useCheckInStore } from "@/interface-adapters/store/checkinStore";
+import { useSettingsStore } from "@/interface-adapters/store/settingsStore";
+import { useEducationStore } from "@/interface-adapters/store/educationStore";
+import { useGamificationStore } from "@/interface-adapters/store/gamificationStore";
+
+/**
+ * Force a Zustand persist store to re-hydrate from storage
+ */
+function rehydrateStore(store: { persist: { rehydrate: () => void | Promise<void> } }) {
+  store.persist.rehydrate();
+}
 
 export function useUserDataInit() {
   const userId = useUserId();
-  const previousUserId = useRef<string | null>(null);
-  const resetOnboarding = useOnboardingStore((state) => state.resetOnboarding);
+  const previousUserId = useRef<string | null | undefined>(undefined);
+  const isInitialized = useRef(false);
 
   useEffect(() => {
-    // Update IndexedDB namespace
+    // Update IndexedDB namespace first
     setCurrentUserId(userId);
 
-    // If user changed (not just initial load), reset onboarding for new user
-    if (previousUserId.current !== null && previousUserId.current !== userId) {
-      // User switched - the onboarding store will need to rehydrate
-      // from the new user's localStorage key (if we implement per-user localStorage)
-      // For now, just reset to show onboarding for new users
-      if (userId && previousUserId.current !== userId) {
-        // Don't reset if just logging out (userId becomes null)
-        // Only reset if switching to a different user
-      }
+    // If this is the first run with a logged-in user, or user changed, re-hydrate all stores
+    const userChanged = previousUserId.current !== undefined && previousUserId.current !== userId;
+    const firstRunWithUser = !isInitialized.current && userId !== null;
+
+    if (firstRunWithUser || userChanged) {
+      // Re-hydrate all stores from their new user-scoped storage keys
+      // This ensures we read from the correct localStorage/IndexedDB for this user
+      rehydrateStore(useOnboardingStore);
+      rehydrateStore(useLoggingStore);
+      rehydrateStore(useCheckInStore);
+      rehydrateStore(useSettingsStore);
+      rehydrateStore(useEducationStore);
+      rehydrateStore(useGamificationStore);
+
+      // Re-initialize IndexedDB stores (they need to open new user-scoped DBs)
+      useLoggingStore.getState().initializeDB();
+      useCheckInStore.getState().initializeDB();
+      useGamificationStore.getState().initializeDB();
     }
 
     previousUserId.current = userId;
-  }, [userId, resetOnboarding]);
+    isInitialized.current = true;
+  }, [userId]);
 
-  return { userId };
+  return { userId, isReady: isInitialized.current };
 }
