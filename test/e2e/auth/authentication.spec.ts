@@ -85,6 +85,33 @@ test.describe("Authentication Flow", () => {
       await expect(page.locator('[data-testid="login-page"]')).toBeVisible();
     });
 
+    test("should redirect to login when accessing /insights without authentication", async ({
+      page,
+    }) => {
+      await page.goto("/insights");
+
+      // Should redirect to login page
+      await expect(page).toHaveURL(/\/login/);
+      await expect(page).toHaveURL(/callbackUrl=%2Finsights/);
+
+      // Verify login page is displayed
+      await expect(page.locator('[data-testid="login-page"]')).toBeVisible();
+    });
+
+    test("should redirect to login when accessing /onboarding without authentication", async ({
+      page,
+    }) => {
+      // /onboarding is a protected route - requires authentication
+      await page.goto("/onboarding");
+
+      // Should redirect to login page
+      await expect(page).toHaveURL(/\/login/);
+      await expect(page).toHaveURL(/callbackUrl=%2Fonboarding/);
+
+      // Verify login page is displayed
+      await expect(page.locator('[data-testid="login-page"]')).toBeVisible();
+    });
+
     test("should preserve callbackUrl parameter in redirect", async ({
       page,
     }) => {
