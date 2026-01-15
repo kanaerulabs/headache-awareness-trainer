@@ -4,50 +4,35 @@ import { NextResponse } from "next/server";
 /**
  * NextAuth middleware for route protection
  *
- * Protected routes require authentication:
+ * Public routes (no auth required):
+ * - /login
+ *
+ * All other routes require authentication:
+ * - / (home)
+ * - /onboarding
  * - /dashboard
  * - /insights
  * - /checkin
  * - /log
  * - /learn
  * - /settings
- *
- * Public routes (no auth required):
- * - /login
- * - /onboarding
- * - /api/* (handled by API routes themselves)
- * - /_next/* (Next.js internals)
- * - Static files
  */
 export default auth((req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
 
-  // Protected routes that require authentication
-  const protectedRoutes = [
-    "/dashboard",
-    "/insights",
-    "/checkin",
-    "/log",
-    "/learn",
-    "/settings",
-  ];
+  // Only /login is public - everything else requires auth
+  const isLoginPage = nextUrl.pathname === "/login";
 
-  // Check if current path is a protected route
-  const isProtectedRoute = protectedRoutes.some(
-    (route) =>
-      nextUrl.pathname === route || nextUrl.pathname.startsWith(`${route}/`),
-  );
-
-  // Redirect unauthenticated users to login
-  if (isProtectedRoute && !isLoggedIn) {
+  // Redirect unauthenticated users to login (except on login page)
+  if (!isLoggedIn && !isLoginPage) {
     const loginUrl = new URL("/login", nextUrl.origin);
     loginUrl.searchParams.set("callbackUrl", nextUrl.pathname);
     return NextResponse.redirect(loginUrl);
   }
 
   // Redirect logged-in users away from login page to dashboard
-  if (nextUrl.pathname === "/login" && isLoggedIn) {
+  if (isLoginPage && isLoggedIn) {
     return NextResponse.redirect(new URL("/dashboard", nextUrl.origin));
   }
 
