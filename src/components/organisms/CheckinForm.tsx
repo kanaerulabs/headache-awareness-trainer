@@ -106,7 +106,6 @@ const tensionAreas: { value: BodyTensionArea; label: string }[] = [
 const physicalFactors: { value: PhysicalFactor; label: string }[] = [
   { value: "acidity", label: "Acidity" },
   { value: "fatigue", label: "Fatigue" },
-  { value: "none", label: "None" },
 ];
 
 /**
@@ -321,13 +320,14 @@ export const CheckinForm: React.FC<CheckinFormProps> = ({
         </div>
       </div>
 
-      {/* Body Tension */}
+      {/* Body Tension (Optional) */}
       <div className="space-y-3">
         <label
           id="tension-label"
           className="block text-sm font-medium text-gray-900 dark:text-gray-100"
         >
-          Any body tension?
+          Any body tension?{" "}
+          <span className="text-gray-500 text-xs">(optional)</span>
         </label>
         <div
           role="group"

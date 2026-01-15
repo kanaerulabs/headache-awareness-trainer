@@ -62,7 +62,6 @@ const tensionAreas: Array<{ value: BodyTensionArea; labelKey: string }> = [
 const physicalOptions: Array<{ value: PhysicalFactor; labelKey: string }> = [
   { value: "acidity", labelKey: "physical.acidity" },
   { value: "fatigue", labelKey: "physical.fatigue" },
-  { value: "none", labelKey: "physical.none" },
 ];
 
 /**
@@ -298,10 +297,11 @@ export default function CheckinPage() {
               </div>
             </div>
 
-            {/* Body Tension */}
+            {/* Body Tension (Optional) */}
             <div className="space-y-3" data-testid="tension-section">
               <label className="block text-sm font-medium text-gray-900 dark:text-gray-100">
-                {t("bodyTension")}
+                {t("bodyTension")}{" "}
+                <span className="text-gray-500 text-xs">({t("optional")})</span>
               </label>
               <div className="grid grid-cols-3 gap-2">
                 {tensionAreas.map((area) => (
